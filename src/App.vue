@@ -1,7 +1,9 @@
 <template>
-  <transition name="fade-transform" mode="out-in">
-    <router-view />
-  </transition>
+  <router-view v-slot="{ Component }">
+    <transition name="fade-transform" mode="out-in"> 
+      <component :is="Component" />
+    </transition>
+  </router-view> 
 </template>
 
 <script setup lang="ts">
@@ -31,6 +33,7 @@ onBeforeMount(() => handleDocumentInit());
 
 #root {
   height: 100vh;
+  background: #1F2228;
   font-family: Avenir, Helvetica, Arial, sans-serif, PingFang SC;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

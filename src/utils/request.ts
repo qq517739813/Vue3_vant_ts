@@ -1,21 +1,18 @@
 import axios from 'axios'
-import { Toast } from 'vant'
+import { showFailToast } from 'vant';
 
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API
-})
+  // baseURL: process.env.VUE_APP_BASE_API
+  baseURL: 'http://111.21.231.41:20101/api',
+});
 
 // Request interceptors
 service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
     const token = sessionStorage.getItem('token') || ''
-    const card_id = localStorage.getItem('card_id')
     if (token) {
       Object.assign(config.headers, { Authorization: token })
-    }
-    if (card_id) {
-      config.headers['card-id'] = card_id
     }
     return config
   },
@@ -28,19 +25,15 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const res = response.data
-    if (res.code !== '000000') {
-      if (res.code === '100000') {
-        sessionStorage.removeItem('token')
-      } else {
-        res.message && Toast.fail(res.message)
-      }
-      return Promise.reject(res.code)
+    if (!res.IsSuccess) {
+        res.Message && showFailToast(res.Message);
+      return Promise.reject(res.IsSuccess);
     } else {
-      return response.data
+      return response.data;
     }
   },
   (error) => {
-    Toast.fail('网络故障，请稍后再试！')
+    showFailToast('网络故障，请稍后再试！');
     return Promise.reject(error)
   }
 )

@@ -1,11 +1,20 @@
-declare namespace API {
-  namespace Demo {
+// import { AxiosRequestConfig } from "axios";
+
+ declare namespace API {
+  namespace Global {
     interface Params {
       token: string;
     }
 
-    interface Payload {
-      user_id: number;
+    interface LoginPayload {
+      LoginName: string;
+      LoginPwd: string;
     }
   }
 }
+
+// declare module 'axios' {
+//   interface AxiosInstance{
+//     (config:AxiosRequestConfig):Promise<any>
+//   }
+// }
