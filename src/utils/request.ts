@@ -28,12 +28,21 @@ service.interceptors.response.use(
     const res = response.data;
     if (!res.IsSuccess) {
       if (res.Code === 401 || res.Code === 400) {
-        res.Message && showFailToast({
-          forbidClick: true, message: res.Message, onClose: () => {
-            redirectLogin();
-        } });
+        res.Message &&
+          showFailToast({
+            forbidClick: true,
+            message: res.Message,
+            onClose: () => {
+              redirectLogin();
+            },
+          });
         return;
       }
+      res.Message &&
+        showFailToast({
+          forbidClick: true,
+          message: res.Message,
+        });
       return Promise.reject(res.IsSuccess);
     } else {
       return response.data;

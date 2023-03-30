@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { SessionStorage } from '@/utils/utils';
-import { TOKEN_KEY } from '@/config/base';
+import { showFailToast } from 'vant';
+
 // 为了首屏加载快，所以首页不使用懒加载
 import Layout from '@/layout/index.vue';
 
@@ -97,7 +97,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // window.document.title = to.meta.title as string;
-  const Token: string | null = SessionStorage.getKey(TOKEN_KEY);
+  const userInfo = window.sessionStorage.getItem('userInfo');
+  const Token = JSON.parse(userInfo as any)?.userInfo?.Token;
   if (Token) {
     if (to.path === '/login') {
       next();
@@ -106,7 +107,13 @@ router.beforeEach((to, from, next) => {
   } else if (whiteList.indexOf(to.path) !== -1) {
     next();
   } else {
-    next(`/login`);
+    showFailToast({
+      forbidClick: true,
+      message: 'token已被清除,请重新登录',
+      onClose: () => {
+        next(`/login`);
+      },
+    });
   }
 });
 

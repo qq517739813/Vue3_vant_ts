@@ -9,26 +9,14 @@
 declare namespace API {
   namespace Global {
     interface Params {
-      Token: string | null;
+      Token: string|null;
+      FunCode?: string;
     }
-
-    /**
-     * @description 用户登录
-     */
     interface LoginPayload {
       LoginName: string; // 用户名
       LoginPwd: string; // 密码
     }
-    /**
-     * @description 设备汇总
-     */
-    interface DevSummaryPayload extends Params {
-      Uid: string; // 用户id
-    }
-    /**
-     * @description 用户设备
-     */
-    interface UserEquipsPayload extends Params {
+    interface CommonPayload extends Params {
       Uid: string; // 用户id
     }
   }

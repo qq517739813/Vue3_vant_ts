@@ -35,17 +35,19 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
+import { userStore } from '@/store/user';
 import { useRouter  } from "vue-router";
 import { LoginItem } from './index'
 import { login } from '@/api/login'
-import { SessionStorage } from '@/utils/utils'
-import { TOKEN_KEY, USER_INFO } from '@/config/base';
+// import { SessionStorage } from '@/utils/utils'
+// import { TOKEN_KEY, USER_INFO } from '@/config/base';
 
+const store = userStore();
 const router = useRouter();
-
 const loginLoding = ref(false)
 const loginForm = reactive<LoginItem>({
-  LoginName: 'qh_admin',
+  // LoginName: 'qh_admin',
+  LoginName: 'kiwi_admin',
   // LoginName: 'kiwi_hy',
   LoginPwd: 'rt123456'
 })
@@ -54,13 +56,15 @@ const onSubmit = (values: any) => {
   login(values).then(res => {
     if ((res as any).IsSuccess) {
       const { Data } = (res as any);
-      SessionStorage.setKey({
-        [TOKEN_KEY]: Data.Token,
-        [USER_INFO]: JSON.stringify(Data),
-      })
-      loginLoding.value = false;
+      store.upDateUserInfo(Data)
+      // SessionStorage.setKey({
+      //   [TOKEN_KEY]: Data.Token,
+      //   [USER_INFO]: JSON.stringify(Data),
+      // })
       router.push('/')
     }
+  }).finally(() => {
+      loginLoding.value = false;
   })
 };
 

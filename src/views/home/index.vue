@@ -1,10 +1,10 @@
 <template>
   <div class="home" v-if="!loading">
-    <div class="head">共有<span>{{ devInfo.DevSummaryInfo.AllNum }}</span>台设备</div>
+    <div class="head">共有<span>{{ devInfo.DevSummary.AllNum }}</span>台设备</div>
     <div class="allDev" id="main"></div>
     <div class="head">农场地块</div>
     <main class="allFarm">
-      <div class="allFarm_item" v-for="item in devInfo.DevSummaryInfo.DevType" :key="item.TypeId">
+      <div class="allFarm_item" v-for="item in devInfo.DevSummary.DevType" :key="item.TypeId">
         <img :src="item.Icon" alt="">
         <span class="item-title">{{ item.TypeName }}</span>
         <div class="item-text">运行<span>{{ item.OnlineNum }}</span>/总{{ item.AllNum }}</div>
@@ -16,13 +16,14 @@
 <script lang="ts" setup>
 import * as echarts from 'echarts';
 import { onMounted, reactive, ref } from 'vue';
-import { devSummary } from '@/api/common'
-import { USER_INFO, TOKEN_KEY } from '@/config/base';
-import { SessionStorage } from '@/utils/utils';
+import { userStore } from '@/store/user';
+
+import { devSummary } from '@/api/home'
 import { DevSummaryItem } from './index'
 
+const store = userStore();
 const devInfo = reactive<DevSummaryItem>({
-  DevSummaryInfo: {
+  DevSummary: {
     AllNum: 0,
     FaultNum: 0,
     NetExpNum: 0,
@@ -33,9 +34,6 @@ const devInfo = reactive<DevSummaryItem>({
   }
 })
 const loading = ref(false)
-const userInfo: string | null = SessionStorage.getKey(USER_INFO)
-const Token: string | null = SessionStorage.getKey(TOKEN_KEY)
-const { Uid } = JSON.parse(userInfo as any)
 // 基于准备好的dom，初始化echarts实例
 const echart = echarts;
 // 绘制图表
@@ -62,17 +60,22 @@ const initChart = () => {
 // 获取设备汇总数据
 const initData = () => {
   loading.value = true
-  devSummary({ Uid, Token }).then(res => {
+  const payload = {
+    Uid: store.userInfo.Uid,
+    Token: store.userInfo.Token,
+  }
+  devSummary(payload).then(res => {
     if ((res as any).IsSuccess) {
       const { Data } = (res as any);
-      devInfo.DevSummaryInfo = Data
+      devInfo.DevSummary = Data
       loading.value = false;
     }
   })
 }
-onMounted(() => {
-  initData()
-  initChart() 
+onMounted( async () => {
+  console.log('store', store.userInfo)
+  await  initChart()
+  await initData()
 });
 // onUnmounted(() => {
 //   echart.dispose();

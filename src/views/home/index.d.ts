@@ -9,5 +9,5 @@ interface Item {
 }
 
 export interface DevSummaryItem {
-  DevSummaryInfo: Item;
+  DevSummary: Item;
 }
