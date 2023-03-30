@@ -36,7 +36,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter  } from "vue-router";
-import { logiForm } from './index'
+import { LoginItem } from './index'
 import { login } from '@/api/login'
 import { SessionStorage } from '@/utils/utils'
 import { TOKEN_KEY, USER_INFO } from '@/config/base';
@@ -44,9 +44,9 @@ import { TOKEN_KEY, USER_INFO } from '@/config/base';
 const router = useRouter();
 
 const loginLoding = ref(false)
-const loginForm = reactive<logiForm>({
-  // LoginName: 'qh_admin',
-  LoginName: 'kiwi_hy',
+const loginForm = reactive<LoginItem>({
+  LoginName: 'qh_admin',
+  // LoginName: 'kiwi_hy',
   LoginPwd: 'rt123456'
 })
 const onSubmit = (values: any) => {

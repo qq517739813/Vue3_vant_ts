@@ -1,5 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 import { showFailToast } from 'vant';
+import { redirectLogin } from '@/utils/utils';
 
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API
@@ -10,23 +11,29 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
-    const token = sessionStorage.getItem('token') || ''
+    const token = sessionStorage.getItem('token') || '';
     if (token) {
-      Object.assign(config.headers, { Authorization: token })
+      Object.assign(config.headers, { Authorization: token });
     }
-    return config
+    return config;
   },
   (error) => {
-    Promise.reject(error)
-  }
-)
+    Promise.reject(error);
+  },
+);
 
 // Response interceptors
 service.interceptors.response.use(
   (response) => {
-    const res = response.data
+    const res = response.data;
     if (!res.IsSuccess) {
-        res.Message && showFailToast(res.Message);
+      if (res.Code === 401 || res.Code === 400) {
+        res.Message && showFailToast({
+          forbidClick: true, message: res.Message, onClose: () => {
+            redirectLogin();
+        } });
+        return;
+      }
       return Promise.reject(res.IsSuccess);
     } else {
       return response.data;
@@ -34,8 +41,8 @@ service.interceptors.response.use(
   },
   (error) => {
     showFailToast('网络故障，请稍后再试！');
-    return Promise.reject(error)
-  }
-)
+    return Promise.reject(error);
+  },
+);
 
-export default service
+export default service;

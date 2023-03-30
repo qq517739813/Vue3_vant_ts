@@ -20,3 +20,13 @@ export const SessionStorage = {
     window.sessionStorage.clear();
     },
 };
+
+/**
+ *  返回登录页面
+ */
+
+export const redirectLogin = () => {
+    window.sessionStorage.clear();
+    window.location.href = '/login';
+
+};

@@ -1,4 +1,4 @@
-export interface logiForm {
+export interface LoginItem {
   LoginName: string;
   LoginPwd: string;
 }
