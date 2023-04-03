@@ -32,7 +32,7 @@ onBeforeMount(() => handleDocumentInit());
 }
 
 #root {
-  height: 100vh;
+  min-height: 100vh;
   background: #1F2228;
   font-family: Avenir, Helvetica, Arial, sans-serif, PingFang SC;
   -webkit-font-smoothing: antialiased;

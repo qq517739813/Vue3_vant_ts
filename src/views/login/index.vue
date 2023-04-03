@@ -4,7 +4,7 @@
       <div class="title">首页</div>
       <div class="desc">
         <p>您好，欢迎使用</p>
-        <p>数字农业物联网综合服务平台</p>
+        <p>{{ systemInfo.systemBaseInfo.SysName }}</p>
       </div>
     </header>
     <main class="main">
@@ -13,7 +13,7 @@
           <van-field v-model="loginForm.LoginName" name="LoginName" placeholder="请输入账号" class="form-input"
             autocomplete="off" :rules="[{ required: true, message: '请输入账号' }]">
             <template #label>
-              <span class="lable-text">用户名</span>
+              <span class="lable-text">账号</span>
             </template>
           </van-field>
           <van-field v-model="loginForm.LoginPwd" type="password" name="LoginPwd" placeholder="请输入密码" class="form-input"
@@ -36,21 +36,26 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
 import { userStore } from '@/store/user';
-import { useRouter  } from "vue-router";
-import { LoginItem } from './index'
-import { login } from '@/api/login'
+import { useRouter } from "vue-router";
+import { LoginItem , SystemItem } from './index'
+import { login, getSystemInfo } from '@/api/login'
 // import { SessionStorage } from '@/utils/utils'
 // import { TOKEN_KEY, USER_INFO } from '@/config/base';
-
+const loading = ref(false)
 const store = userStore();
 const router = useRouter();
 const loginLoding = ref(false)
+// 登录表单
 const loginForm = reactive<LoginItem>({
   // LoginName: 'qh_admin',
   LoginName: 'kiwi_admin',
   // LoginName: 'kiwi_hy',
   LoginPwd: 'rt123456'
 })
+// 系统信息
+const systemInfo = reactive<SystemItem>({
+  systemBaseInfo:{}
+}) 
 const onSubmit = (values: any) => {
   loginLoding.value = true
   login(values).then(res => {
@@ -64,11 +69,23 @@ const onSubmit = (values: any) => {
       router.push('/')
     }
   }).finally(() => {
-      loginLoding.value = false;
+    loginLoding.value = false;
   })
 };
-
+// 获取系统基本信息
+const initData = () => {
+  getSystemInfo({}).then(res => {
+    loading.value = true
+    if ((res as any).IsSuccess) {
+      const { Data } = (res as any);
+      systemInfo.systemBaseInfo=Data
+      store.upDateSystemInfo(Data)
+      loading.value = false;
+    }
+  })
+}
 onMounted(() => {
+  initData()
   console.log('我是my页面,我做了缓存');
 });
 </script>

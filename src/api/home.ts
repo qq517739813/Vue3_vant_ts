@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 /**
- * @description 设备汇总
+ * @description 获取设备汇总
  * @param {API.Global.DevSummaryPayload}
  * @return {Promise<*>}
  */

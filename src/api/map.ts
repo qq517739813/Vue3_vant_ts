@@ -1,13 +1,13 @@
 import request from '@/utils/request';
 
 /**
- * @description 获取用户基本信息
+ * @description 获取设备列表
  * @param {API.Global.DevSummaryPayload}
  * @return {Promise<*>}
  */
-export function getUserInfo(params: API.Global.CommonPayload) {
+export function GetEquipmentsList(params: API.Global.CommonPayload) {
   return request({
-    url: '/CommService/SysInfo',
+    url: '/UserService/GetDevList',
     method: 'post',
     data: params,
   });

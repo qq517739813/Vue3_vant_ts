@@ -12,3 +12,15 @@ export function login(params: API.Global.LoginPayload) {
     data: params,
   });
 }
+
+/**
+ * @description 获取系统基本信息
+ * @return {Promise<*>}
+ */
+export function getSystemInfo(params:any) {
+  return request({
+    url: '/CommService/SysInfo',
+    method: 'post',
+    data: params,
+  });
+}
