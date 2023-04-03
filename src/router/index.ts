@@ -100,9 +100,6 @@ router.beforeEach((to, from, next) => {
   const userInfo = window.sessionStorage.getItem('userInfo');
   const Token = JSON.parse(userInfo as any)?.userInfo?.Token;
   if (Token) {
-    if (to.path === '/login') {
-      next();
-    }
     next();
   } else if (whiteList.indexOf(to.path) !== -1) {
     next();

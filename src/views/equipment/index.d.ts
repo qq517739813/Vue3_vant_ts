@@ -1,4 +1,4 @@
-interface Item {
+interface CommonItem {
   ModuleCode: string;
   ModuleId: string;
   ModuleName: string;
@@ -6,5 +6,5 @@ interface Item {
 }
 
 export interface UserEquipsItem {
-  UserEquips: Item[];
+  UserEquips: CommonItem[];
 }

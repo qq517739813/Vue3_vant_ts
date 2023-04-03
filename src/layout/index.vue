@@ -53,7 +53,6 @@ const tabbarList: TabbarItem[] = [
   },
 ]
 onMounted(() => {
-  console.log('我是layout页面,我做了缓存');
 });
 </script>
 
