@@ -1,5 +1,6 @@
 <template>
-  <div class="home" v-if="!loading">
+  <div class="home">
+    <div class="title">首页</div>
     <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
       <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
       <template #pulling="props">
@@ -17,10 +18,10 @@
       </template>
       <div class="head">共有<span>{{ devInfo.DevSummary.AllNum }}</span>台设备</div>
       <!-- 饼图 -->
-      <PieChart :chartData="devInfo" />
+      <pie-chart :chartData="devInfo" />
       <div class="head">农场地块</div>
       <!-- 农场地块 -->
-      <FarmPlot :plotData="devInfo.DevSummary.DevType" />
+      <farm-plot :plotData="devInfo.DevSummary.DevType" />
     </van-pull-refresh>
   </div>
 </template>
@@ -76,6 +77,13 @@ onMounted(() => {
 <style scoped lang="less">
 .home {
   padding: 0 16px;
+
+  .title {
+    text-align: center;
+    padding-top: 10px;
+    font-size: 18px;
+    color: #FFFFFF;
+  }
 
   .pulling,
   .loosing {

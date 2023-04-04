@@ -1,5 +1,6 @@
 <template>
-    <div class="equipment" v-if="!loading">
+    <div class="equipment">
+        <div class="title">设备</div>
         <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh" class="equipment-pull-refresh">
             <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
             <template #pulling="props">
@@ -67,6 +68,13 @@ onMounted(() => {
 
 <style scoped lang="less">
 .equipment {
+    .title {
+        text-align: center;
+        padding-top: 10px;
+        font-size: 18px;
+        color: #FFFFFF;
+    }
+
     .equipment-pull-refresh {
         :deep(.van-pull-refresh__track) {
             min-height: 100vh;
@@ -90,7 +98,7 @@ onMounted(() => {
     .equipment-content {
         display: flex;
         flex-wrap: wrap;
-        padding: 39px 17px 0;
+        padding: 29px 17px 0;
 
         .equipment-item {
             box-sizing: border-box;

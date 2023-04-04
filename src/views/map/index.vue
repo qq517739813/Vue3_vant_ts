@@ -1,5 +1,6 @@
 <template>
   <div class="map" v-if="!loading">
+    <div class="title">地图</div>
     <div id="container"></div>
   </div>
 </template>
@@ -109,8 +110,12 @@ onUnmounted(() => {
 
 <style scoped lang="less">
 .map {
-  color: #fff;
-
+  .title {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+    color: #FFFFFF;
+  }
   #container {
     padding: 0px;
     margin: 0px;
