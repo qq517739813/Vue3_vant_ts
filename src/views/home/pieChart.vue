@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, defineProps } from 'vue';
+import { onMounted } from 'vue';
 import * as echarts from 'echarts';
 import { EchartsDataItem } from './index'
 
@@ -77,7 +77,8 @@ const initChart = () => {
                         color: '#FFFFFF',
                         fontSize: 14,
                     },
-                }
+                },
+                padding: [0, 0, -2, 0],
             },
             formatter: (name: string) => {
                 // formatter格式化函数动态呈现数据
@@ -99,15 +100,17 @@ const initChart = () => {
                 label: {
                     show: true,
                     position: 'outside',
-                    color:'#FFFFFF',
-                    fontSize:12,
+                    color: '#FFFFFF',
+                    fontSize: 12,
                     formatter(param: any) {
                         // correct the percentage
                         return `${param.percent}%`;
                     }
                 },
                 labelLine: {
-                    show: true
+                    show: true,
+                    length: 10,
+                    length2: 10
                 },
                 emphasis: {
                     label: {

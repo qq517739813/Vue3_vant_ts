@@ -1,9 +1,27 @@
 <template>
     <div class="equipment" v-if="!loading">
-        <div class="equipment-item" v-for="item  in equipInfo.UserEquips" :key="item.ModuleId">
-            <img :src="getEquipImg(item)" alt="">
-            <span>{{ item.ModuleName }}</span>
-        </div>
+        <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh" class="equipment-pull-refresh">
+            <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
+            <template #pulling="props">
+                <div class="pulling" :style="{ height: props.distance }">
+                    <van-icon name="arrow-down" />
+                    <span>下拉即可刷新...</span>
+                </div>
+            </template>
+            <!-- 释放提示 -->
+            <template #loosing>
+                <div class="loosing">
+                    <van-icon name="arrow-up" />
+                    <span>释放即可刷新...</span>
+                </div>
+            </template>
+            <div class="equipment-content">
+                <div class="equipment-item" v-for="item  in equipInfo.UserEquips" :key="item.ModuleId">
+                    <img :src="getEquipImg(item)" alt="">
+                    <span>{{ item.ModuleName }}</span>
+                </div>
+            </div>
+        </van-pull-refresh>
     </div>
 </template>
 
@@ -15,7 +33,9 @@ import { getEquipImg } from '@/utils/base';
 import { UserEquipsItem } from './index'
 
 const store = userStore();
-const loading = ref(false)
+const loading = ref<boolean>(false)
+const refreshLoading = ref<boolean>(false)
+
 const equipInfo = reactive<UserEquipsItem>({
     UserEquips: []
 })
@@ -34,6 +54,12 @@ const initData = () => {
         }
     })
 }
+// 下拉刷新
+const onRefresh = () => {
+    refreshLoading.value = true;
+    initData()
+    refreshLoading.value = false;
+};
 onMounted(() => {
     initData()
 });
@@ -41,32 +67,58 @@ onMounted(() => {
 
 <style scoped lang="less">
 .equipment {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 39px 17px 0;
+    .equipment-pull-refresh {
+        :deep(.van-pull-refresh__track ){
+            min-height: 100vh ;
 
-    .equipment-item {
-        box-sizing: border-box;
+        }
+    }
+
+    .pulling,
+    .loosing {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        margin-bottom: 14px;
-        width: 104px;
-        height: 108px;
-        border-radius: 4px;
-        border: 1px solid #333333;
-        img{
-            margin: 12px 0 10px;
-            width: 45px;
-            height: 45px;
-        }
+        justify-content: center;
+        height: 80px;
+        font-size: 20px;
+
         span {
-            font-size: 14px;
-            color: #CCCCCC;
+            margin-left: 10px;
         }
     }
 
-    .equipment-item:nth-child(3n-1) {
-        margin: 0 14px;
+    .equipment-content {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 39px 17px 0;
+
+        .equipment-item {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 14px;
+            width: 104px;
+            height: 108px;
+            border-radius: 4px;
+            border: 1px solid #333333;
+
+            img {
+                margin: 12px 0 10px;
+                width: 45px;
+                height: 45px;
+            }
+
+            span {
+                font-size: 14px;
+                color: #CCCCCC;
+            }
+        }
+
+        .equipment-item:nth-child(3n-1) {
+            margin: 0 14px;
+        }
+
     }
-}</style>
+}
+</style>

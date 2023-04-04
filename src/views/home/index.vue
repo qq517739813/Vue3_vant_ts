@@ -1,21 +1,38 @@
 <template>
   <div class="home" v-if="!loading">
-    <div class="head">共有<span>{{ devInfo.DevSummary.AllNum }}</span>台设备</div>
-    <PieChart :chartData="devInfo" />
-    <div class="head">农场地块</div>
-    <main class="allFarm">
-      <div class="allFarm_item" v-for="item in devInfo.DevSummary.DevType" :key="item.TypeId">
-        <img :src="item.Icon" alt="">
-        <span class="item-title">{{ item.TypeName }}</span>
-        <div class="item-text">运行<span>{{ item.OnlineNum }}</span>/总{{ item.AllNum }}</div>
-      </div>
-    </main>
+    <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
+      <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
+      <template #pulling="props">
+        <div class="pulling" :style="{ height: props.distance }">
+          <van-icon name="arrow-down" />
+          <span>下拉即可刷新...</span>
+        </div>
+      </template>
+      <!-- 释放提示 -->
+      <template #loosing>
+        <div class="loosing">
+          <van-icon name="arrow-up" />
+          <span>释放即可刷新...</span>
+        </div>
+      </template>
+      <div class="head">共有<span>{{ devInfo.DevSummary.AllNum }}</span>台设备</div>
+      <PieChart :chartData="devInfo" />
+      <div class="head">农场地块</div>
+      <main class="allFarm">
+        <div class="allFarm_item" v-for="item in devInfo.DevSummary.DevType" :key="item.TypeId">
+          <img :src="item.Icon" alt="">
+          <span class="item-title">{{ item.TypeName }}</span>
+          <div class="item-text">运行<span>{{ item.OnlineNum }}</span>/总{{ item.AllNum }}</div>
+        </div>
+      </main>
+    </van-pull-refresh>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
 import { userStore } from '@/store/user';
+// import { showLoadingToast } from 'vant';
 import { devSummary } from '@/api/home'
 import { DevSummaryItem } from './index'
 import PieChart from './pieChart.vue'
@@ -25,9 +42,16 @@ const devInfo = reactive<DevSummaryItem>({
   DevSummary: {}
 })
 const loading = ref<boolean>(false)
+const refreshLoading = ref<boolean>(false)
 
 // 获取设备汇总数据
 const initData = () => {
+  // showLoadingToast({
+  //   message: 'loading...',
+  //   forbidClick: true,
+  //   loadingType: 'spinner',
+  //   duration:200,
+  // });
   loading.value = true
   const payload = {
     Uid: store.userInfo.Uid,
@@ -41,6 +65,12 @@ const initData = () => {
     }
   })
 }
+// 下拉刷新
+const onRefresh = () => {
+  refreshLoading.value = true;
+  initData()
+  refreshLoading.value = false;
+};
 onMounted(() => {
   initData()
 });
@@ -49,6 +79,19 @@ onMounted(() => {
 <style scoped lang="less">
 .home {
   padding: 0 16px;
+
+  .pulling,
+  .loosing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    font-size: 20px;
+
+    span {
+      margin-left: 10px;
+    }
+  }
 
   .head {
     padding: 24px 0 12px;

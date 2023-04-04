@@ -130,7 +130,7 @@ onMounted(() => {
           color: #EEEEEE;
         }
 
-        /deep/ .van-field__control {
+        :deep(.van-field__control) {
           font-size: 14px;
           padding-left: 16px;
           color: #fff;
@@ -139,7 +139,7 @@ onMounted(() => {
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /deep/ .van-field__control::-webkit-input-placeholder {
+        :deep(.van-field__control::-webkit-input-placeholder)  {
           font-size: 14px;
           color: #999999;
         }
