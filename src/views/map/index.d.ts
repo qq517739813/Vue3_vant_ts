@@ -1,4 +1,4 @@
-interface CommonItem {
+export interface CommonItem {
   DevAddr?: string;
   TypeCode?: string;
   IconPath?: string;
@@ -20,5 +20,5 @@ interface CommonItem {
 }
 
 export interface DevListtem {
-  DevList: CommonItem;
+  DevList: CommonItem[];
 }

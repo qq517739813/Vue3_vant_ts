@@ -68,8 +68,8 @@ onMounted(() => {
 <style scoped lang="less">
 .equipment {
     .equipment-pull-refresh {
-        :deep(.van-pull-refresh__track ){
-            min-height: 100vh ;
+        :deep(.van-pull-refresh__track) {
+            min-height: 100vh;
 
         }
     }

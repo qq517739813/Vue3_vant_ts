@@ -8,10 +8,13 @@ import AnalyzeData from '@/assets/AnalyzeData.svg';
 import WarnData from '@/assets/WarnData.svg';
 import Fertilizer from '@/assets/Fertilizer.svg';
 import WarnMsgData from '@/assets/WarnMsgData.svg';
+import { CommonItem as MarkersItem } from '@/views/map/index';
 
 export interface EquipItem {
   ModuleCode: string;
 }
+
+// 获取设备图标
 export const getEquipImg = (param: EquipItem) => {
   switch (param.ModuleCode) {
     // 监测数据
@@ -44,6 +47,20 @@ export const getEquipImg = (param: EquipItem) => {
     // 水肥控制
     case 'Fertilizer':
       return Fertilizer;
+    default:
+      break;
+  }
+};
+
+// 获取地图marker图标
+export const getMarkersIcon = (param: MarkersItem) => {
+  switch (String(param.Status)) {
+    // 在线
+    case '1':
+      return `${param.IconPath}${param.OnIcon}`;
+    // 待机
+    case '0':
+      return `${param.IconPath}${param.SleepIcon}`;
     default:
       break;
   }
