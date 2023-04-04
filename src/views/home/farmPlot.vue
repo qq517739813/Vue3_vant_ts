@@ -1,7 +1,7 @@
 <template>
     <div class="farmPlot">
         <main class="allFarm">
-            <div class="allFarm_item" v-for="item in props.plotData" :key="item.TypeId">
+            <div class="allFarm_item" v-for="item in props.plotData" :key="item.TypeId" @click="handleClick(item.FunCode)">
                 <img :src="item.Icon" alt="">
                 <span class="item-title">{{ item.TypeName }}</span>
                 <div class="item-text">运行<span>{{ item.OnlineNum }}</span>/总{{ item.AllNum }}</div>
@@ -11,7 +11,9 @@
 </template>
 
 <script lang="ts" setup>
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const props = defineProps({
     plotData: {
         type: Object,
@@ -21,6 +23,14 @@ const props = defineProps({
     },
 })
 
+const handleClick = (FunCode:string) => {
+    router.push({
+        name: FunCode,
+        params: {
+            FunCode
+        }
+    })
+}
 </script>
 
 <style scoped lang="less">

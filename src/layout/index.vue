@@ -15,6 +15,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
+import type { Ref } from 'vue'
 import { TabbarItem } from './index'
 import HomeActive from '@/assets/home_active.svg'
 import HomeInactive from '@/assets/home_inactive.svg'
@@ -25,7 +26,8 @@ import EquipmentInactive from '@/assets/equipment_inactive.svg'
 import UserInfoActive from '@/assets/userInfo_active.svg'
 import UserInfoInactive from '@/assets/userInfo_inactive.svg'
 
-const active = ref(0);
+
+const active: Ref<number> = ref(0);
 const tabbarList: TabbarItem[] = [
   {
     title: '首页',

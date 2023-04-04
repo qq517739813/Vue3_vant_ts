@@ -42,28 +42,39 @@ const constantRoutes = [
       // 导入首页组件
       {
         path: '/home',
+        name: 'Home',
         component: () => import('@/views/home/index.vue'),
         meta: { title: '首页' },
       },
       // 导入地图组件
       {
         path: '/map',
+        name: 'Map',
         component: () => import('@/views/map/index.vue'),
         meta: { title: '地图' },
       },
       // 导入设备组件
       {
         path: '/equipment',
+        name: 'Equipment',
         component: () => import('@/views/equipment/index.vue'),
         meta: { title: '设备' },
       },
       // 导入我的组件
       {
         path: '/userInfo',
+        name: 'UserInfo',
         component: () => import('@/views/userInfo/index.vue'),
         meta: { title: '我的' },
       },
     ],
+  },
+  // 导入实时(监测)数据组件
+  {
+    path: '/MonitorData/:FunCode',
+    name: 'MonitorData',
+    component: () => import('@/views/monitorData/index.vue'),
+    meta: { title: '实时数据' },
   },
   // 无权限页面
   {

@@ -69,15 +69,23 @@ onMounted(() => {
 <style scoped lang="less">
 .equipment {
     .title {
+        box-sizing: border-box;
+        position: fixed;
+        z-index: 22;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 45px;
+        line-height: 45px;
+        width: 100%;
+        background: #1f2228;
         text-align: center;
-        padding-top: 10px;
         font-size: 18px;
         color: #FFFFFF;
     }
 
     .equipment-pull-refresh {
         :deep(.van-pull-refresh__track) {
-            min-height: 100vh;
+            min-height: calc(100vh - 50px);
 
         }
     }
@@ -98,7 +106,7 @@ onMounted(() => {
     .equipment-content {
         display: flex;
         flex-wrap: wrap;
-        padding: 29px 17px 0;
+        padding: 39px 17px 0;
 
         .equipment-item {
             box-sizing: border-box;

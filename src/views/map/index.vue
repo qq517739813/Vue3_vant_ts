@@ -95,7 +95,7 @@ const initMap = () => {
   })
 }
 // 打开详情弹窗
-const openDialog = (e: any) => {
+const openDialog = (e: Event) => {
   console.log('e', e)
 }
 onMounted(() => {

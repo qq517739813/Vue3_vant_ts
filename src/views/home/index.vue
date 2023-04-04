@@ -16,18 +16,19 @@
           <span>释放即可刷新...</span>
         </div>
       </template>
-      <div class="head">共有<span>{{ devInfo.DevSummary.AllNum }}</span>台设备</div>
+      <div class="equipment-title">共有<span>{{ devInfo.DevSummary.AllNum }}</span>台设备</div>
       <!-- 饼图 -->
-      <pie-chart :chartData="devInfo" />
-      <div class="head">农场地块</div>
+      <pie-chart :chartData="devInfo" v-if="!loading" />
+      <div class="farm-title">农场地块</div>
       <!-- 农场地块 -->
-      <farm-plot :plotData="devInfo.DevSummary.DevType" />
+      <farm-plot :plotData="devInfo.DevSummary.DevType" v-if="!loading" />
     </van-pull-refresh>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
+import type { Ref } from 'vue'
 import { userStore } from '@/store/user';
 // import { showLoadingToast } from 'vant';
 import { devSummary } from '@/api/home'
@@ -39,8 +40,8 @@ const store = userStore();
 const devInfo = reactive<DevSummaryItem>({
   DevSummary: {}
 })
-const loading = ref<boolean>(false)
-const refreshLoading = ref<boolean>(false)
+const loading: Ref<boolean> = ref(false)
+const refreshLoading: Ref<boolean>  = ref(false)
 
 // 获取设备汇总数据
 const initData = () => {
@@ -79,8 +80,16 @@ onMounted(() => {
   padding: 0 16px;
 
   .title {
+    box-sizing: border-box;
+    position: fixed;
+    z-index: 22;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 45px;
+    line-height: 45px;
+    width: 100%;
+    background: #1f2228;
     text-align: center;
-    padding-top: 10px;
     font-size: 18px;
     color: #FFFFFF;
   }
@@ -98,14 +107,19 @@ onMounted(() => {
     }
   }
 
-  .head {
-    padding: 24px 0 12px;
+  .equipment-title,
+  .farm-title {
+    padding: 47px 0 12px;
     font-size: 16px;
     color: #9E9E9E;
 
     span {
       color: #00CC90;
     }
+  }
+
+  .farm-title {
+    padding-top: 24px;
   }
 }
 </style>

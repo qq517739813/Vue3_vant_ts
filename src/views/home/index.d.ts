@@ -1,11 +1,18 @@
-export interface CommonItem {
+
+export interface BaseItem{
   AllNum?: number | string; // 所有
   FaultNum?: number | string; // 异常
   NetExpNum?: number | string;
   OnlineNum?: number | string; // 在线
   OutageNum?: number | string;
   ReadyNum?: number | string; // 待机
-  DevType?: any[];
+  FunCode?: string;
+  Icon?: string;
+  TypeId?: string;
+  TypeName?:string;
+}
+export interface CommonItem extends BaseItem {
+  DevType?: BaseItem[];
 }
 export interface EchartsDataItem {
   OnlineNum?: string; // 在线
