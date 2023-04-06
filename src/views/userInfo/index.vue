@@ -15,9 +15,7 @@
         </div>
       </div>
       <!-- 右箭头 -->
-      <div class="userNameRigth">
-        <van-icon name="arrow" />
-      </div>
+      <van-icon name="arrow" />
     </div>
     <!-- 报警设置 -->
     <div class="warnSetting">
@@ -25,20 +23,16 @@
         <img src="@/assets/warnSetting.svg" class="warning-o" />
         <span>报警设置</span>
       </div>
-      <div class="warnSettingRigth">
-        <van-icon name="arrow" />
-      </div>
+      <van-icon name="arrow" />
     </div>
     <hr class="hengxian" />
     <!-- 版本更新 -->
-    <div class="versionUpdate">
-      <div>
-        <img src="@/assets/versionUpdate.svg" class="records" />
+    <div class="warnSetting">
+      <div class="duiqi">
+        <img src="@/assets/versionUpdate.svg" class="warning-o" />
         <span>版本更新日志</span>
       </div>
-      <div class="versionUpdateRigth">
-        <van-icon name="arrow" />
-      </div>
+      <van-icon name="arrow" />
     </div>
     <div class="loginOut">
       <span>退出账号</span>
@@ -66,6 +60,10 @@ onMounted(() => {});
 .duiqi {
   display: flex;
   align-items: flex-end;
+}
+.warning-o {
+  font-size: 20px;
+  margin-right: 11px;
 }
 .userInfo {
   .title {
@@ -109,11 +107,6 @@ onMounted(() => {});
         }
       }
     }
-    // 右箭头
-    .userNameRigth {
-      width: 20px;
-      height: 20px;
-    }
   }
   // 报警设置
   .warnSetting {
@@ -125,41 +118,10 @@ onMounted(() => {});
     height: 60px;
     color: #ccc;
     text-align: center;
-    .warning-o {
-      font-size: 20px;
-      margin-right: 11px;
-    }
-    & .warnSettingRigth {
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
   .hengxian {
     margin: 28px 18px 0px 18px;
     border: 0.5px solid rgba(255, 255, 255, 0.1);
-  }
-  // 版本更新
-  .versionUpdate {
-    margin: 70px 18px 0px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    height: 60px;
-    color: #ccc;
-    text-align: center;
-    .records {
-      font-size: 20px;
-      margin-right: 11px;
-    }
-    & .versionUpdateRigth {
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
   // 退出账号
   .loginOut {
@@ -167,7 +129,6 @@ onMounted(() => {});
     margin: 70px 18px 0px 18px;
     border-radius: 4px;
     background: #00cc90;
-    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
