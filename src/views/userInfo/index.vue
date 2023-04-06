@@ -1,143 +1,143 @@
 <template>
   <div class="userInfo">
-    <div class="title">我的</div>
-    <!-- 头像栏 -->
-    <div class="userName" @click="userInfoHandleClick">
-      <!-- 头像 -->
-      <div class="usericon">
-        <div class="userIconImg">
-          <img src="@/assets/user.svg" />
-        </div>
-        <!-- 用户名 -->
-        <div class="userNameInfo">
-          <div class="userNameInfo1">{{ store.userInfo.UserName }}</div>
-          <div class="userNameInfo2">{{ store.userInfo.UserName }}</div>
-        </div>
-      </div>
-      <!-- 右箭头 -->
-      <van-icon name="arrow" />
-    </div>
-    <!-- 报警设置 -->
-    <div class="warnSetting">
-      <div class="duiqi">
-        <img src="@/assets/warnSetting.svg" class="warning-o" />
-        <span>报警设置</span>
-      </div>
-      <van-icon name="arrow" />
-    </div>
-    <hr class="hengxian" />
-    <!-- 版本更新 -->
-    <div class="warnSetting">
-      <div class="duiqi">
-        <img src="@/assets/versionUpdate.svg" class="warning-o" />
-        <span>版本更新日志</span>
-      </div>
-      <van-icon name="arrow" />
-    </div>
-    <div class="loginOut">
-      <span>退出账号</span>
-    </div>
+    <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="我的" />
+    <van-cell-group :border="false" class="content">
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('EditData')">
+        <template #icon>
+          <div class="userIcon">
+            <img src="@/assets/user.svg" alt="" />
+          </div>
+        </template>
+        <template #title>
+          <span class="content-cell-userOne">{{ store.userInfo.UserName }}</span>
+        </template>
+        <template #label>
+          <span class="content-cell-userTwo">{{ store.userInfo.UserName }}</span>
+        </template>
+      </van-cell>
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
+        <template #icon>
+          <img src="@/assets/warnSetting.svg" alt="" />
+        </template>
+        <template #title>
+          <span class="content-cell-title">报警设置</span>
+        </template>
+      </van-cell>
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('VersionManage')">
+        <template #icon>
+          <img src="@/assets/versionUpdate.svg" alt="" />
+        </template>
+        <template #title>
+          <span class="content-cell-title">版本更新日志</span>
+        </template>
+      </van-cell>
+    </van-cell-group>
+    <van-button class="loginOut" @click="logOut" type="success">退出账号</van-button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
 import { userStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 
 const store = userStore();
 const router = useRouter();
 
-const userInfoHandleClick = () => {
+// 点击每个单元格
+const handeleCellClick = (item: string) => {
   router.push({
-    name: 'EditData',
+    name: item,
   });
 };
-onMounted(() => {});
+
+// 点击退出
+const logOut = () => {
+  store.upDateUserInfo({});
+  router.push({
+    name: 'Login',
+  });
+};
 </script>
-    
+
 <style scoped lang="less">
-.duiqi {
-  display: flex;
-  align-items: flex-end;
-}
-.warning-o {
-  font-size: 20px;
-  margin-right: 11px;
-}
 .userInfo {
+  padding: 0 16px;
+  background: #1f2228;
+
   .title {
-    text-align: center;
-    padding-top: 10px;
-    font-size: 18px;
-    color: #ffffff;
+    :deep(.van-nav-bar--fixed) {
+      background: #1f2228;
+      .van-nav-bar__title {
+        font-weight: normal;
+        font-size: 18px;
+        color: #ffffff;
+      }
+    }
   }
-  .userName {
-    display: flex;
-    margin: 28px 18px 0px 18px;
-    height: 60px;
-    color: #ffffff;
-    align-items: center;
-    justify-content: space-between;
-    // 头像
-    .usericon {
+  .content {
+    .content-cell {
       display: flex;
-      .userIconImg {
+      align-items: flex-end;
+      background: #1f2228;
+      padding: 0;
+      .userIcon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 60px;
         height: 60px;
-        background: rgba(0, 204, 144, 0.4);
         border-radius: 8px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        background: rgba(0, 204, 144, 0.4);
+        border: 1px solid rgba(0, 204, 144, 0.4);
+        img {
+          width: 40px;
+          height: 40px;
+        }
       }
-      // 用户名
-      .userNameInfo {
+      .content-cell-userOne {
+        margin-bottom: 3px;
         margin-left: 16px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        .userNameInfo1 {
-          font-size: 18px;
-          color: #cccccc;
-        }
-        .userNameInfo2 {
-          font-size: 14px;
-          color: #9e9e9e;
-        }
+        font-size: 18px;
+        color: #cccccc;
+      }
+      .content-cell-userTwo {
+        margin-left: 16px;
+        font-size: 14px;
+        color: #9e9e9e;
+      }
+      .content-cell-title {
+        margin-left: 11px;
+        font-size: 16px;
+        color: #cccccc;
+      }
+      :deep(.van-cell__right-icon) {
+        font-size: 20px;
       }
     }
+    .content-cell:after {
+      border-bottom: none;
+    }
+    .content-cell:nth-child(1) {
+      display: flex;
+      align-items: center;
+    }
+    .content-cell:nth-child(2) {
+      padding-top: 64px;
+      padding-bottom: 28px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    }
+    .content-cell:nth-child(3) {
+      padding-top: 38px;
+    }
   }
-  // 报警设置
-  .warnSetting {
-    margin: 70px 18px 0px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    height: 60px;
-    color: #ccc;
-    text-align: center;
-  }
-  .hengxian {
-    margin: 28px 18px 0px 18px;
-    border: 0.5px solid rgba(255, 255, 255, 0.1);
-  }
-  // 退出账号
   .loginOut {
+    margin-top: 134px;
+    width: 100%;
     height: 50px;
-    margin: 70px 18px 0px 18px;
     border-radius: 4px;
     background: #00cc90;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    & span {
-      font-size: 14px;
-      font-weight: normal;
-      letter-spacing: 0px;
-      color: #ffffff;
-    }
+    font-size: 14px;
+    color: #ffffff;
   }
 }
 </style>
