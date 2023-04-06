@@ -1,7 +1,7 @@
 <template>
-  <div class="monitorData">
+  <div class="autoIrrigate">
     <van-nav-bar
-      title="实时数据"
+      title="智能灌溉"
       class="title"
       fixed
       :border="false"
@@ -39,7 +39,7 @@ console.log('countFuncode', countFuncode);
 </script>
 
 <style scoped lang="less">
-.monitorData {
+.autoIrrigate {
   .title {
     :deep(.van-nav-bar--fixed) {
       background: #1f2228;

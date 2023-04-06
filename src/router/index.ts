@@ -69,12 +69,68 @@ const constantRoutes = [
       },
     ],
   },
-  // 导入实时(监测)数据组件
+  // 导入气象站、土壤墒情站、监测数据数据组件
   {
     path: '/MonitorData/:FunCode',
     name: 'MonitorData',
     component: () => import('@/views/monitorData/index.vue'),
     meta: { title: '实时数据' },
+  },
+  // 导入摄像机(视频直播)组件
+  {
+    path: '/VideoData/:FunCode',
+    name: 'VideoData',
+    component: () => import('@/views/videoData/index.vue'),
+    meta: { title: '视频监控' },
+  },
+  // 导入虫情测报仪(虫情测报)组件
+  {
+    path: '/PestLamp/:FunCode',
+    name: 'PestLamp',
+    component: () => import('@/views/pestLamp/index.vue'),
+    meta: { title: '虫情测报' },
+  },
+  // 导入杀虫灯(虫情监测)组件
+  {
+    path: '/KillPestLamp/:FunCode',
+    name: 'KillPestLamp',
+    component: () => import('@/views/killPestLamp/index.vue'),
+    meta: { title: '虫情监测' },
+  },
+  // 导入灌溉阀门(智能灌溉)组件
+  {
+    path: '/AutoIrrigate/:FunCode',
+    name: 'AutoIrrigate',
+    component: () => import('@/views/autoIrrigate/index.vue'),
+    meta: { title: '智能灌溉' },
+  },
+  // 导入数据分析组件
+  {
+    path: '/AnalyzeData/:FunCode',
+    name: 'AnalyzeData',
+    component: () => import('@/views/analyzeData/index.vue'),
+    meta: { title: '数据分析' },
+  },
+  // 导入预警统计组件
+  {
+    path: '/WarnData/:FunCode',
+    name: 'WarnData',
+    component: () => import('@/views/warnData/index.vue'),
+    meta: { title: '预警统计' },
+  },
+  // 导入预警通知组件
+  {
+    path: '/WarnMsgData/:FunCode',
+    name: 'WarnMsgData',
+    component: () => import('@/views/warnMsgData/index.vue'),
+    meta: { title: '预警通知' },
+  },
+  // 导入施肥机(水肥控制)组件
+  {
+    path: '/Fertilizer/:FunCode',
+    name: 'Fertilizer',
+    component: () => import('@/views/fertilizer/index.vue'),
+    meta: { title: '施肥机' },
   },
   // 无权限页面
   {

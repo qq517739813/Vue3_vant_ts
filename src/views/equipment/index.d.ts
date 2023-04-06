@@ -1,4 +1,4 @@
-interface CommonItem {
+export interface CommonItem {
   ModuleCode: string;
   ModuleId: string;
   ModuleName: string;

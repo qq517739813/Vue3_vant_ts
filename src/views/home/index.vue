@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="title">首页</div>
+    <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="首页" />
     <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh">
       <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
       <template #pulling="props">
@@ -30,7 +30,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import type { Ref } from 'vue'
 import { userStore } from '@/store/user';
-// import { showLoadingToast } from 'vant';
+import { showLoadingToast, closeToast } from 'vant';
 import { devSummary } from '@/api/home'
 import { DevSummaryItem } from './index'
 import PieChart from './pieChart.vue'
@@ -41,17 +41,17 @@ const devInfo = reactive<DevSummaryItem>({
   DevSummary: {}
 })
 const loading: Ref<boolean> = ref(false)
-const refreshLoading: Ref<boolean>  = ref(false)
+const refreshLoading: Ref<boolean> = ref(false)
 
 // 获取设备汇总数据
 const initData = () => {
-  // showLoadingToast({
-  //   message: 'loading...',
-  //   forbidClick: true,
-  //   loadingType: 'spinner',
-  //   duration:200,
-  // });
   loading.value = true
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration:0,
+  });
   const payload = {
     Uid: store.userInfo.Uid,
     Token: store.userInfo.Token,
@@ -61,6 +61,7 @@ const initData = () => {
       const { Data } = (res as any);
       devInfo.DevSummary = Data
       loading.value = false;
+      closeToast()
     }
   })
 }
@@ -80,18 +81,15 @@ onMounted(() => {
   padding: 0 16px;
 
   .title {
-    box-sizing: border-box;
-    position: fixed;
-    z-index: 22;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 45px;
-    line-height: 45px;
-    width: 100%;
-    background: #1f2228;
-    text-align: center;
-    font-size: 18px;
-    color: #FFFFFF;
+    :deep(.van-nav-bar--fixed) {
+      background: #1f2228;
+
+      .van-nav-bar__title {
+        font-weight: normal;
+        font-size: 18px;
+        color: #FFFFFF;
+      }
+    }
   }
 
   .pulling,
@@ -109,17 +107,13 @@ onMounted(() => {
 
   .equipment-title,
   .farm-title {
-    padding: 47px 0 12px;
+    padding: 24px 0 12px;
     font-size: 16px;
     color: #9E9E9E;
 
     span {
       color: #00CC90;
     }
-  }
-
-  .farm-title {
-    padding-top: 24px;
   }
 }
 </style>
