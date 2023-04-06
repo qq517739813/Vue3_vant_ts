@@ -19,5 +19,10 @@ declare namespace API {
     interface CommonPayload extends Params {
       Uid: string; // 用户id
     }
+    interface VersionManagePayload extends Params {
+      Condition: string;
+      Page:number;
+      PageSize:number;
+    }
   }
 }

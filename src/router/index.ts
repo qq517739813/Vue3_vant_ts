@@ -69,6 +69,13 @@ const constantRoutes = [
       },
     ],
   },
+  // 导入版本更新日志组件
+  {
+    path: '/versionManage',
+    name: 'VersionManage',
+    component: () => import('@/views/versionManage/index.vue'),
+    meta: { title: '版本更新记录' },
+  },
   // 导入气象站、土壤墒情站、监测数据数据组件
   {
     path: '/MonitorData/:FunCode',
