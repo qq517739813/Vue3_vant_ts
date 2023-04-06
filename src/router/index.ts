@@ -161,6 +161,14 @@ const constantRoutes = [
     path: '/:catchAll(.*)', // 不识别的path自动匹配404
     redirect: '/404',
   },
+  // 我的-编辑资料 页面路由
+  // 我的-编辑资料 页面路由
+  {
+    path: '/EditData',
+    name: 'EditData',
+    component: () => import('@/views/editdata/index.vue'),
+    meta: { title: '编辑资料' },
+  },
 ];
 
 const router = createRouter({

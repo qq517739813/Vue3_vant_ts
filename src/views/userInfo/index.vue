@@ -2,39 +2,37 @@
   <div class="userInfo">
     <div class="title">我的</div>
     <!-- 头像栏 -->
-    <div class="userName">
+    <div class="userName" @click="userInfoHandleClick">
       <!-- 头像 -->
       <div class="usericon">
         <div class="userIconImg">
           <img src="@/assets/user.svg" />
         </div>
-      </div>
-      <!-- 用户名 -->
-      <div class="userNameInfo">
-        <div class="userNameInfo1">{{ store.userInfo.UserName }}</div>
-        <div class="userNameInfo2">{{ store.userInfo.UserName }}</div>
+        <!-- 用户名 -->
+        <div class="userNameInfo">
+          <div class="userNameInfo1">{{ store.userInfo.UserName }}</div>
+          <div class="userNameInfo2">{{ store.userInfo.UserName }}</div>
+        </div>
       </div>
       <!-- 右箭头 -->
-      <div class="userNameRigth">
-        <van-icon name="arrow" />
-      </div>
+      <van-icon name="arrow" />
     </div>
     <!-- 报警设置 -->
     <div class="warnSetting">
-      <van-icon name="warning-o" class="warning-o" />
-      <span>报警设置</span>
-      <div class="warnSettingRigth">
-        <van-icon name="arrow" />
+      <div class="duiqi">
+        <img src="@/assets/warnSetting.svg" class="warning-o" />
+        <span>报警设置</span>
       </div>
+      <van-icon name="arrow" />
     </div>
     <hr class="hengxian" />
     <!-- 版本更新 -->
-    <div class="versionUpdate">
-      <van-icon name="records" class="records" />
-      <span>版本更新日志</span>
-      <div class="versionUpdateRigth">
-        <van-icon name="arrow" />
+    <div class="warnSetting">
+      <div class="duiqi">
+        <img src="@/assets/versionUpdate.svg" class="warning-o" />
+        <span>版本更新日志</span>
       </div>
+      <van-icon name="arrow" />
     </div>
     <div class="loginOut">
       <span>退出账号</span>
@@ -45,12 +43,28 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
 
 const store = userStore();
+const router = useRouter();
+
+const userInfoHandleClick = () => {
+  router.push({
+    name: 'EditData',
+  });
+};
 onMounted(() => {});
 </script>
     
 <style scoped lang="less">
+.duiqi {
+  display: flex;
+  align-items: flex-end;
+}
+.warning-o {
+  font-size: 20px;
+  margin-right: 11px;
+}
 .userInfo {
   .title {
     text-align: center;
@@ -60,139 +74,61 @@ onMounted(() => {});
   }
   .userName {
     display: flex;
-    position: relative;
-    left: 18px;
-    top: 28px;
-    width: 333px;
+    margin: 28px 18px 0px 18px;
     height: 60px;
-    opacity: 1;
     color: #ffffff;
+    align-items: center;
+    justify-content: space-between;
     // 头像
     .usericon {
-      width: 60px;
-      height: 60px;
-      background: rgba(0, 204, 144, 0.4);
-      border-radius: 8px;
-      position: relative;
-      & img {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-    // 用户名
-    .userNameInfo {
-      margin-left: 16px;
       display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      .userNameInfo1 {
-        font-size: 18px;
-        font-weight: normal;
-        letter-spacing: 0em;
-        color: #cccccc;
+      .userIconImg {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 204, 144, 0.4);
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-      .userNameInfo2 {
-        font-family: PingFang SC;
-        font-size: 14px;
-        font-weight: normal;
-        letter-spacing: 0em;
-        color: #9e9e9e;
+      // 用户名
+      .userNameInfo {
+        margin-left: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        .userNameInfo1 {
+          font-size: 18px;
+          color: #cccccc;
+        }
+        .userNameInfo2 {
+          font-size: 14px;
+          color: #9e9e9e;
+        }
       }
-    }
-    // 右箭头
-    .userNameRigth {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translate(50%, -50%);
-      width: 20px;
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2px;
     }
   }
   // 报警设置
   .warnSetting {
-    margin-top: 67px;
+    margin: 70px 18px 0px 18px;
     display: flex;
-    position: relative;
+    justify-content: space-between;
     align-items: center;
     font-size: 16px;
-    left: 18px;
-    top: 26px;
-    width: 333px;
     height: 60px;
     color: #ccc;
     text-align: center;
-    .warning-o {
-      font-size: 20px;
-      margin-right: 11px;
-    }
-    & .warnSettingRigth {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translate(50%, -50%);
-      width: 20px;
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
   .hengxian {
-    position: absolute;
-    left: 16px;
-    top: 283px;
-    width: 343px;
-    height: 0px;
-    opacity: 1;
+    margin: 28px 18px 0px 18px;
     border: 0.5px solid rgba(255, 255, 255, 0.1);
-  }
-  // 版本更新
-  .versionUpdate {
-    margin-top: 67px;
-    display: flex;
-    position: relative;
-    align-items: center;
-    font-size: 16px;
-    left: 18px;
-    top: 26px;
-    width: 333px;
-    height: 60px;
-    color: #ccc;
-    text-align: center;
-    .records {
-      font-size: 20px;
-      margin-right: 11px;
-    }
-    & .versionUpdateRigth {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translate(50%, -50%);
-      width: 20px;
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
   // 退出账号
   .loginOut {
-    position: absolute;
-    left: 18px;
-    top: 478px;
-    width: 343px;
     height: 50px;
+    margin: 70px 18px 0px 18px;
     border-radius: 4px;
-    opacity: 1;
     background: #00cc90;
-    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
