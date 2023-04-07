@@ -16,18 +16,14 @@
         </template>
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
-        <template #icon>
-          <img src="@/assets/warnSetting.svg" alt="" />
-        </template>
         <template #title>
-          <span class="content-cell-title">报警设置</span>
+            <img src="@/assets/warnSetting.svg" alt="" />
+            <span class="content-cell-title">报警设置</span>
         </template>
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('VersionManage')">
-        <template #icon>
-          <img src="@/assets/versionUpdate.svg" alt="" />
-        </template>
         <template #title>
+          <img src="@/assets/versionUpdate.svg" alt="" />
           <span class="content-cell-title">版本更新日志</span>
         </template>
       </van-cell>
@@ -104,6 +100,9 @@ const logOut = () => {
         margin-left: 16px;
         font-size: 14px;
         color: #9e9e9e;
+      }
+      img{
+        vertical-align: sub;
       }
       .content-cell-title {
         margin-left: 11px;
