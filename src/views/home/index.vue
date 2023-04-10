@@ -31,7 +31,7 @@ import { onMounted, reactive, ref } from 'vue';
 import type { Ref } from 'vue'
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
-import { devSummary } from '@/api/home'
+import { devSummary } from '@/api/equipment'
 import { DevSummaryItem } from './index'
 import PieChart from './pieChart.vue'
 import FarmPlot from './farmPlot.vue'

@@ -1,7 +1,7 @@
 <template>
-  <div class="versionManage">
+  <div class="warnSetting">
     <van-nav-bar
-      title="版本更新记录"
+      title="报警设置"
       class="title"
       fixed
       :border="false"
@@ -16,7 +16,7 @@
     <van-pull-refresh
       v-model="refreshLoading"
       @refresh="onRefresh"
-      class="versionManage-pull-refresh"
+      class="warnSetting-pull-refresh"
     >
       <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
       <template #pulling="props">
@@ -32,20 +32,24 @@
           <span>释放即可刷新...</span>
         </div>
       </template>
-      <van-card class="versionManage-card" v-for="item in versionInfo.versionList" :key="item.Id">
-        <template #title>
-          <div class="title">
-            <span>{{ item.Ctime }}</span>
-            <span>版本:{{ item.VersionStr }}</span>
-          </div>
-        </template>
-        <template #desc>
-          <div class="desc">
-            <span>更新内容</span>
-            <span>{{ item.Description }}</span>
-          </div>
-        </template>
-      </van-card>
+      <div class="warnTime-title">报警时间</div>
+      <van-row justify="space-between">
+        <van-col span="6">span: 6</van-col>
+        <van-col span="6">span: 6</van-col>
+        <van-col span="6">span: 6</van-col>
+      </van-row>
+      <van-form @submit="onSubmit">
+        <van-field name="switch" label="开关">
+          <template #input>
+            <van-switch v-model="checked" size="20" />
+          </template>
+        </van-field>
+
+        <div style="margin: 16px">
+          <van-button round block type="primary" native-type="submit"> 提交 </van-button>
+        </div>
+      </van-form>
+      <div class="warnStyle-title">报警方式</div>
     </van-pull-refresh>
   </div>
 </template>
@@ -60,6 +64,7 @@ import { VersionItem } from './index';
 
 const store = userStore();
 const loading: Ref<boolean> = ref(false);
+const checked: Ref<boolean>  = ref(false);
 const refreshLoading: Ref<boolean> = ref(false);
 const versionInfo = reactive<VersionItem>({
   versionList: [],
@@ -95,14 +100,20 @@ const onRefresh = () => {
   initData();
   refreshLoading.value = false;
 };
+// 后退
 const onClickLeft = () => history.back();
+// 报警设置保存事件
+const onSubmit = (values:any) => {
+      console.log('submit', values);
+    };
 onMounted(() => {
   initData();
 });
 </script>
 
 <style scoped lang="less">
-.versionManage {
+.warnSetting {
+  padding: 0 16px;
   .title {
     :deep(.van-nav-bar--fixed) {
       background: #1f2228;
@@ -119,31 +130,9 @@ onMounted(() => {
       }
     }
   }
-  .versionManage-pull-refresh {
+  .warnSetting-pull-refresh {
     :deep(.van-pull-refresh__track) {
       min-height: calc(100vh - 46px);
-    }
-    .versionManage-card {
-      background: #1f2228;
-      border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
-      .title {
-        display: flex;
-        justify-content: space-between;
-        span {
-          font-size: 16px;
-          color: #9e9e9e;
-        }
-      }
-      .desc {
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-        font-size: 14px;
-        color: #9e9e9e;
-        span {
-          margin-top: 5px;
-        }
-      }
     }
   }
   .pulling,
@@ -157,6 +146,15 @@ onMounted(() => {
     span {
       margin-left: 10px;
     }
+  }
+  .warnTime-title,
+  .warnStyle-title {
+    margin-top: 24px;
+    font-size: 16px;
+    color: #cccccc;
+  }
+  .warnStyle-title {
+    margin-top: 38px;
   }
 }
 </style>

@@ -10,7 +10,6 @@ declare namespace API {
   namespace Global {
     interface Params {
       Token: string|null;
-      FunCode?: string;
     }
     interface LoginPayload {
       LoginName: string; // 用户名
@@ -18,11 +17,15 @@ declare namespace API {
     }
     interface CommonPayload extends Params {
       Uid: string; // 用户id
+      FunCode?: string;
     }
     interface VersionManagePayload extends Params {
       Condition: string;
       Page:number;
       PageSize:number;
+    }
+    interface DevInfoPayload extends Params {
+      ObjId:string;
     }
   }
 }

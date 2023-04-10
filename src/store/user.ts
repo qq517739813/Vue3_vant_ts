@@ -6,11 +6,15 @@ interface UserStoreState {
 interface SystemStoreState {
   [propName: string]: any;
 }
+interface DevListStoreState {
+  [propName: string]: any;
+}
 export const userStore = defineStore('userInfo', {
   state: (): UserStoreState => {
     return {
       userInfo: {},
-      systemInfo:{}
+      systemInfo: {},
+      devList: {},
     };
   },
   actions: {
@@ -19,7 +23,10 @@ export const userStore = defineStore('userInfo', {
     },
     upDateSystemInfo(info: SystemStoreState) {
       this.$state.systemInfo = info;
-    }
+    },
+    upDateDevList(info: DevListStoreState) {
+      this.$state.devList = info;
+    },
   },
   // 开启数据缓存
   persist: {

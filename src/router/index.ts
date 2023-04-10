@@ -80,7 +80,7 @@ const constantRoutes = [
   {
     path: '/warnSetting',
     name: 'WarnSetting',
-    component: () => import('@/views/WarnSetting/index.vue'),
+    component: () => import('@/views/warnSetting/index.vue'),
     meta: { title: '报警设置' },
   },
   // 导入气象站、土壤墒情站、监测数据数据组件

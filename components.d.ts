@@ -9,7 +9,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    DeviceState: typeof import('./src/components/deviceState.vue')['default']
+    DeviceSwitch: typeof import('./src/components/deviceSwitch.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    PullRefresh: typeof import('./src/components/pullRefresh.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']
@@ -21,8 +24,13 @@ declare module '@vue/runtime-core' {
     VanForm: typeof import('vant/es')['Form']
     VanIcon: typeof import('vant/es')['Icon']
     VanNavBar: typeof import('vant/es')['NavBar']
+    VanPopup: typeof import('vant/es')['Popup']
     VanPullRefresh: typeof import('vant/es')['PullRefresh']
     VanRow: typeof import('vant/es')['Row']
+    VanSkeleton: typeof import('vant/es')['Skeleton']
+    VanSkeletonImage: typeof import('vant/es')['SkeletonImage']
+    VanSkeletonParagraph: typeof import('vant/es')['SkeletonParagraph']
+    VanSwitch: typeof import('vant/es')['Switch']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VanTag: typeof import('vant/es')['Tag']
