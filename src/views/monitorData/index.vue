@@ -19,7 +19,7 @@
       </template>
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
-      <device-state  :devBaseInfo="devInfo.devBaseInfo" />
+      <device-state :devBaseInfo="devInfo.devBaseInfo" />
       <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
     </pull-refresh>
   </div>
@@ -34,8 +34,8 @@ import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
 import { DevInfoItem, DevListBaseItem } from '@/components/index';
-import DeviceState from '@/components/deviceState.vue'
-import pullRefresh from '@/components/pullRefresh.vue'
+import DeviceState from '@/components/deviceState.vue';
+import pullRefresh from '@/components/pullRefresh.vue';
 import DeviceSwitch from '@/components/deviceSwitch.vue';
 import { getdevList } from '@/utils/base';
 
@@ -44,7 +44,7 @@ const store = userStore();
 // popup弹窗状态
 const showPopup: Ref<boolean> = ref(false);
 // 设备基本信息
-const devInfo = reactive<DevInfoItem>({ devBaseInfo: {} });
+const devInfo = reactive<DevInfoItem>({ devBaseInfo: { DevId: '', ControlPwd: '' } });
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
 // 路由参数
@@ -85,6 +85,7 @@ const handClickDev = (item: DevListBaseItem) => {
   showPopup.value = false;
 };
 onMounted(async () => {
+  // 获取设备列表
   await getdevList(countFuncode.value);
   equipmentId.value = store.devList[0].DevId;
   await getDevBaseInfo(equipmentId.value);

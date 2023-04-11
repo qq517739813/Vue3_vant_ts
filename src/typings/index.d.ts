@@ -30,6 +30,9 @@ declare namespace API {
     interface AutoIrrigatePayload {
       Id: string; // 用户id
     }
+    interface FertilizerPayload {
+      Id: string; // 设备id
+    }
     interface ControlCommandPayload extends Params {
       ObjId: string; // 设备id
       Uid: string; // 用户id

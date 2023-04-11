@@ -108,6 +108,7 @@ const initMap = () => {
 // 打开详情弹窗
 const openDialog = (e: Event) => {
   console.log('e', e);
+  console.log('object :>> ', (e.target as any)._originOpts.extData);
 };
 onMounted(() => {
   initData();

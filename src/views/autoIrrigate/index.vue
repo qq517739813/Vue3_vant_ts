@@ -14,7 +14,8 @@
       </template>
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
-      <auto-irrigate-list :irrigateData="List.IrrigateList"  @getData="getDevBaseInfo"/>
+      <!-- <auto-irrigate-list :irrigateData="List.IrrigateList"  @getData="getDevBaseInfo"/> -->
+      <auto-irrigate-list :irrigateData="List.IrrigateList" />
     </pull-refresh>
   </div>
 </template>

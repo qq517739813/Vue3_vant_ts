@@ -65,7 +65,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   devBaseInfo: () => {
-    return {};
+    return { DevId: '', ControlPwd: '' };
   },
 });
 // 路由参数
