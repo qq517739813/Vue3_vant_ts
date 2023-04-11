@@ -9,7 +9,7 @@
 declare namespace API {
   namespace Global {
     interface Params {
-      Token: string|null;
+      Token: string | null;
     }
     interface LoginPayload {
       LoginName: string; // 用户名
@@ -21,11 +21,19 @@ declare namespace API {
     }
     interface VersionManagePayload extends Params {
       Condition: string;
-      Page:number;
-      PageSize:number;
+      Page: number;
+      PageSize: number;
     }
     interface DevInfoPayload extends Params {
-      ObjId:string;
+      ObjId: string; // 设备id
+    }
+    interface AutoIrrigatePayload {
+      Id: string; // 用户id
+    }
+    interface ControlCommandPayload extends Params {
+      ObjId: string; // 设备id
+      Uid: string; // 用户id
+      Command: number; // 1为开，0为关
     }
   }
 }

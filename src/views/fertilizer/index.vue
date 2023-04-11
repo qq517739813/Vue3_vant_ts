@@ -11,7 +11,7 @@
       @click-right="onClickRight"
     >
       <template #left>
-        <van-icon name="arrow-left" size="20" color="#FFFFFF" />
+        <van-icon name="arrow-left" size="20" color="#FFFFFF" style="margin-left: 11px" />
       </template>
       <template #right>
         <van-icon name="sort" size="20" color="#00cc90" style="transform: rotate(90deg)" />
