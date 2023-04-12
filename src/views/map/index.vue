@@ -10,7 +10,7 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import { onMounted, reactive, onUnmounted, ref } from 'vue';
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
-import { GetEquipmentsList } from '@/api/map';
+import { GetEquipmentsList } from '@/api/equipment';
 import { DevListtem } from './index';
 import { MAP_KEY, SECURITY_JS_CODE } from '@/config/base';
 import { getMarkersIcon } from '@/utils/base';
@@ -108,6 +108,7 @@ const initMap = () => {
 // 打开详情弹窗
 const openDialog = (e: Event) => {
   console.log('e', e);
+  console.log('object :>> ', (e.target as any)._originOpts.extData);
 };
 onMounted(() => {
   initData();

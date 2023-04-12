@@ -14,21 +14,19 @@
 import { useRouter } from "vue-router";
 import { BaseItem } from './index'
 
+interface Props {
+    plotData: BaseItem[]
+}
 const router = useRouter();
-const props = defineProps({
-    plotData: {
-        type: Object,
-        default: () => {
-            return {};
-        }
-    },
+const props = withDefaults(defineProps<Props>(), {
+    plotData: () => []
 })
 // 农场地块点击事件
-const handleClick = (item:BaseItem) => {
+const handleClick = (item: BaseItem) => {
     router.push({
         name: item.FunCode,
         params: {
-            FunCode:item.FunCode
+            FunCode: item.FunCode
         }
     })
 }

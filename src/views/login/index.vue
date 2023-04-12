@@ -39,16 +39,15 @@ import { userStore } from '@/store/user';
 import { useRouter } from "vue-router";
 import { LoginItem , SystemItem } from './index'
 import { login, getSystemInfo } from '@/api/login'
-// import { SessionStorage } from '@/utils/utils'
-// import { TOKEN_KEY, USER_INFO } from '@/config/base';
+
 const loading = ref(false)
 const store = userStore();
 const router = useRouter();
 const loginLoding = ref(false)
 // 登录表单
 const loginForm = reactive<LoginItem>({
-  // LoginName: 'qh_admin',
-  LoginName: 'kiwi_admin',
+  LoginName: 'qh_admin',
+  // LoginName: 'kiwi_admin',
   // LoginName: 'kiwi_hy',
   LoginPwd: 'rt123456'
 })
@@ -62,10 +61,6 @@ const onSubmit = (values: any) => {
     if ((res as any).IsSuccess) {
       const { Data } = (res as any);
       store.upDateUserInfo(Data)
-      // SessionStorage.setKey({
-      //   [TOKEN_KEY]: Data.Token,
-      //   [USER_INFO]: JSON.stringify(Data),
-      // })
       router.push('/')
     }
   }).finally(() => {

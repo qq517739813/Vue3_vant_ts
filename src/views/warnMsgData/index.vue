@@ -8,34 +8,96 @@
       placeholder
       safe-area-inset-top
       @click-left="onClickLeft"
-      @click-right="onClickRight"
     >
       <template #left>
-        <van-icon name="arrow-left" size="20" color="#FFFFFF" />
-      </template>
-      <template #right>
-        <van-icon name="sort" size="20" color="#00cc90" style="transform: rotate(90deg)" />
-        <span class="head-change">切换</span>
+        <van-icon name="arrow-left" size="20" color="#FFFFFF" style="margin-left: 11px" />
       </template>
     </van-nav-bar>
+    <van-tabs
+      v-model:active="tabtId"
+      background="#1f2228"
+      color="#FFFFFF"
+      :line-width="tabtId === 1 ? 60 : 86"
+      line-height="2"
+      title-inactive-color="#ffffff99"
+      title-active-color="#FFFFFF"
+      @change="handleClickTab"
+    >
+      <pull-refresh @pull-method="getWarnMsgInfo" :equipmentId="tabtId">
+        <van-tab :name="1">
+          <template #title>
+            <span>参数异常</span>
+          </template>
+          <template #default>
+            <param-ques
+              :paramData="warnMsg.warnMsgInfo.DataList"
+              v-if="warnMsg.warnMsgInfo.DataList?.length"
+            />
+          </template>
+        </van-tab>
+        <van-tab :name="2">
+          <template #title>
+            <span>虫情监测异常</span>
+          </template>
+          <template #default>
+            <pest-ques
+              :pestData="warnMsg.warnMsgInfo.DataList"
+              v-if="warnMsg.warnMsgInfo.DataList?.length"
+            />
+            <empty v-else/>
+          </template>
+        </van-tab>
+      </pull-refresh>
+    </van-tabs>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
+import type { Ref } from 'vue';
+import { userStore } from '@/store/user';
+import { showLoadingToast, closeToast } from 'vant';
+import { GetWarnMsgList } from '@/api/warnMsgData';
+import { WarnMsgItem } from './index';
+import PullRefresh from '@/components/pullRefresh.vue';
+import Empty from '@/components/empty.vue';
+import ParamQues from './paramQues.vue';
+import PestQues from './pestQues.vue';
 
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
-
-const countFuncode = computed(() => {
-  return route.params.FunCode;
-});
+const store = userStore();
+// 切换Tab标签页id
+const tabtId: Ref<number> = ref(1);
+// 预警通知基本信息
+const warnMsg = reactive<WarnMsgItem>({ warnMsgInfo: {} });
+// 获取预警通知基本信息
+const getWarnMsgInfo = async (Type: number) => {
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0,
+  });
+  const payload = {
+    ProId: store.userInfo.ProjId, // 项目id
+    Type, // 1参数异常(环境参数) 2虫情异常
+    Token: store.userInfo.Token,
+    Page: 1,
+    PageSize: 100,
+  };
+  const res: any = await GetWarnMsgList(payload);
+  warnMsg.warnMsgInfo = res.Data;
+  closeToast();
+};
+// 导航栏左侧事件
 const onClickLeft = () => history.back();
-const onClickRight = () => {
-  console.log('右边')
-}
-console.log('countFuncode', countFuncode);
+// tab标签点击事件
+const handleClickTab = (name: number) => {
+  tabtId.value = name;
+  getWarnMsgInfo(tabtId.value)
+};
+onMounted(async () => {
+  await getWarnMsgInfo(tabtId.value);
+});
 </script>
 
 <style scoped lang="less">
@@ -48,11 +110,6 @@ console.log('countFuncode', countFuncode);
         font-weight: normal;
         font-size: 18px;
         color: #ffffff;
-      }
-      .head-change {
-        margin-left: 5px;
-        font-size: 14px;
-        color: #00cc90;
       }
     }
   }

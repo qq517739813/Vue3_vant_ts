@@ -1,3 +1,5 @@
+import { userStore } from '@/store/user';
+import { GetEquipmentsList } from '@/api/equipment';
 import MonitorData from '@/assets/MonitorData.svg';
 import VideoData from '@/assets/VideoData.svg';
 import PestLamp from '@/assets/PestLamp.svg';
@@ -13,6 +15,7 @@ import { CommonItem as MarkersItem } from '@/views/map/index';
 export interface EquipItem {
   ModuleCode: string;
 }
+const store = userStore();
 
 // 获取设备图标
 export const getEquipImg = (param: EquipItem) => {
@@ -63,5 +66,18 @@ export const getMarkersIcon = (param: MarkersItem) => {
       return `${param.IconPath}${param.SleepIcon}`;
     default:
       break;
+  }
+};
+
+// 获取设备列表
+export const getdevList = async (FunCode: string) => {
+  const payload = {
+    Uid: store.userInfo.Uid,
+    Token: store.userInfo.Token,
+    FunCode,
+  };
+  const res: any = await GetEquipmentsList(payload);
+  if (res.IsSuccess) {
+    store.upDateDevList(res.Data);
   }
 };

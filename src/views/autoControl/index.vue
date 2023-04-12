@@ -1,7 +1,7 @@
 <template>
   <div class="killPestLamp">
     <van-nav-bar
-      title="虫情监测"
+      title="智能控制"
       class="title"
       fixed
       :border="false"
@@ -21,6 +21,8 @@
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
       <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <!-- <auto-dev-list :autoControlList="autoControlList.controlInfo.ChannelList" @getData="getDevBaseInfo" /> -->
+      <auto-dev-list :autoControlList="autoControlList.controlInfo.ChannelList" />
     </pull-refresh>
   </div>
 </template>
@@ -33,11 +35,14 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
+import { GetControlParamList } from '@/api/autoControl';
 import { getdevList } from '@/utils/base';
 import { DevInfoItem, DevListBaseItem } from '@/components/index';
+import { ControlInfoItem } from './index';
 import pullRefresh from '@/components/pullRefresh.vue';
 import DeviceState from '@/components/deviceState.vue';
 import DeviceSwitch from '@/components/deviceSwitch.vue';
+import AutoDevList from './autoDevList.vue';
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store = userStore();
@@ -45,6 +50,8 @@ const store = userStore();
 const showPopup: Ref<boolean> = ref(false);
 // 设备基本信息
 const devInfo = reactive<DevInfoItem>({ devBaseInfo: { DevId: '', ControlPwd: '' } });
+// 智能设备列表数据
+const autoControlList = reactive<ControlInfoItem>({ controlInfo: { DevId: '', ChannelList: [] } });
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
 // 路由参数
@@ -52,25 +59,28 @@ const countFuncode: ComputedRef = computed(() => {
   return route.params.FunCode;
 });
 // 获取设备基本信息
-const getDevBaseInfo = (DevId: string) => {
+const getDevBaseInfo = async (DevId: string) => {
   showLoadingToast({
     message: 'loading...',
     forbidClick: true,
     loadingType: 'spinner',
     duration: 0,
   });
-  const payload = {
+  const devInfoPayload = {
     Uid: store.userInfo.Uid,
     Token: store.userInfo.Token,
     ObjId: DevId,
   };
-  GetDevInfo(payload).then((res) => {
-    if ((res as any).IsSuccess) {
-      const { Data } = res as any;
-      devInfo.devBaseInfo = Data;
-      closeToast();
-    }
-  });
+  const controlPayload = {
+    TypeId: '',
+    ObjId: DevId,
+    Token: store.userInfo.Token,
+  };
+  const res: any = await GetDevInfo(devInfoPayload);
+  devInfo.devBaseInfo = res.Data;
+  const info: any = await GetControlParamList(controlPayload);
+  autoControlList.controlInfo=info.Data
+  closeToast();
 };
 // 导航栏左侧事件
 const onClickLeft = () => history.back();

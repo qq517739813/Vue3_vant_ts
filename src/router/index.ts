@@ -80,7 +80,7 @@ const constantRoutes = [
   {
     path: '/warnSetting',
     name: 'WarnSetting',
-    component: () => import('@/views/WarnSetting/index.vue'),
+    component: () => import('@/views/warnSetting/index.vue'),
     meta: { title: '报警设置' },
   },
   // 导入气象站、土壤墒情站、监测数据数据组件
@@ -145,6 +145,13 @@ const constantRoutes = [
     name: 'Fertilizer',
     component: () => import('@/views/fertilizer/index.vue'),
     meta: { title: '施肥机' },
+  },
+  // 导入控制器(智能控制)组件
+  {
+    path: '/AutoControl/:FunCode',
+    name: 'AutoControl',
+    component: () => import('@/views/autoControl/index.vue'),
+    meta: { title: '智能控制' },
   },
   // 无权限页面
   {
