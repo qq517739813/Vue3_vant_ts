@@ -26,13 +26,13 @@ export function getVersionList(params: API.Global.VersionManagePayload) {
   });
 }
 
-
 /**
  * @description 重置头像
  * @param data 
  * @returns 
  */
- export function SetUserHead(data: any) {
+
+export function SetUserHead(data: any) {
   return request({
     url: 'UserService/SetUserHead',
     method: 'post',
@@ -51,7 +51,6 @@ export function ResetName(data: any) {
     data
   })
 }
-
 
 /**
  * @description 重置密码
