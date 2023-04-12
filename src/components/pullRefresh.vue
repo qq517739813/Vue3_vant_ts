@@ -1,6 +1,10 @@
 <template>
   <div class="global-pull">
-    <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh" class="common-pull-refresh">
+    <van-pull-refresh
+      v-model="refreshLoading"
+      @refresh="onRefresh"
+      :class="countFuncode==='WarnMsgData'?'warnMsg-pull-refresh':'common-pull-refresh'"
+    >
       <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
       <template #pulling="props">
         <div class="pulling" :style="{ height: props.distance }">
@@ -21,17 +25,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import type { Ref } from 'vue';
+import { ref, computed } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
+import { useRoute } from 'vue-router';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 interface Props {
-  equipmentId: string;
+  equipmentId: string | number;
 }
 const props = withDefaults(defineProps<Props>(), {
   equipmentId: '',
 });
+const route: RouteLocationNormalizedLoaded = useRoute();
 // 父子传方法
 const emit = defineEmits(['pullMethod']);
+// 路由参数
+const countFuncode: ComputedRef = computed(() => {
+  return route.params.FunCode;
+});
 // 下拉刷新状态
 const refreshLoading: Ref<boolean> = ref(false);
 // 下拉刷新
@@ -47,6 +58,11 @@ const onRefresh = () => {
   .common-pull-refresh {
     :deep(.van-pull-refresh__track) {
       min-height: calc(100vh - 46px);
+    }
+  }
+  .warnMsg-pull-refresh {
+    :deep(.van-pull-refresh__track) {
+      min-height: calc(100vh - 90px);
     }
   }
   .pulling,

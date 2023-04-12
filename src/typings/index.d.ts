@@ -42,5 +42,11 @@ declare namespace API {
       TypeId: string; // 空字符串
       ObjId: string; // 设备id
     }
+    interface WarnMsgPayload extends Params {
+      Page: number;
+      PageSize: number;
+      ProId: string; // 项目id
+      Type: number;  // 1参数异常(环境参数) 2虫情异常
+    }
   }
 }
