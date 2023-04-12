@@ -146,6 +146,13 @@ const constantRoutes = [
     component: () => import('@/views/fertilizer/index.vue'),
     meta: { title: '施肥机' },
   },
+  // 导入控制器(智能控制)组件
+  {
+    path: '/AutoControl/:FunCode',
+    name: 'AutoControl',
+    component: () => import('@/views/autoControl/index.vue'),
+    meta: { title: '智能控制' },
+  },
   // 无权限页面
   {
     path: '/no-permission',

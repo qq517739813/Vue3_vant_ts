@@ -13,7 +13,7 @@ export function GetIrrigateList(params: API.Global.AutoIrrigatePayload) {
   });
 }
 /**
- * @description 发送控制命令（阀门）(灌溉)
+ * @description 发送控制命令（阀门）(灌溉阀门、智能灌溉)(控制器、智能控制)
  * @param {API.Global.ControlCommandPayload}
  * @return {Promise<*>}
  */

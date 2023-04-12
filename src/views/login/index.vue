@@ -46,8 +46,8 @@ const router = useRouter();
 const loginLoding = ref(false)
 // 登录表单
 const loginForm = reactive<LoginItem>({
-  // LoginName: 'qh_admin',
-  LoginName: 'kiwi_admin',
+  LoginName: 'qh_admin',
+  // LoginName: 'kiwi_admin',
   // LoginName: 'kiwi_hy',
   LoginPwd: 'rt123456'
 })

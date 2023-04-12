@@ -1,30 +1,38 @@
 <template>
-  <div class="autoIrrigate-list">
-    <div class="autoIrrigate-item" v-for="item in props.irrigateData" :key="item.DevId">
-      <div class="item-content">
-        <div class="content-img">
-          <img :src="`${item.IconPath}${item.Icon}`" alt="" />
+  <div class="autoDevList">
+    <div class="autoDevList-title">智能设备列表</div>
+    <div class="autoDevList-content">
+      <div class="autoDevList-item" v-for="item in props.autoControlList" :key="item.CtrlId">
+        <div class="item-head">
+          <span :style="item.IsOnline ? 'color: #00cc90' : 'color: #FF8935'">{{
+            item.IsOnline ? '在线' : '待机'
+          }}</span>
+          <van-button class="setting">
+            <!-- <van-button class="setting" @click="handleShowDialog(item, 'setting')"> -->
+            <template #icon>
+              <img src="@/assets/autoControlSetting.svg" alt="" />
+            </template>
+          </van-button>
         </div>
-        <div class="content-text">
-          <div class="content-main">
-            <span>{{ item.DevName }}</span>
-            <span class="item-status">{{ item.Online }}</span>
-          </div>
-          <div class="item-devId">
-            <span>设备ID号:</span>
-            <span>{{ item.DevId }}</span>
-          </div>
+        <div class="item-center">
+          <img :src="item.IsOnline ? item.Icon : item.OffIcon" alt="" />
+          <span>{{ item.CtrlName }}</span>
         </div>
-      </div>
-      <div class="item-opt">
-        <van-button @click="handleShowDialog(item, 'on')">开</van-button>
-        <van-button @click="handleShowDialog(item, 'off')">关</van-button>
+        <div class="item-footer-isTurn" v-if="item.IsTurn">
+          <van-button @click="handleShowDialog(item, 'on')">正转</van-button>
+          <van-button @click="handleShowDialog(item, 'turn')">反转</van-button>
+          <van-button @click="handleShowDialog(item, 'off')">停止</van-button>
+        </div>
+        <div class="item-footer" v-else>
+          <van-button @click="handleShowDialog(item, 'on')">开</van-button>
+          <van-button @click="handleShowDialog(item, 'off')">关</van-button>
+        </div>
       </div>
     </div>
     <van-dialog
       v-model:show="dialogShow"
       width="343"
-      class="autoIrrigate-dialog"
+      class="autoDevList-dialog"
       closeOnClickOverlay
       @closeDialog="handleCloseDialog"
       @touchmove.stop.prevent="moveHandle"
@@ -60,17 +68,17 @@
 import { ref, reactive } from 'vue';
 import type { Ref } from 'vue';
 import { userStore } from '@/store/user';
-import type { FormInstance } from 'vant';
-import { Item, IrrigateInfoItem } from './index';
+import { ChannelItem, ChannelInfoItem } from './index';
 import { showSuccessToast, showFailToast } from 'vant';
+import type { FormInstance } from 'vant';
 import { SendControlCommand } from '@/api/autoIrrigate';
 
 interface Props {
-  irrigateData: Item[];
+  autoControlList: ChannelItem[];
 }
 // 父传子数据
 const props = withDefaults(defineProps<Props>(), {
-  irrigateData: () => [],
+  autoControlList: () => [],
 });
 // 父子传方法
 // const emit = defineEmits(['getData']);
@@ -82,13 +90,13 @@ const controlStatus: Ref<string> = ref('');
 // 密码输入框
 const ControlPwd: Ref<string> = ref('');
 // 每一项得数据
-const irrigateInfo: IrrigateInfoItem = reactive({ IrrigateInfo: { ControlPwd: '', DevId: '' } });
+const channelItem: ChannelInfoItem = reactive({ channelInfo: { CtrlId: '', CtrlPwd: '' } });
 // 表单实列
 const formRef = ref<FormInstance>();
 // 打开弹窗
-const handleShowDialog = (item: Item, text: string) => {
+const handleShowDialog = (item: ChannelItem, text: string) => {
   // 每一项数据赋值
-  irrigateInfo.IrrigateInfo = item;
+  channelItem.channelInfo = item;
   // 输入框开还是关赋值
   controlStatus.value = text;
   // 打开弹窗
@@ -101,7 +109,7 @@ const handleCloseDialog = () => {
   // 清空密码输入框
   ControlPwd.value = '';
   // 清空每一项的数据
-  irrigateInfo.IrrigateInfo = { ControlPwd: '', DevId: '' };
+  channelItem.channelInfo = { CtrlId: '', CtrlPwd: '' };
   // 清空输入框开还是关状态
   controlStatus.value = '';
   // 调用父组件方法刷新信息
@@ -117,8 +125,8 @@ const onClickRight = () => {
 const moveHandle = () => {};
 // 表单事件
 const onSubmit = (values: any) => {
-  const { IrrigateInfo } = irrigateInfo;
-  if (values.ControlPwd !== IrrigateInfo.ControlPwd) {
+  const { channelInfo } = channelItem;
+  if (values.ControlPwd !== channelInfo.CtrlPwd) {
     showFailToast({
       message: '密码不正确,请重新输入',
       forbidClick: true,
@@ -130,14 +138,30 @@ const onSubmit = (values: any) => {
     });
     return;
   }
+  
   const payload = {
-    ObjId: IrrigateInfo.DevId, // 设备id
+    ObjId: channelInfo.CtrlId, // 设备id
     Uid: store.userInfo.Uid,
-    // Command: 1, // 1为开或正向，0为关或停止，2反向
+    Command: 0, // 1为开或正向，0为关或停止，2反向
     Token: store.userInfo.Token,
   };
-  const list = { ...payload, Command: controlStatus.value === 'on' ? 1 : 0 };
-  SendControlCommand(list).then((res) => {
+  switch (controlStatus.value) {
+    // case 'setting':
+    //   { ...payload, Command: 1 };
+    //   return ;
+    case 'on':
+      payload.Command = 1;
+      break;
+    case 'turn':
+      payload.Command = 0;
+      break;
+    case 'off':
+      payload.Command = 2;
+      break;
+    default:
+      break;
+  }
+  SendControlCommand(payload).then((res) => {
     if ((res as any).IsSuccess) {
       showSuccessToast({
         message: '发送命令成功',
@@ -152,66 +176,84 @@ const onSubmit = (values: any) => {
 </script>
 
 <style scoped lang="less">
-.autoIrrigate-list {
-  color: #ffffff;
-  .autoIrrigate-item {
-    box-sizing: border-box;
-    padding: 12px 21px 17px 10px;
-    margin-bottom: 14px;
-    height: 150px;
-    border-radius: 4px;
-    border: 0.5px solid #333333;
-    .item-content {
-      display: flex;
-      padding-bottom: 12px;
-      margin-bottom: 17px;
-      border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
-
-      .content-img {
-        margin-right: 10px;
-        img {
-          width: 50px;
-          height: 50px;
+.autoDevList {
+  .autoDevList-title {
+    margin: 20px 0 14px;
+    font-size: 16px;
+    color: #cccccc;
+  }
+  .autoDevList-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .autoDevList-item {
+      box-sizing: border-box;
+      margin-bottom: 14px;
+      padding: 13px 12px 18px 8px;
+      width: 164px;
+      min-height: 180px;
+      border-radius: 4px;
+      border: 0.5px solid #333333;
+      .item-head {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 17px;
+        font-size: 14px;
+        .setting {
+          padding: 0;
+          border: none;
+          background: none;
+          height: 20px;
+          width: 20px;
+          img {
+            vertical-align: middle;
+          }
         }
       }
-      .content-text {
-        .content-main {
-          margin-bottom: 15px;
-          font-size: 16px;
-          .item-status {
-            margin-left: 15px;
-            font-size: 14px;
+      .item-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 12px;
+        color: #9e9e9e;
+        img {
+          width: 45px;
+          height: 45px;
+          margin-bottom: 5px;
+        }
+      }
+      .item-footer-isTurn,
+      .item-footer {
+        display: flex;
+        button {
+          width: 40px;
+          height: 25px;
+          padding: 0;
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.1);
+          box-sizing: border-box;
+          border: 0.5px solid rgba(255, 255, 255, 0.2);
+          font-size: 12px;
+          color: #ffffff;
+          &:last-child {
             color: #00cc90;
           }
         }
-        .item-devId {
-          font-size: 12px;
-          color: #9e9e9e;
-          span:nth-child(1) {
-            margin-right: 15px;
-          }
+      }
+      .item-footer-isTurn {
+        justify-content: space-between;
+      }
+      .item-footer {
+        justify-content: center;
+        button:first-child {
+          margin-right: 12px;
         }
       }
     }
-    .item-opt {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      button {
-        width: 130px;
-        height: 33px;
-        font-size: 12px;
-        color: #9e9e9e;
-        background: rgba(255, 255, 255, 0.1);
-        border: 0.5px solid rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
-      }
-      button:nth-child(2) {
-        color: #00cc90;
-      }
-    }
   }
-  :deep(.autoIrrigate-dialog) {
+  :deep(.autoDevList-dialog) {
     background: #1f2228;
     .van-dialog__header--isolated {
       padding: 0;
@@ -260,8 +302,5 @@ const onSubmit = (values: any) => {
       }
     }
   }
-}
-:deep(.van-toast) {
-  z-index: 3333;
 }
 </style>

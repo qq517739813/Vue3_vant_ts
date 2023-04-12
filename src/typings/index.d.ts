@@ -36,7 +36,11 @@ declare namespace API {
     interface ControlCommandPayload extends Params {
       ObjId: string; // 设备id
       Uid: string; // 用户id
-      Command: number; // 1为开，0为关
+      Command: number; // 1为开或正向，0为关或停止，2反向
+    }
+    interface ControlParamPayload extends Params {
+      TypeId: string; // 空字符串
+      ObjId: string; // 设备id
     }
   }
 }

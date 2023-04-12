@@ -12,7 +12,8 @@
           <span class="content-cell-userOne">{{ store.userInfo.UserName }}</span>
         </template>
         <template #label>
-          <span class="content-cell-userTwo">{{ store.userInfo.UserName }}</span>
+          <!-- <span class="content-cell-userTwo">{{ store.userInfo.UserName }}</span> -->
+          <span class="content-cell-userTwo">管理员</span>
         </template>
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
@@ -93,7 +94,7 @@ const logOut = () => {
       .content-cell-userOne {
         margin-bottom: 3px;
         margin-left: 16px;
-        font-size: 18px;
+        font-size: 16px;
         color: #cccccc;
       }
       .content-cell-userTwo {

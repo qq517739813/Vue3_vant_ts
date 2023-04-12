@@ -141,10 +141,10 @@ const onSubmit = (values: any) => {
   const payload = {
     ObjId: controlInfo.CtrlId, // 设备id
     Uid: store.userInfo.Uid,
-    // Command: 1, // 1为开，2为关
+    // Command: 1, // 1为开，0为关
     Token: store.userInfo.Token,
   };
-  const list = { ...payload, Command: controlStatus.value === 'on' ? 1 : 2 };
+  const list = { ...payload, Command: controlStatus.value === 'on' ? 1 : 0 };
   SendFertilizerCommand(list).then((res) => {
     if ((res as any).IsSuccess) {
       showSuccessToast({
