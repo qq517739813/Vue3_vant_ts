@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     DeviceState: typeof import('./src/components/deviceState.vue')['default']
     DeviceSwitch: typeof import('./src/components/deviceSwitch.vue')['default']
+    Empty: typeof import('./src/components/empty.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     PullRefresh: typeof import('./src/components/pullRefresh.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -21,6 +22,7 @@ declare module '@vue/runtime-core' {
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanCol: typeof import('vant/es')['Col']
     VanDialog: typeof import('vant/es')['Dialog']
+    VanEmpty: typeof import('vant/es')['Empty']
     VanField: typeof import('vant/es')['Field']
     VanForm: typeof import('vant/es')['Form']
     VanIcon: typeof import('vant/es')['Icon']

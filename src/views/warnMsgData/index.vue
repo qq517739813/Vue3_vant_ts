@@ -23,7 +23,7 @@
       title-active-color="#FFFFFF"
       @change="handleClickTab"
     >
-      <pullRefresh @pull-method="getWarnMsgInfo" :equipmentId="tabtId">
+      <pull-refresh @pull-method="getWarnMsgInfo" :equipmentId="tabtId">
         <van-tab :name="1">
           <template #title>
             <span>参数异常</span>
@@ -44,9 +44,10 @@
               :pestData="warnMsg.warnMsgInfo.DataList"
               v-if="warnMsg.warnMsgInfo.DataList?.length"
             />
+            <empty v-else/>
           </template>
         </van-tab>
-      </pullRefresh>
+      </pull-refresh>
     </van-tabs>
   </div>
 </template>
@@ -58,7 +59,8 @@ import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetWarnMsgList } from '@/api/warnMsgData';
 import { WarnMsgItem } from './index';
-import pullRefresh from '@/components/pullRefresh.vue';
+import PullRefresh from '@/components/pullRefresh.vue';
+import Empty from '@/components/empty.vue';
 import ParamQues from './paramQues.vue';
 import PestQues from './pestQues.vue';
 
