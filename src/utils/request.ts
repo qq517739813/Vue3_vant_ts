@@ -5,6 +5,7 @@ import { redirectLogin } from '@/utils/utils';
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API
   baseURL: 'http://111.21.231.41:20101/api',
+
 });
 
 // Request interceptors
