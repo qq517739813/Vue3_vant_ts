@@ -162,7 +162,7 @@ const onSubmit = (values: any) => {
 <style scoped lang="less">
 .fertilizerList {
   .fertilizerList-title {
-    margin-top: 20px;
+    margin-top: 24px;
     font-size: 16px;
     color: #cccccc;
   }

@@ -7,10 +7,10 @@ export interface CommonItem {
   OffIcon?: string;
   SleepIcon?: string;
   ExpIcon?: string;
-  FunCode?: string[];
+  FunCode: string[];
   Gid?: string;
   Gname?: string;
-  DevId?: string;
+  DevId: string;
   DevName?: string;
   DevIcon?: string;
   Status?: string | number;

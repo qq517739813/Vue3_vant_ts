@@ -51,7 +51,7 @@ const constantRoutes = [
         path: '/map',
         name: 'Map',
         component: () => import('@/views/map/index.vue'),
-        meta: { title: '地图' },
+        meta: { title: '地图', },
       },
       // 导入设备组件
       {
@@ -88,7 +88,14 @@ const constantRoutes = [
     path: '/MonitorData/:FunCode',
     name: 'MonitorData',
     component: () => import('@/views/monitorData/index.vue'),
-    meta: { title: '实时数据' },
+    meta: { title: '实时数据'},
+  },
+  // 导入气象站、土壤墒情站、监测数据数据组件图表组件
+  {
+    path: '/MonitorData/HistoryData',
+    name: 'MonitorHistoryData',
+    component: () => import('@/views/monitorData/monitorHistoryData/index.vue'),
+    meta: { title: '历史数据曲线'},
   },
   // 导入摄像机(视频直播)组件
   {

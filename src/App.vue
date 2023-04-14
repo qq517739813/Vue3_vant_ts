@@ -1,14 +1,21 @@
 <template>
   <router-view v-slot="{ Component }">
-    <transition name="fade-transform" mode="out-in"> 
-      <component :is="Component" />
-    </transition>
-  </router-view> 
+    <!-- <transition name="fade-transform" mode="out-in">
+        <component :is="Component" />
+    </transition> -->
+    <keep-alive>
+      <component :is="Component" :key="route.name" v-if="route.meta.keepAlive" />
+    </keep-alive>
+    <component :is="Component" :key="route.name" v-if="!route.meta.keepAlive" />
+  </router-view>
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
 import { onBeforeMount } from 'vue';
 import { getSystemAgent, isAlipayOrWechat } from '@/utils';
+
+const route = useRoute();
 
 function handleDocumentInit() {
   getSystemAgent();
@@ -33,7 +40,7 @@ onBeforeMount(() => handleDocumentInit());
 
 #root {
   min-height: 100vh;
-  background: #1F2228;
+  background: #1f2228;
   font-family: Avenir, Helvetica, Arial, sans-serif, PingFang SC;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

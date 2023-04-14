@@ -14,6 +14,7 @@
       </template>
     </van-nav-bar>
     <van-tabs
+      sticky
       v-model:active="tabtId"
       background="#1f2228"
       color="#FFFFFF"
@@ -29,10 +30,7 @@
             <span>参数异常</span>
           </template>
           <template #default>
-            <param-ques
-              :paramData="warnMsg.warnMsgInfo.DataList"
-              v-if="warnMsg.warnMsgInfo.DataList?.length"
-            />
+            <param-ques :paramData="warnMsg.warnMsgInfo.DataList" />
           </template>
         </van-tab>
         <van-tab :name="2">
@@ -40,11 +38,7 @@
             <span>虫情监测异常</span>
           </template>
           <template #default>
-            <pest-ques
-              :pestData="warnMsg.warnMsgInfo.DataList"
-              v-if="warnMsg.warnMsgInfo.DataList?.length"
-            />
-            <empty v-else/>
+            <pest-ques :pestData="warnMsg.warnMsgInfo.DataList" />
           </template>
         </van-tab>
       </pull-refresh>
@@ -60,7 +54,6 @@ import { showLoadingToast, closeToast } from 'vant';
 import { GetWarnMsgList } from '@/api/warnMsgData';
 import { WarnMsgItem } from './index';
 import PullRefresh from '@/components/pullRefresh.vue';
-import Empty from '@/components/empty.vue';
 import ParamQues from './paramQues.vue';
 import PestQues from './pestQues.vue';
 
@@ -93,8 +86,9 @@ const onClickLeft = () => history.back();
 // tab标签点击事件
 const handleClickTab = (name: number) => {
   tabtId.value = name;
-  getWarnMsgInfo(tabtId.value)
+  getWarnMsgInfo(tabtId.value);
 };
+// this.selectComponent('#tabs').resize();
 onMounted(async () => {
   await getWarnMsgInfo(tabtId.value);
 });
@@ -113,5 +107,8 @@ onMounted(async () => {
       }
     }
   }
+  // :deep(.van-tabs__wrap) {
+  //   touch-action: manipulation;
+  // }
 }
 </style>

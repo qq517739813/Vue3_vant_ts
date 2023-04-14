@@ -25,6 +25,7 @@ declare namespace API {
       PageSize: number;
     }
     interface DevInfoPayload extends Params {
+      Uid?: string; // 用户id
       ObjId: string; // 设备id
     }
     interface AutoIrrigatePayload {
@@ -47,6 +48,10 @@ declare namespace API {
       PageSize: number;
       ProId: string; // 项目id
       Type: number;  // 1参数异常(环境参数) 2虫情异常
+    }
+    interface HistoryDataPayload extends DevInfoPayload {
+      Bdate: string;
+      Edate: string;
     }
   }
 }

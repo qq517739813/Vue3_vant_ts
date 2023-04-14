@@ -19,8 +19,9 @@
       </template>
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
-      <device-state :devBaseInfo="devInfo.devBaseInfo" />
       <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-state :devBaseInfo="devInfo.devBaseInfo" />
+      <real-data :realList="realInfo.realList" :equipmentId="equipmentId" :realTime="timeStr" />
     </pull-refresh>
   </div>
 </template>
@@ -33,11 +34,15 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
+import { GetRealDataList } from '@/api/monitorData';
+import { RealListItem } from './index';
 import { DevInfoItem, DevListBaseItem } from '@/components/index';
 import DeviceState from '@/components/deviceState.vue';
 import pullRefresh from '@/components/pullRefresh.vue';
 import DeviceSwitch from '@/components/deviceSwitch.vue';
+import RealData from './realData.vue';
 import { getdevList } from '@/utils/base';
+import { formatDate } from '@/utils/utils';
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store = userStore();
@@ -45,14 +50,22 @@ const store = userStore();
 const showPopup: Ref<boolean> = ref(false);
 // 设备基本信息
 const devInfo = reactive<DevInfoItem>({ devBaseInfo: { DevId: '', ControlPwd: '' } });
+// 实时数据
+const realInfo = reactive<RealListItem>({ realList: [] });
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
+// 实时数据时间
+const timeStr: Ref<string> = ref('');
 // 路由参数
 const countFuncode: ComputedRef = computed(() => {
   return route.params.FunCode;
 });
+// 路由参数(设备id)
+const countObjId: ComputedRef = computed(() => {
+  return route.query.ObjId;
+});
 // 获取设备基本信息
-const getDevBaseInfo = (DevId: string) => {
+const getDevBaseInfo = async (DevId: string) => {
   showLoadingToast({
     message: 'loading...',
     forbidClick: true,
@@ -60,17 +73,15 @@ const getDevBaseInfo = (DevId: string) => {
     duration: 0,
   });
   const payload = {
-    Uid: store.userInfo.Uid,
     Token: store.userInfo.Token,
     ObjId: DevId,
   };
-  GetDevInfo(payload).then((res) => {
-    if ((res as any).IsSuccess) {
-      const { Data } = res as any;
-      devInfo.devBaseInfo = Data;
-      closeToast();
-    }
-  });
+  const res: any = await GetDevInfo({ ...payload, Uid: store.userInfo.Uid });
+  devInfo.devBaseInfo = res.Data;
+  const info: any = await GetRealDataList(payload);
+  realInfo.realList = info.Data;
+  timeStr.value = formatDate();
+  closeToast();
 };
 // 导航栏左侧事件
 const onClickLeft = () => history.back();
@@ -87,7 +98,7 @@ const handClickDev = (item: DevListBaseItem) => {
 onMounted(async () => {
   // 获取设备列表
   await getdevList(countFuncode.value);
-  equipmentId.value = store.devList[0].DevId;
+  equipmentId.value = countObjId.value || store.devList[0].DevId;
   await getDevBaseInfo(equipmentId.value);
 });
 </script>
