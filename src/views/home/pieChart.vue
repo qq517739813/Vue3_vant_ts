@@ -11,10 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import * as echarts from 'echarts';
 import { EchartsDataItem } from './index';
 
+// 父传子数据
 const props = defineProps({
   chartData: {
     type: Object,
@@ -23,12 +24,12 @@ const props = defineProps({
     },
   },
 });
-// 基于准备好的dom，初始化echarts实例
-const echart = echarts;
+// chart实列
+const myChart: any = ref(null);
 // 绘制图表
 const initChart = () => {
   const main = document.getElementById('main') as HTMLDivElement;
-  const myChart = echart.init(main);
+  myChart.value = echarts.init(main);
   const { DevSummary } = props.chartData;
   const list: EchartsDataItem = {
     OnlineNum: '在线',
@@ -130,14 +131,17 @@ const initChart = () => {
       },
     ],
   };
-  myChart.setOption(options);
+  myChart.value.setOption(options);
   window.onresize = function () {
     // 自适应大小
-    myChart.resize();
+    myChart.value.resize();
   };
 };
 onMounted(() => {
   initChart();
+});
+onUnmounted(() => {
+  myChart.value.dispose();
 });
 </script>
 

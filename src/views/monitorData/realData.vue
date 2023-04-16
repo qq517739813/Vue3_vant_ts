@@ -9,7 +9,7 @@
         class="realData-items"
         v-for="item in props.realList"
         :key="item.ParamId"
-        @click="handeleItemClick(item.ParamId)"
+        @click="handeleItemClick(item)"
       >
         <div class="item-title">
           <div class="title-left">
@@ -36,6 +36,7 @@ import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { RealDataItem } from './index';
 import Empty from '@/components/empty.vue';
+import emitter from '@/utils/emitter';
 
 interface Props {
   realList: RealDataItem[];
@@ -49,12 +50,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const router: Router = useRouter();
 // 农场地块点击事件
-const handeleItemClick = (paramId:string) => {
+const handeleItemClick = (item: RealDataItem) => {
+  emitter.emit('sendHistory', item);
   router.push({
     name: 'MonitorHistoryData',
     query: {
       ObjId: props.equipmentId,
-      paramId
+      paramId: item.ParamId,
+      ParamVal:item.ParamVal
     },
   });
 };

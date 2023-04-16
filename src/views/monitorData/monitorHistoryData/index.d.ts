@@ -1,8 +1,8 @@
 export interface LineChartItem {
   ParamId: string;
-  MaxVal: string | number;
-  MinVal: string | number;
-  ParamVal: string | number;
+  MaxVal: number;
+  MinVal: number;
+  ParamVal: number;
   Ctime: string;
 }
 export interface HistoryItem {
@@ -10,12 +10,19 @@ export interface HistoryItem {
   ParamCode: string;
   ParamName: string;
   ParamUnit: string;
-  MaxVal: string | number;
-  MinVal: string | number;
+  MaxVal: number;
+  MinVal: number;
   ParamIcon: string;
   MonitorList: LineChartItem[];
 }
 
 export interface HistoryDataItem {
     historyList: HistoryItem[];
+}
+export interface EchartsDataItem {
+  OnlineNum?: string; // 在线
+  ReadyNum?: string; // 待机
+  FaultNum?: string; // 异常
+  value?: number; // 数量
+  name?: string; // 名字
 }

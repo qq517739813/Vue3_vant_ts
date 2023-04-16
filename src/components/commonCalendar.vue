@@ -1,6 +1,8 @@
 <template>
   <div class="deviceSwitch">
     <van-calendar
+      ref="calendarRef"
+      :max-range="7"
       v-model:show="show"
       :min-date="minDate"
       :max-date="maxDate"
@@ -16,6 +18,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, reactive } from 'vue';
 import type { Ref } from 'vue';
+import type { CalendarInstance } from 'vant';
 import { formatDate } from '@/utils/utils';
 import { DateItem } from './index';
 
@@ -26,7 +29,12 @@ const props = withDefaults(defineProps<Props>(), {
   showCalendar: false,
 });
 // 父子传方法
-const emit = defineEmits(['update:showCalendar','calendarConfirm']);
+const emit = defineEmits<{
+  (e: 'update:showCalendar', value: boolean): void;
+  (e: 'calendarConfirm', Item: DateItem): void;
+}>();
+// 日历选择实列
+const calendarRef = ref<CalendarInstance>();
 // 最小日期
 const minDate: Ref<Date> = ref(new Date());
 // 最大日期
@@ -51,7 +59,8 @@ const handleConfirm = (values: any) => {
     Bdate: formatDate(start),
     Edate: formatDate(end),
   };
-  emit('calendarConfirm',rangeCalendar)
+  calendarRef.value?.reset();
+  emit('calendarConfirm', rangeCalendar);
 };
 // 自定义日期范围
 const customDate = () => {

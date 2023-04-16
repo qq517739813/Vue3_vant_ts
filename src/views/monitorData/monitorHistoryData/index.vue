@@ -37,7 +37,30 @@
           <span>释放即可刷新...</span>
         </div>
       </template>
-      <history-item :dateTitle="rangeCalendar.calendar" :lineChartData="lineChartList.historyList" />
+      <div class="historyItem-title">
+        <span>采集数据</span>
+        <span>{{ computedTitle }}</span>
+      </div>
+      <div class="historyItem-content" v-for="(item, index) in countLineChart.historyList" :key="index">
+        <div class="content-head">
+          <div class="head-left">
+            <img :src="item.ParamIcon" alt="" />
+            <span>{{ item.ParamName }}</span>
+            <span>当前:</span>
+            <span class="current-data">{{ `${computedCurentValue}${item.ParamUnit}` }}</span>
+          </div>
+          <div class="head-right">
+            <img src="@/assets/historyNormal.png" alt="" />
+            <span>正常</span>
+            <span></span>
+            <span>最大</span>
+            <span></span>
+            <span>最小</span>
+          </div>
+        </div>
+        <common-line-chart :chartData="item" v-if="item.MonitorList.length > 0&&!loading" />
+        <empty v-else />
+      </div>
     </van-pull-refresh>
     <common-calendar v-model:show-calendar="calendarVisible" @calendar-confirm="onConfirm" />
   </div>
@@ -53,7 +76,9 @@ import { showLoadingToast, closeToast } from 'vant';
 import { GetHistoryDataList } from '@/api/monitorData';
 import { formatDate } from '@/utils/utils';
 import CommonCalendar from '@/components/commonCalendar.vue';
-import HistoryItem from './historyItem.vue';
+import CommonLineChart from '@/components/commonLineChart.vue';
+import Empty from '@/components/empty.vue';
+// import HistoryItem from './historyItem.vue';
 import { DateItem } from '@/components/index';
 import { HistoryDataItem } from './index';
 
@@ -69,19 +94,24 @@ const rangeCalendar = reactive<DateItem>({
 const historyData = reactive<HistoryDataItem>({
   historyList: [],
 });
-// 折线图数据
-const lineChartList = reactive<HistoryDataItem>({
+const countLineChart = reactive<HistoryDataItem>({
   historyList: [],
 });
+const loading: Ref<boolean> = ref(false);
 // 控制日期选择器状态
 const calendarVisible: Ref<boolean> = ref(false);
 // 路由参数(设备id)
 const countObjId: ComputedRef = computed(() => {
   return route.query.ObjId;
 });
-// 路由参数(实时数据设备id)
-const countParamId: ComputedRef = computed(() => {
-  return route.query.paramId;
+// 计算时间标题
+const computedTitle: ComputedRef = computed(() => {
+  const list = [...new Set(Object.values(rangeCalendar.calendar))];
+  return list.join('~');
+});
+// 计算当前值
+const computedCurentValue: ComputedRef = computed(() => {
+  return route.query.ParamVal;
 });
 // 获取设备基本信息
 const getDevBaseInfo = async (DevId: string, item: DateItem) => {
@@ -97,9 +127,12 @@ const getDevBaseInfo = async (DevId: string, item: DateItem) => {
     Token: store.userInfo.Token,
     ObjId: DevId,
   };
+  loading.value = true;
   const res: any = await GetHistoryDataList({ ...payload, Uid: store.userInfo.Uid });
   historyData.historyList = res.Data;
-  lineChartList.historyList = countLineChart(countParamId.value);
+  const list = historyData.historyList.filter((Item) => Item.ParamId === route.query.paramId);
+  countLineChart.historyList = list;
+  loading.value = false;
   closeToast();
 };
 // 导航栏左侧事件
@@ -116,15 +149,9 @@ const onRefresh = () => {
 };
 // 日期确定事件
 const onConfirm = (values: DateItem) => {
-  console.log('values :>> ', values);
   rangeCalendar.calendar = values.calendar;
   getDevBaseInfo(countObjId.value, rangeCalendar);
   calendarVisible.value = false;
-};
-// 设备id对应的折线图数据
-const countLineChart = (paramId: string) => {
-  const list = historyData.historyList.filter((item) => item.ParamId === paramId);
-  return list;
 };
 onMounted(async () => {
   rangeCalendar.calendar = {
@@ -158,6 +185,65 @@ onMounted(async () => {
   .historyData-pull-refresh {
     :deep(.van-pull-refresh__track) {
       min-height: calc(100vh - 46px);
+    }
+    .historyItem-title {
+      padding: 14px 0;
+      span:first-child {
+        margin-right: 10px;
+        font-size: 16px;
+        color: #cccccc;
+      }
+      font-size: 14px;
+      color: #999999;
+    }
+    .historyItem-content {
+      padding: 16px 0px;
+      min-height: 250px;
+      border-radius: 4px;
+      border: 0.5px solid #333333;
+      .content-head {
+        padding: 0 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: #ffffff;
+        .head-left {
+          line-height: 18px;
+          display: flex;
+          span {
+            margin-left: 5px;
+          }
+          .current-data {
+            color: #00cc90;
+          }
+          img {
+            width: 16px;
+            height: 16px;
+          }
+        }
+        .head-right {
+          display: flex;
+          align-items: center;
+          line-height: 18px;
+          img {
+            margin-right: 5px;
+            height: 12px;
+          }
+          span:nth-child(3) {
+            margin: 0 5px;
+            width: 12px;
+            height: 4px;
+            background: #ff3c58;
+          }
+          span:nth-child(5) {
+            margin: 0 5px;
+            width: 12px;
+            height: 4px;
+            background: #5591f4;
+          }
+        }
+      }
     }
   }
 
