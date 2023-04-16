@@ -41,7 +41,11 @@
         <span>采集数据</span>
         <span>{{ computedTitle }}</span>
       </div>
-      <div class="historyItem-content" v-for="(item, index) in countLineChart.historyList" :key="index">
+      <div
+        class="historyItem-content"
+        v-for="(item, index) in countLineChart.historyList"
+        :key="index"
+      >
         <div class="content-head">
           <div class="head-left">
             <img :src="item.ParamIcon" alt="" />
@@ -58,7 +62,7 @@
             <span>最小</span>
           </div>
         </div>
-        <common-line-chart :chartData="item" v-if="item.MonitorList.length > 0&&!loading" />
+        <common-line-chart :chartData="item" v-if="item.MonitorList.length > 0 && !loading" />
         <empty v-else />
       </div>
     </van-pull-refresh>
@@ -78,7 +82,6 @@ import { formatDate } from '@/utils/utils';
 import CommonCalendar from '@/components/commonCalendar.vue';
 import CommonLineChart from '@/components/commonLineChart.vue';
 import Empty from '@/components/empty.vue';
-// import HistoryItem from './historyItem.vue';
 import { DateItem } from '@/components/index';
 import { HistoryDataItem } from './index';
 
