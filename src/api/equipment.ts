@@ -48,15 +48,3 @@ export function GetDevInfo(params: API.Global.DevInfoPayload) {
     data: params,
   });
 }
-/**
- * @description 获取设备实时采集数据
- * @param {API.Global.DevInfoPayload}
- * @return {Promise<*>}
- */
-export function GetRealDataList(params: API.Global.DevInfoPayload) {
-  return request({
-    url: '/DataService/GetRealData',
-    method: 'post',
-    data: params,
-  });
-}

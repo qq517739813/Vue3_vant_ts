@@ -33,3 +33,10 @@ export interface DevListItem {
 export interface DevInfoItem {
   devBaseInfo: DevInfoBaseItem;
 }
+
+export interface DateItem {
+  calendar: {
+    Bdate: string;
+    Edate: string;
+  };
+}

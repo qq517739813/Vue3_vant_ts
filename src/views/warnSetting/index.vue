@@ -26,14 +26,14 @@
           <VanField readonly v-model="Btime" input-align="center" clickable class="timeinputclass"
             @click="BtimeShow = !BtimeShow" />
         </VanCol>
-        <VanCol span="2 "> ----</VanCol>
+        <VanCol span="2 " style="display: flex; align-items: center; justify-content: center;"> <span>----</span></VanCol>
         <VanCol span="11 ">
           <VanField readonly v-model="Etime" input-align="center" clickable class="timeinputclass"
             @click="EtimeShow = !EtimeShow" />
         </VanCol>
       </VanRow>
-      <div style="margin: 10px 0;">
-        <VanButton style="background: #1F2228;" plain block color="#ccc" @click="submitWeekData"> 提交 </VanButton>
+      <div class="submitWeekDataBtn" style="margin: 10px 0;">
+        <VanButton plain block @click="submitWeekData"> 保存 </VanButton>
       </div>
 
       <VanPopup v-model:show="BtimeShow" :style="{ height: '30%' }" position="bottom">
@@ -48,17 +48,72 @@
     </div>
 
     <div class="warnStyle-title">报警方式</div>
-    <br />
-    <van-cell  title="邮箱" value="内容">
+    <!-- 邮箱方式 -->
+    <div class="warnStyle-title">邮箱</div>
+    <van-cell value="内容">
       <template #value>
-        <!-- <div v-for="item in WarnAccount " :key="item.ID"> -->
-          <!-- <span>123</span> -->
-          <!-- <span>{{ item.Account }}</span> -->
-        <!-- </div> -->
+        <van-row v-for="item in WarnAccountListEmail.list " :key="item.ID">
+          <van-col class="bottomCol" span="19">
+            <van-field readonly v-model="item.Account" />
+          </van-col>
+          <van-col span="5">
+            <van-button style="color: #ccc; border: 0.5px solid rgb(255 255 255 / 30%); background: #1f2228 ;"
+              @click="deleteWarnAccount(item.Account)">删除</van-button>
+          </van-col>
+        </van-row>
       </template>
-
     </van-cell>
-    <!-- <span class="warnStyle-title">{{WarnAccount[0].ProId}}</span> -->
+    <van-form @submit="onSubmit(1)" @failed="onFailed(1)">
+      <van-cell value="内容">
+        <template #value>
+          <van-row>
+            <van-col class="bottomCol" span="19">
+              <van-field autocomplete="off" v-model="warnEmailValue" placeholder="请输入接收报警信息的邮箱" :rules="[
+                { required: true },
+                { pattern: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/i }
+              ]" />
+            </van-col>
+            <van-col span="5">
+              <van-button style="color: #ccc; border: 0.5px solid rgb(255 255 255 / 30%); background: #1f2228 ;"
+                native-type="submit">添加</van-button>
+            </van-col>
+          </van-row>
+        </template>
+      </van-cell>
+    </van-form>
+    <!-- 手机方式 -->
+    <div class="warnStyle-title">手机</div>
+    <van-cell value="内容">
+      <template #value>
+        <van-row v-for="item in WarnAccountListPhone.list " :key="item.ID">
+          <van-col class="bottomCol" span="19">
+            <van-field readonly v-model="item.Account" />
+          </van-col>
+          <van-col span="5">
+            <van-button style="color: #ccc; border: 0.5px solid rgb(255 255 255 / 30%); background: #1f2228 ;"
+              @click="deleteWarnAccount(item.Account)">删除</van-button>
+          </van-col>
+        </van-row>
+      </template>
+    </van-cell>
+    <van-form @submit="onSubmit" @failed="onFailed">
+      <van-cell value="内容">
+        <template #value>
+          <van-row>
+            <van-col class="bottomCol" span="19">
+              <van-field autocomplete="off" v-model="warnPhoneValue" placeholder="请输入接收报警信息的手机号" :rules="[
+                { required: true },
+                { pattern: /^1[3456789]\d{9}$/ }
+              ]" />
+            </van-col>
+            <van-col span="5">
+              <van-button native-type="submit"
+                style="color: #ccc; border: 0.5px solid rgb(255 255 255 / 30%); background: #1f2228 ;">添加</van-button>
+            </van-col>
+          </van-row>
+        </template>
+      </van-cell>
+    </van-form>
   </div>
 </template>
 
@@ -66,9 +121,8 @@
 import { onMounted, ref, reactive } from 'vue';
 import type { Ref } from 'vue';
 import { userStore } from '@/store/user';
-import { showLoadingToast, closeToast, TimePickerColumnType } from 'vant';
-import { GetWarnTime, GetWarnAccount, WarnTimeConfig } from '@/api/user';
-
+import { showLoadingToast, closeToast, TimePickerColumnType, showToast } from 'vant';
+import { GetWarnTime, GetWarnAccount, WarnTimeConfig, WarnAccount, DelWarnAccount } from '@/api/user';
 
 const store = userStore();
 const loading: Ref<boolean> = ref(false);
@@ -80,7 +134,9 @@ const Etime = ref('结束时间');
 const BtimePopup = ref([]);
 const EtimePopup = ref([]);
 // 报警方式
-const WarnAccount = reactive({list:[]});
+// const WarnAccountList = reactive({ list: [] as any[] });
+const WarnAccountListEmail = reactive({ list: [] as any[] });
+const WarnAccountListPhone = reactive({ list: [] as any[] });
 // 时间展示开关
 const BtimeShow = ref(false);
 const EtimeShow = ref(false);
@@ -89,6 +145,10 @@ const rows = reactive([] as any)
 const columnsType: TimePickerColumnType[] = ['hour', 'minute', 'second'];
 const ProjId = ref(store.userInfo.ProjId);
 const Token = ref(store.userInfo.Token);
+// 报警接收邮箱输入框内容
+const warnEmailValue = ref<string>('')
+// 报警接收邮箱输入框内容
+const warnPhoneValue = ref<string>('')
 
 
 
@@ -161,8 +221,18 @@ const initData = async () => {
   await GetWarnAccount(payload).then((res) => {
     if ((res as any).IsSuccess) {
       const { Data } = res as any;
-      WarnAccount.list = Data
+      console.log(Data);
+      WarnAccountListEmail.list = []
+      WarnAccountListPhone.list = []
+      for (const key of Data) {
+        if (key.AccountType === 1) {
+          WarnAccountListEmail.list.push(key)
+        } else if (key.AccountType === 2) {
+          WarnAccountListPhone.list.push(key)
+        }
+      }
       loading.value = false;
+
       closeToast();
     }
 
@@ -205,7 +275,55 @@ const submitWeekData = () => {
 
 }
 
+// 添加报警方式
+const addWarnAccount = (types: number) => {
+  const warnAccount = {
+    Account: types === 1 ? warnEmailValue.value : warnPhoneValue.value,
+    AccountType: types === 1 ? 1 : 2,
+    ProId: store.userInfo.ProjId,
+    Token: store.userInfo.Token,
+  };
+  WarnAccount(warnAccount).then(res => {
+    if ((res as any).IsSuccess) {
+      console.log(res);
+      initData()
+      warnEmailValue.value = ''
+      warnPhoneValue.value = ''
+    }
+  })
 
+}
+
+// 删除报警方式
+
+const deleteWarnAccount = (Account: string) => {
+  const warnAccount = {
+    Account,
+    AccountType: 1,
+    ProId: store.userInfo.ProjId,
+    Token: store.userInfo.Token,
+  };
+  DelWarnAccount(warnAccount).then(res => {
+    if ((res as any).IsSuccess) {
+      initData()
+
+    }
+  })
+}
+
+const onSubmit = (value: any) => {
+  addWarnAccount(value)
+
+}
+const onFailed = (type: Number) => {
+  if (type === 1) {
+    showToast('请填写正确邮箱！')
+
+  } else {
+    showToast('请填写正确手机号！')
+  }
+
+}
 
 // 后退
 const onClickLeft = () => history.back();
@@ -213,6 +331,8 @@ const onClickLeft = () => history.back();
 onMounted(() => {
   initData();
 });
+
+
 
 
 
@@ -264,13 +384,26 @@ onMounted(() => {
 
   .warnTime-title,
   .warnStyle-title {
-    margin-top: 24px;
+    margin-top: 20px;
     font-size: 16px;
     color: #cccccc;
   }
 
-  .warnStyle-title {
-    margin-top: 38px;
+  .van-cell {
+    background: #1f2228;
+
+  }
+
+  .van-cell:after {
+    display: none;
+  }
+
+  .submitWeekDataBtn {
+    .van-button {
+      border: 0.5px solid rgba(255, 255, 255, 0.3);
+      background: #1f2228;
+      color: #ccc;
+    }
   }
 }
 
@@ -291,11 +424,20 @@ onMounted(() => {
 
   .timeinputclass {
     background: #1F2228;
-    border: 1px solid #ccc;
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
 
     :deep(.van-field__control) {
       color: #ccc
     }
+  }
+}
+
+.bottomCol {
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  color: #ccc;
+
+  :deep(.van-field__control) {
+    color: #ccc;
   }
 }
 </style>

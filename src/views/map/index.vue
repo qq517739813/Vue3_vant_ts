@@ -9,9 +9,11 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { onMounted, reactive, onUnmounted, ref } from 'vue';
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetEquipmentsList } from '@/api/equipment';
-import { DevListtem } from './index';
+import { DevListtem,CommonItem } from './index';
 import { MAP_KEY, SECURITY_JS_CODE } from '@/config/base';
 import { getMarkersIcon } from '@/utils/base';
 
@@ -19,6 +21,7 @@ import { getMarkersIcon } from '@/utils/base';
   securityJsCode: SECURITY_JS_CODE,
 };
 const store = userStore();
+const router: Router = useRouter();
 const loading = ref<boolean>(false);
 let map: any = null;
 const devInfo = reactive<DevListtem>({ DevList: [] });
@@ -61,11 +64,11 @@ const initMap = () => {
     .then((AMap) => {
       map = new AMap.Map('container', {
         // 设置地图容器id
-        viewMode: '2D', // 是否为3D地图模式
+        viewMode: '3D', // 是否为3D地图模式
         zoom: 11, // 初始化地图层级
         zooms: [11, 20], // 缩放范围
         mapStyle: 'amap://styles/dark',
-        center: [108.90862, 32.31288], // 初始化地图中心点位置
+        // center: [108.90862, 32.31288], // 初始化地图中心点位置
       });
       const { DevList } = devInfo;
       // 获取当前地图级别
@@ -83,7 +86,7 @@ const initMap = () => {
         const marks = new AMap.Marker({
           map,
           // icon: getMarkersIcon(marker),
-          position: [marker.Lng, marker.Lat],
+          position: [Number(marker.Lng), Number(marker.Lat)],
           extData: marker,
           content: `<img src="${getMarkersIcon(
             marker,
@@ -107,8 +110,17 @@ const initMap = () => {
 };
 // 打开详情弹窗
 const openDialog = (e: Event) => {
-  console.log('e', e);
-  console.log('object :>> ', (e.target as any)._originOpts.extData);
+  // console.log('e :>> ', (e.target as any)._originOpts.extData);
+  const item:CommonItem=(e.target as any)._originOpts.extData
+   router.push({
+    name: item.FunCode[0],
+    params: {
+      FunCode: item.FunCode[0],
+    },
+    query: {
+      ObjId:item.DevId ,
+    },
+  });
 };
 onMounted(() => {
   initData();
@@ -117,6 +129,7 @@ onUnmounted(() => {
   // 销毁地图，并清空地图容器
   if (map) {
     map.destroy();
+    map = null;
   }
   console.log('地图销毁完成！');
 });

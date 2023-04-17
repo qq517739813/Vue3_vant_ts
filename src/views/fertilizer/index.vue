@@ -70,6 +70,10 @@ const equipmentId: Ref<string> = ref('');
 const countFuncode: ComputedRef = computed(() => {
   return route.params.FunCode;
 });
+// 路由参数(设备id)
+const countObjId: ComputedRef = computed(() => {
+  return route.query.ObjId;
+});
 // 获取设备基本信息
 const getDevBaseInfo = async (DevId: string) => {
   showLoadingToast({
@@ -105,7 +109,7 @@ const handClickDev = (item: DevListBaseItem) => {
 onMounted(async () => {
   // 获取设备列表
   await getdevList(countFuncode.value);
-  equipmentId.value = store.devList[0].DevId;
+  equipmentId.value = countObjId.value || store.devList[0].DevId;
   await getDevBaseInfo(equipmentId.value);
 });
 </script>

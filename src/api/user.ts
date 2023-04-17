@@ -103,7 +103,7 @@ export function GetWarnTime(data: any) {
  * @returns 
  */
 
- export function GetWarnAccount(data: any) {
+export function GetWarnAccount(data: any) {
   return request({
     url: 'WarnService/GetWarnAccount',
     method: 'post',
@@ -117,9 +117,36 @@ export function GetWarnTime(data: any) {
  * @returns 
  */
 
- export function WarnTimeConfig(params: any) {
+export function WarnTimeConfig(params: any) {
   return request({
     url: 'WarnService/WarnTimeConfig',
+    method: 'post',
+    data: params,
+  })
+}
+
+/**
+ * @description 报警方式
+ * @param {API.Global.WarnAccount }
+ * @returns {Promise<*>}
+ */
+
+export function WarnAccount(params: API.Global.WarnAccount) {
+  return request({
+    url: 'WarnService/WarnAccount',
+    method: 'post',
+    data: params,
+  })
+}
+/**
+ * @description 删除报警方式
+ * @param {API.Global.WarnAccount }
+ * @returns {Promise<*>}
+ */
+
+ export function DelWarnAccount(params: API.Global.WarnAccount) {
+  return request({
+    url: 'WarnService/DelWarnAccount',
     method: 'post',
     data: params,
   })

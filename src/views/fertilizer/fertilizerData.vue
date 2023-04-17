@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
 <style scoped lang="less">
 .fertilizerData {
   .fertilizerData-title {
-    margin: 20px 0 14px;
+    margin: 24px 0 11px;
     font-size: 16px;
     color: #cccccc;
   }

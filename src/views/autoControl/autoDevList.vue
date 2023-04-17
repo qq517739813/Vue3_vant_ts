@@ -178,7 +178,7 @@ const onSubmit = (values: any) => {
 <style scoped lang="less">
 .autoDevList {
   .autoDevList-title {
-    margin: 20px 0 14px;
+    margin: 24px 0 11px;
     font-size: 16px;
     color: #cccccc;
   }

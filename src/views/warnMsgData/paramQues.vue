@@ -1,5 +1,5 @@
 <template>
-  <div class="paramQues">
+  <div class="paramQues"  v-if="props.paramData?.length">
     <div class="paramQues-item" v-for="item in props.paramData" :key="item.Id">
       <div class="item-head">
         <span>参数异常</span>
@@ -11,10 +11,12 @@
       </div>
     </div>
   </div>
+  <empty v-else />
 </template>
 
 <script lang="ts" setup>
 import { CommonItem } from './index';
+import Empty from '@/components/empty.vue';
 
 interface Props {
   paramData: CommonItem[];
