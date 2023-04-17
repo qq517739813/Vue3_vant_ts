@@ -10,7 +10,6 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CommonCalendar: typeof import('./src/components/commonCalendar.vue')['default']
-    CommonLineChart: typeof import('./src/components/commonLineChart.vue')['default']
     DeviceState: typeof import('./src/components/deviceState.vue')['default']
     DeviceSwitch: typeof import('./src/components/deviceSwitch.vue')['default']
     Empty: typeof import('./src/components/empty.vue')['default']
@@ -19,7 +18,6 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     VanButton: typeof import('vant/es')['Button']
-    VanCalendar: typeof import('vant/es')['Calendar']
     VanCard: typeof import('vant/es')['Card']
     VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']
@@ -39,6 +37,6 @@ declare module '@vue/runtime-core' {
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VanTabs: typeof import('vant/es')['Tabs']
-    VanTextEllipsis: typeof import('vant/es')['TextEllipsis']
+    VanTimePicker: typeof import('vant/es')['TimePicker']
   }
 }

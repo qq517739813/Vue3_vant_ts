@@ -21,11 +21,13 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { userStore } from '@/store/user';
+import { useRouter } from "vue-router";
 import { showLoadingToast, closeToast } from 'vant';
 import { ResetName, ResetPhone, ResetEmail, ResetPwd } from '@/api/user';
 import CellComponent from './component/cell.vue';
 
 const store = userStore();
+const router = useRouter();
 const onClickLeft = () => history.back();
 const nickNameRef = ref()
 const pwdRef = ref()
@@ -119,6 +121,10 @@ const handleUserInfo = (data: any) => {
           pwdRef.value.closeshowHeaderDialog()
           phoneRef.value.closeshowHeaderDialog()
           emailRef.value.closeshowHeaderDialog()
+          store.upDateUserInfo({});
+          router.push({
+            name: 'Login',
+          });
         });
         return;
       default:

@@ -79,3 +79,75 @@ export function ResetEmail(data: any) {
     data
   })
 }
+
+/* ****** 报警设置 ***** */
+
+/**
+ * @description 获取报警时间
+ * @param data 
+ * @returns 
+ */
+
+export function GetWarnTime(data: any) {
+  return request({
+    url: 'WarnService/GetWarnTime',
+    method: 'post',
+    data
+  })
+}
+
+
+/**
+ * @description 获取报警方式
+ * @param data 
+ * @returns 
+ */
+
+export function GetWarnAccount(data: any) {
+  return request({
+    url: 'WarnService/GetWarnAccount',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * @description 报警时间配置
+ * @param data 
+ * @returns 
+ */
+
+export function WarnTimeConfig(params: any) {
+  return request({
+    url: 'WarnService/WarnTimeConfig',
+    method: 'post',
+    data: params,
+  })
+}
+
+/**
+ * @description 报警方式
+ * @param {API.Global.WarnAccount }
+ * @returns {Promise<*>}
+ */
+
+export function WarnAccount(params: API.Global.WarnAccount) {
+  return request({
+    url: 'WarnService/WarnAccount',
+    method: 'post',
+    data: params,
+  })
+}
+/**
+ * @description 删除报警方式
+ * @param {API.Global.WarnAccount }
+ * @returns {Promise<*>}
+ */
+
+ export function DelWarnAccount(params: API.Global.WarnAccount) {
+  return request({
+    url: 'WarnService/DelWarnAccount',
+    method: 'post',
+    data: params,
+  })
+}

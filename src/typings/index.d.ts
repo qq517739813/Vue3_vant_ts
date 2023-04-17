@@ -53,5 +53,13 @@ declare namespace API {
       Bdate: string;
       Edate: string;
     }
+    // tss
+    interface ProId extends Params {
+      ProId: string;
+    }
+    interface WarnAccount extends ProId {
+      Account:string;
+      AccountType:Number;
+    }
   }
 }
