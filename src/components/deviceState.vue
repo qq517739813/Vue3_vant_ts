@@ -1,7 +1,7 @@
 <template>
   <div class="deviceState">
     <div class="device-state-title">设备状态提醒</div>
-    <div class="device-state-content">
+    <div class="device-state-content" v-if="props.devBaseInfo">
       <van-row gutter="20">
         <van-col span="24">
           <span>设备ID号:</span>
@@ -33,6 +33,7 @@
         </van-col>
       </van-row>
     </div>
+    <empty v-else />
     <!-- <van-skeleton :animate="false" class="device-state-content">
         <template #template>
           <div :style="{ display: 'flex', width: '100%' }">
@@ -57,6 +58,7 @@ import type { ComputedRef } from 'vue';
 import { DevInfoBaseItem } from './index';
 import { useRoute } from 'vue-router';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
+import Empty from '@/components/empty.vue';
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 

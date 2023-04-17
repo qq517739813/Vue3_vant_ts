@@ -62,7 +62,7 @@
             <span>最小</span>
           </div>
         </div>
-        <common-line-chart :chartData="item" v-if="item.MonitorList.length > 0 && !loading" />
+        <line-chart :chartData="item" v-if="item.MonitorList.length > 0 && !loading" />
         <empty v-else />
       </div>
     </van-pull-refresh>
@@ -80,7 +80,7 @@ import { showLoadingToast, closeToast } from 'vant';
 import { GetHistoryDataList } from '@/api/monitorData';
 import { formatDate } from '@/utils/utils';
 import CommonCalendar from '@/components/commonCalendar.vue';
-import CommonLineChart from '@/components/commonLineChart.vue';
+import LineChart from './lineChart.vue';
 import Empty from '@/components/empty.vue';
 import { DateItem } from '@/components/index';
 import { HistoryDataItem } from './index';

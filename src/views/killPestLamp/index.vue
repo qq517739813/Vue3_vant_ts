@@ -2,7 +2,7 @@
   <div class="killPestLamp">
     <van-nav-bar
       title="虫情监测"
-      class="title"
+      class="head-title"
       fixed
       :border="false"
       placeholder
@@ -19,40 +19,96 @@
       </template>
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
+      <!-- 设备状态 -->
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
+      <!-- 设备切换 -->
       <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <van-nav-bar
+        class="pest-title"
+        :border="false"
+        placeholder
+        safe-area-inset-top
+        @click-right="onClickChooseTime"
+      >
+        <template #left>
+          <span>虫情灯监测数据</span>
+          <span>{{ computedTitle }}</span>
+        </template>
+        <template #right>
+          <van-icon name="underway-o" size="14" color="#FFFFFF" />
+          <span class="head-change">选择时间</span>
+        </template>
+      </van-nav-bar>
+      <!-- 电击次数 -->
+      <electric-num v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <!-- 电池电压 -->
+      <cell-voltage v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <!-- 环境温度 -->
+      <atmosphere-temperature v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <!-- 环境湿度 -->
+      <atmosphere-humidity v-if="!loading && LineChartInfo.pestList.length > 0" />
     </pull-refresh>
+    <!-- 选择时间 -->
+    <common-calendar v-model:show-calendar="calendarVisible" @calendar-confirm="onConfirm" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, computed, ref, reactive } from 'vue';
+import { onMounted, computed, ref, reactive, provide } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import { useRoute } from 'vue-router';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
+import { getKillPestDataList } from '@/api/killPestLamp';
 import { getdevList } from '@/utils/base';
-import { DevInfoItem, DevListBaseItem } from '@/components/index';
+import { formatDate } from '@/utils/utils';
+import { DevInfoItem, DevListBaseItem, DateItem } from '@/components/index';
+import { LineChartItem } from './index';
 import pullRefresh from '@/components/pullRefresh.vue';
 import DeviceState from '@/components/deviceState.vue';
 import DeviceSwitch from '@/components/deviceSwitch.vue';
+import CommonCalendar from '@/components/commonCalendar.vue';
+import ElectricNum from './electricNum.vue';
+import CellVoltage from './cellVoltage.vue';
+import AtmosphereTemperature from './atmosphereTemperature.vue';
+import AtmosphereHumidity from './atmosphereHumidity.vue';
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store = userStore();
+// 控制图表显示
+const loading: Ref<boolean> = ref(false);
 // popup弹窗状态
 const showPopup: Ref<boolean> = ref(false);
+// 控制日期选择器状态
+const calendarVisible: Ref<boolean> = ref(false);
 // 设备基本信息
 const devInfo = reactive<DevInfoItem>({ devBaseInfo: { DevId: '', ControlPwd: '' } });
+// 折线图数据
+const LineChartInfo = reactive<LineChartItem>({ pestList: [] });
+provide('pestLampList', LineChartInfo);
+// 日期范围
+const rangeCalendar = reactive<DateItem>({
+  calendar: { Bdate: '', Edate: '' },
+});
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
 // 路由参数
 const countFuncode: ComputedRef = computed(() => {
   return route.params.FunCode;
 });
+// 路由参数(设备id)
+const countObjId: ComputedRef = computed(() => {
+  return route.query.ObjId;
+});
+// 计算时间标题
+const computedTitle: ComputedRef = computed(() => {
+  const list = [...new Set(Object.values(rangeCalendar.calendar))];
+  return list.join('~');
+});
 // 获取设备基本信息
-const getDevBaseInfo = (DevId: string) => {
+const getDevBaseInfo = async (DevId: string) => {
   showLoadingToast({
     message: 'loading...',
     forbidClick: true,
@@ -64,19 +120,46 @@ const getDevBaseInfo = (DevId: string) => {
     Token: store.userInfo.Token,
     ObjId: DevId,
   };
-  GetDevInfo(payload).then((res) => {
-    if ((res as any).IsSuccess) {
-      const { Data } = res as any;
-      devInfo.devBaseInfo = Data;
-      closeToast();
-    }
+  const devRes: any = await GetDevInfo(payload);
+  devInfo.devBaseInfo = devRes.Data;
+  getKillPestList(DevId, rangeCalendar);
+  closeToast();
+};
+// 根据时间获取虫情灯监测数据
+const getKillPestList = async (DevId: string, item: DateItem) => {
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0,
   });
+  const payload = {
+    Bdate: item.calendar.Bdate,
+    Edate: item.calendar.Edate,
+    Token: store.userInfo.Token,
+    ObjId: DevId,
+  };
+  loading.value = true;
+  const res: any = await getKillPestDataList(payload);
+  LineChartInfo.pestList = res.Data;
+  loading.value = false;
+  closeToast();
 };
 // 导航栏左侧事件
 const onClickLeft = () => history.back();
-// 导航栏右侧事件
+// 导航栏右侧切换事件
 const onClickRight = () => {
   showPopup.value = true;
+};
+// 导航栏右侧选择事件
+const onClickChooseTime = () => {
+  calendarVisible.value = true;
+};
+// 日期确定事件
+const onConfirm = (values: DateItem) => {
+  rangeCalendar.calendar = values.calendar;
+  getKillPestList(equipmentId.value, rangeCalendar);
+  calendarVisible.value = false;
 };
 // 切换设备点击事件
 const handClickDev = (item: DevListBaseItem) => {
@@ -85,17 +168,22 @@ const handClickDev = (item: DevListBaseItem) => {
   showPopup.value = false;
 };
 onMounted(async () => {
+  rangeCalendar.calendar = {
+    Bdate: formatDate(new Date()),
+    Edate: formatDate(new Date()),
+  };
   // 获取设备列表
   await getdevList(countFuncode.value);
-  equipmentId.value = store.devList[0].DevId;
+  equipmentId.value = countObjId.value || store.devList[0].DevId;
   await getDevBaseInfo(equipmentId.value);
+  // 提供传入子组件的值
 });
 </script>
 
 <style scoped lang="less">
 .killPestLamp {
   padding: 0 16px;
-  .title {
+  .head-title {
     :deep(.van-nav-bar--fixed) {
       background: #1f2228;
 
@@ -108,6 +196,29 @@ onMounted(async () => {
         margin-left: 5px;
         font-size: 14px;
         color: #00cc90;
+      }
+    }
+  }
+  .pest-title {
+    :deep(.van-nav-bar__content) {
+      background: #1f2228;
+      .van-nav-bar__left,
+      .van-nav-bar__right {
+        padding: 0;
+      }
+      .van-nav-bar__left {
+        span:first-child {
+          margin-right: 10px;
+          font-size: 16px;
+          color: #cccccc;
+        }
+        font-size: 12px;
+        color: #999999;
+      }
+      .head-change {
+        margin-left: 5px;
+        font-size: 14px;
+        color: #ffffff;
       }
     }
   }

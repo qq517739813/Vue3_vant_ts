@@ -57,7 +57,7 @@ const onRefresh = () => {
 .global-pull {
   .common-pull-refresh {
     :deep(.van-pull-refresh__track) {
-      min-height: calc(100vh - 46px);
+      min-height: calc(100vh - 60px);
     }
   }
   .warnMsg-pull-refresh {
