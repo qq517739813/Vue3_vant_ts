@@ -5,10 +5,10 @@ import request from '@/utils/request';
  * @param {API.Global.WarnMsgPayload}
  * @return {Promise<*>}
  */
-export function GetWarnMsgList(params: API.Global.WarnMsgPayload) {
+export function GetWarnMsgList(data: API.Global.WarnMsgPayload) {
   return request({
     url: '/WarnService/DataExpMsg',
     method: 'post',
-    data: params,
+    data,
   });
 }

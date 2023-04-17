@@ -1,16 +1,16 @@
 <template>
-  <div class="atmosphereHumidity">
+  <div class="airHumidity">
    <div class="head">
       <div class="head-left">
         <img src="@/assets/atmosphereHumidity.svg" alt="" />
-        <span>环境湿度</span>
+        <span>空气湿度</span>
       </div>
       <div class="head-right">
         <span>最新:</span>
         <span>{{countNewestHumidity}}％</span>
       </div>
     </div>
-    <div id="atmosphereHumidityMain" style="width: 100%; height: 250px"></div>
+    <div id="airHumidityMain" style="width: 100%; height: 250px"></div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -29,16 +29,14 @@ const countNewestHumidity: ComputedRef = computed(() => {
 const myChart: any = ref(null);
 // 绘制图表
 const initChart = () => {
-  const main = document.getElementById('atmosphereHumidityMain') as HTMLDivElement;
+  const main = document.getElementById('airHumidityMain') as HTMLDivElement;
   myChart.value = echarts.init(main);
   const { pestList } = electricList;
-  const MaxValList = Array.from(pestList, () => 0);
-  const MinValList = Array.from(pestList, () => 0);
   const ParamValList = pestList.map((item) => item.Ah);
   const XValList = pestList.map((item) => item.Ctime);
   const options = {
     legend: {
-      data: ['最大值', '最小值', '在线'],
+      data: ['空气湿度'],
       show: false,
     },
     tooltip: {
@@ -87,7 +85,7 @@ const initChart = () => {
           borderWidth: 1,
           formatter(params: any) {
             const paramStr = pestList.filter((item) => item.Ctime === params.value)[0].Ah;
-            return `环境湿度\n${paramStr}％\n${params.value}`;
+            return `空气湿度\n${paramStr}％\n${params.value}`;
           },
         },
         lineStyle: {
@@ -153,63 +151,13 @@ const initChart = () => {
       },
       axisLabel: {
         // 坐标轴刻度标签的相关设置
-        formatter(value: any) {
-           return Number.parseFloat(value).toFixed(1);
-        },
         color: '#ffffff',
       },
     },
     series: [
       {
-        data: MaxValList || [],
-        name: '最大值',
-        type: 'line',
-        symbolSize: 0, // 标记的大小
-        connectNulls: true, // 是否连接空数据
-        itemStyle: {
-          //  折线拐点标志的样式。
-          color: '#ff3c58',
-        },
-        lineStyle: {
-          // 线宽
-          width: 2,
-        },
-        endLabel: {
-          // 折线端点的标签。
-          show: true,
-          offset: [-50, -10],
-          formatter: '{a}',
-          color: '#ff3c58',
-        },
-        // areaStyle: {
-        //   // 区域填充样式。
-        //   color: 'rgba(241, 37, 37, 1)',
-        // },
-        // animation:false // 是否开启动画
-      },
-      {
-        data: MinValList || [],
-        name: '最小值',
-        type: 'line',
-        symbolSize: 0,
-        connectNulls: true,
-        itemStyle: {
-          color: '#5591f4',
-        },
-        lineStyle: {
-          width: 2,
-        },
-        endLabel: {
-          show: true,
-          offset: [-50, -10],
-          formatter: '{a}',
-          color: '#5591f4',
-        },
-        // animation:false // 是否开启动画
-      },
-      {
         data: ParamValList,
-        name: '在线',
+        name: '空气湿度',
         type: 'line',
         smooth: true, // 平滑曲线
         symbolSize: 1,
@@ -243,7 +191,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="less">
-.atmosphereHumidity {
+.airHumidity {
   padding: 16px 0px;
   margin-bottom: 14px;
   min-height: 250px;

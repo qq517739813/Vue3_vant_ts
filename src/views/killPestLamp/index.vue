@@ -35,18 +35,18 @@
           <span>{{ computedTitle }}</span>
         </template>
         <template #right>
-          <van-icon name="underway-o" size="14" color="#FFFFFF" />
+          <van-icon name="underway-o" size="16" color="#FFFFFF" />
           <span class="head-change">选择时间</span>
         </template>
       </van-nav-bar>
       <!-- 电击次数 -->
-      <electric-num v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <electric-num v-if="!loading && lineChartInfo.pestList.length > 0" />
       <!-- 电池电压 -->
-      <cell-voltage v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <cell-voltage v-if="!loading && lineChartInfo.pestList.length > 0" />
       <!-- 环境温度 -->
-      <atmosphere-temperature v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <atmosphere-temperature v-if="!loading && lineChartInfo.pestList.length > 0" />
       <!-- 环境湿度 -->
-      <atmosphere-humidity v-if="!loading && LineChartInfo.pestList.length > 0" />
+      <atmosphere-humidity v-if="!loading && lineChartInfo.pestList.length > 0" />
     </pull-refresh>
     <!-- 选择时间 -->
     <common-calendar v-model:show-calendar="calendarVisible" @calendar-confirm="onConfirm" />
@@ -61,7 +61,7 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
-import { getKillPestDataList } from '@/api/killPestLamp';
+import { getKillPestDataList } from '@/api/pestLamp';
 import { getdevList } from '@/utils/base';
 import { formatDate } from '@/utils/utils';
 import { DevInfoItem, DevListBaseItem, DateItem } from '@/components/index';
@@ -86,8 +86,8 @@ const calendarVisible: Ref<boolean> = ref(false);
 // 设备基本信息
 const devInfo = reactive<DevInfoItem>({ devBaseInfo: { DevId: '', ControlPwd: '' } });
 // 折线图数据
-const LineChartInfo = reactive<LineChartItem>({ pestList: [] });
-provide('pestLampList', LineChartInfo);
+const lineChartInfo = reactive<LineChartItem>({ pestList: [] });
+provide('pestLampList', lineChartInfo);
 // 日期范围
 const rangeCalendar = reactive<DateItem>({
   calendar: { Bdate: '', Edate: '' },
@@ -141,7 +141,7 @@ const getKillPestList = async (DevId: string, item: DateItem) => {
   };
   loading.value = true;
   const res: any = await getKillPestDataList(payload);
-  LineChartInfo.pestList = res.Data;
+  lineChartInfo.pestList = res.Data;
   loading.value = false;
   closeToast();
 };
@@ -217,7 +217,7 @@ onMounted(async () => {
       }
       .head-change {
         margin-left: 5px;
-        font-size: 14px;
+        font-size: 16px;
         color: #ffffff;
       }
     }

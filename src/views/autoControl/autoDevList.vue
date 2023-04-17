@@ -7,8 +7,7 @@
           <span :style="item.IsOnline ? 'color: #00cc90' : 'color: #FF8935'">{{
             item.IsOnline ? '在线' : '待机'
           }}</span>
-          <van-button class="setting">
-            <!-- <van-button class="setting" @click="handleShowDialog(item, 'setting')"> -->
+          <van-button class="setting" @click="handleShowDialog(item, 'setting')">
             <template #icon>
               <img src="@/assets/autoControlSetting.svg" alt="" />
             </template>
@@ -138,7 +137,7 @@ const onSubmit = (values: any) => {
     });
     return;
   }
-  
+
   const payload = {
     ObjId: channelInfo.CtrlId, // 设备id
     Uid: store.userInfo.Uid,

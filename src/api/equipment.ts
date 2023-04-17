@@ -5,11 +5,11 @@ import request from '@/utils/request';
  * @param {API.Global.CommonPayload}
  * @return {Promise<*>}
  */
-export function GetUserEquips(params: API.Global.CommonPayload) {
+export function GetUserEquips(data: API.Global.CommonPayload) {
   return request({
     url: '/UserService/GetFuncMenu',
     method: 'post',
-    data: params,
+    data,
   });
 }
 /**
@@ -17,11 +17,11 @@ export function GetUserEquips(params: API.Global.CommonPayload) {
  * @param {API.Global.CommonPayload}
  * @return {Promise<*>}
  */
-export function GetEquipmentsList(params: API.Global.CommonPayload) {
+export function GetEquipmentsList(data: API.Global.CommonPayload) {
   return request({
     url: '/UserService/GetDevList',
     method: 'post',
-    data: params,
+    data,
   });
 }
 /**
@@ -29,11 +29,11 @@ export function GetEquipmentsList(params: API.Global.CommonPayload) {
  * @param {API.Global.CommonPayload}
  * @return {Promise<*>}
  */
-export function devSummary(params: API.Global.CommonPayload) {
+export function devSummary(data: API.Global.CommonPayload) {
   return request({
     url: '/UserService/DevSummary',
     method: 'post',
-    data: params,
+    data,
   });
 }
 /**
@@ -41,10 +41,10 @@ export function devSummary(params: API.Global.CommonPayload) {
  * @param {API.Global.DevInfoPayload}
  * @return {Promise<*>}
  */
-export function GetDevInfo(params: API.Global.DevInfoPayload) {
+export function GetDevInfo(data: API.Global.DevInfoPayload) {
   return request({
     url: '/DataService/GetDevInfo',
     method: 'post',
-    data: params,
+    data,
   });
 }

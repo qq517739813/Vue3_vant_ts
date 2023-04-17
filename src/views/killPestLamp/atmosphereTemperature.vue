@@ -45,7 +45,7 @@ const initChart = () => {
       trigger: 'axis',
     },
     grid: {
-      top: '12%',
+      top: '7%',
       right: '4%',
       bottom: '0%',
       left: '2%',

@@ -5,11 +5,11 @@ import request from '@/utils/request'
  * @param {API.Global.LoginPayload}  
  * @return {Promise<*>}
  */
-export function login(params: API.Global.LoginPayload) {
+export function login(data: API.Global.LoginPayload) {
   return request({
     url: '/UserService/UserLogin',
     method: 'post',
-    data: params,
+    data,
   });
 }
 
@@ -17,10 +17,10 @@ export function login(params: API.Global.LoginPayload) {
  * @description 获取系统基本信息
  * @return {Promise<*>}
  */
-export function getSystemInfo(params:any) {
+export function getSystemInfo(data:any) {
   return request({
     url: '/CommService/SysInfo',
     method: 'post',
-    data: params,
+    data,
   });
 }

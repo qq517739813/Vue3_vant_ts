@@ -47,7 +47,7 @@ const initChart = () => {
       trigger: 'axis',
     },
     grid: {
-      top: '12%',
+      top: '7%',
       right: '4%',
       bottom: '0%',
       left: '2%',
@@ -161,6 +161,10 @@ const initChart = () => {
           width: 0.5,
           type: 'solid',
         },
+      },
+      axisLabel: {
+        // 坐标轴刻度标签的相关设置
+        color: '#ffffff',
       },
     },
     series: [
