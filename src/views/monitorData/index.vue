@@ -42,7 +42,7 @@ import pullRefresh from '@/components/pullRefresh.vue';
 import DeviceSwitch from '@/components/deviceSwitch.vue';
 import RealData from './realData.vue';
 import { getdevList } from '@/utils/base';
-import { formatDate } from '@/utils/utils';
+import moment from 'moment';
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store = userStore();
@@ -80,7 +80,7 @@ const getDevBaseInfo = async (DevId: string) => {
   devInfo.devBaseInfo = res.Data;
   const info: any = await GetRealDataList(payload);
   realInfo.realList = info.Data;
-  timeStr.value = formatDate();
+  timeStr.value = moment().format('YYYY-MM-DD');
   closeToast();
 };
 // 导航栏左侧事件

@@ -18,6 +18,7 @@ import { inject, onMounted, onUnmounted, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import * as echarts from 'echarts';
 import { LineChartItem } from './index';
+import moment from 'moment';
 // 接收数据
 const electricList = inject('pestLampList') as LineChartItem;
 // 计算最新环境温度
@@ -102,12 +103,8 @@ const initChart = () => {
         align: 'center',
         margin: 12,
         formatter(value: any) {
-          const date = new Date(value);
-          let day: number | string = date.getDate(); // 返回的是 几号
-          day = day < 10 ? `0${day}` : day;
-          let time: number | string = date.getHours(); // 返回的是 几时
-          time = time < 10 ? `0${time}` : time;
-          return `${day}日${time}时`;
+          const timeStr = moment(value).format('DD日HH时');
+          return timeStr;
         },
         color: '#ffffff',
       },

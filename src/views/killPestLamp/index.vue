@@ -63,8 +63,8 @@ import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
 import { getKillPestDataList } from '@/api/pestLamp';
 import { getdevList } from '@/utils/base';
-import { formatDate } from '@/utils/utils';
 import { DevInfoItem, DevListBaseItem, DateItem } from '@/components/index';
+import moment from 'moment';
 import { LineChartItem } from './index';
 import pullRefresh from '@/components/pullRefresh.vue';
 import DeviceState from '@/components/deviceState.vue';
@@ -169,8 +169,8 @@ const handClickDev = (item: DevListBaseItem) => {
 };
 onMounted(async () => {
   rangeCalendar.calendar = {
-    Bdate: formatDate(new Date()),
-    Edate: formatDate(new Date()),
+    Bdate: moment().format('YYYY-MM-DD'),
+    Edate: moment().format('YYYY-MM-DD'),
   };
   // 获取设备列表
   await getdevList(countFuncode.value);

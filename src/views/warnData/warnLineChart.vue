@@ -1,55 +1,81 @@
 <template>
-  <div id="main" style="width: 100%; height: 250px"></div>
+  <div class="warnLineData">
+    <div id="warnLineDataMain" style="width: 100%; height: 230px"></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import * as echarts from 'echarts';
-import { HistoryItem } from './index';
+import { lineBaseItem } from './index';
 import moment from 'moment';
 
 interface Props {
-  chartData: HistoryItem;
+  lineChartList: lineBaseItem[];
 }
 // 父传子数据
 const props = withDefaults(defineProps<Props>(), {
-  // chartData: () => [],
-  chartData: () => {
-    return {
-      ParamId: '',
-      ParamCode: '',
-      ParamName: '',
-      ParamUnit: '',
-      MaxVal: 0,
-      MinVal: 0,
-      ParamIcon: '',
-      MonitorList: [],
-    };
-  },
+  lineChartList: () => [],
 });
 // chart实列
 const myChart: any = ref(null);
 // 绘制图表
 const initChart = () => {
-  const main = document.getElementById('main') as HTMLDivElement;
+  const main = document.getElementById('warnLineDataMain') as HTMLDivElement;
   myChart.value = echarts.init(main);
-  const { MonitorList, ParamName, ParamUnit, MaxVal,MinVal } = props.chartData;
-  const MaxValList = MonitorList.map((item) => item.MaxVal);
-  const MinValList = MonitorList.map((item) => item.MinVal);
-  const ParamValList = MonitorList.map((item) => item.ParamVal);
-  const MaxFlag = ParamValList.some((item) => item > MaxVal);
-  const XValList = MonitorList.map((item) => item.Ctime);
+  const { lineChartList } = props;
+  const legendData = lineChartList.map((item) => item.ParamName);
+  const xAxisData: any = [];
+  lineChartList.forEach((item) => {
+    item.Datas.forEach((ele) => {
+      xAxisData.push(ele.Ctime);
+    });
+  });
+  const seriesData: any = [];
+  lineChartList.forEach((ele: lineBaseItem) => {
+    seriesData.push({
+      data: ele.Datas.map((item) => item.Num),
+      name: ele.ParamName,
+      type: 'line',
+      symbolSize: 1, // 标记的大小
+      connectNulls: true, // 是否连接空数据
+      // itemStyle: {
+      //   //  折线拐点标志的样式。
+      //   color: 'yellow',
+      // },
+      lineStyle: {
+        // 线宽
+        width: 1,
+      },
+      endLabel: {
+        // 折线端点的标签。
+        show: false,
+        offset: [-50, -10],
+        formatter: '{a}',
+        color: '#ff3c58',
+      },
+      // animation:false // 是否开启动画
+    });
+  });
   const options = {
     legend: {
-      data: ['最大值', '最小值', '在线'],
-      show: false,
+      data: legendData,
+      show: true,
+      left: '10%',
+      itemWidth: 15,
+      itemHeight: 1,
+       selectedMode: false,
+      textStyle: {
+        // 图例的公用文本样式
+        color: '#FFFFFF',
+      },
     },
     tooltip: {
       trigger: 'axis',
     },
     grid: {
-      top: '7%',
-      right: '4%',
+      top: legendData.length>4?'25%':'15%',
+      right: '2%',
       bottom: '0%',
       left: '2%',
       containLabel: true,
@@ -58,7 +84,7 @@ const initChart = () => {
       },
     },
     xAxis: {
-      data: XValList,
+      data: [...new Set(xAxisData)],
       type: 'category',
       boundaryGap: false, // 坐标轴两边留白策略
       // max: 5, // 坐标轴刻度最大值。
@@ -81,17 +107,26 @@ const initChart = () => {
         snap: true,
         type: 'line',
         label: {
-          show: true,
-          padding: [5, 5, 45, 5],
+          show: false,
+          padding: [5, 5, 120, 5],
           color: '#ffffff',
+          height: 200,
           lineHeight: 18,
           backgroundColor: '#00cc90',
           borderColor: '#ffffff',
           borderWidth: 1,
           formatter(params: any) {
-            const paramStr = MonitorList.filter((item) => item.Ctime === params.value)[0].ParamVal
-            const toTime = moment(params.value).format('YYYY-MM-DD HH');
-            return `${ParamName}\n${paramStr}${ParamUnit}\n${toTime}`;
+            const paramStrlist: any = [];
+            lineChartList.forEach((item) => {
+              item.Datas.forEach((ele) => {
+                if (ele.Ctime === params.value) {
+                  paramStrlist.push(`${item.ParamName}\xa0\xa0${ele.Num}${item.ParamUnit}`);
+                }
+              });
+            });
+            const paramStr: string = paramStrlist.join().replace(/,/g, '\r\n');
+            const timeStr = moment(params.value).format('DD日');
+            return `${timeStr}\n${paramStr}`;
           },
         },
         lineStyle: {
@@ -106,7 +141,7 @@ const initChart = () => {
         align: 'center',
         margin: 12,
         formatter(value: any) {
-          const timeStr = moment(value).format('DD日HH时');
+          const timeStr = moment(value).format('DD日');
           return timeStr;
         },
         color: '#ffffff',
@@ -156,69 +191,7 @@ const initChart = () => {
         color: '#ffffff',
       },
     },
-    series: [
-      {
-        data: MaxFlag ? MaxValList : [],
-        name: '最大值',
-        type: 'line',
-        symbolSize: 0, // 标记的大小
-        connectNulls: true, // 是否连接空数据
-        itemStyle: {
-          //  折线拐点标志的样式。
-          color: '#ff3c58',
-        },
-        lineStyle: {
-          // 线宽
-          width: 2,
-        },
-        endLabel: {
-          // 折线端点的标签。
-          show: true,
-          offset: [-50, -10],
-          formatter: '{a}',
-          color: '#ff3c58',
-        },
-        // areaStyle: {
-        //   // 区域填充样式。
-        //   color: 'rgba(241, 37, 37, 1)',
-        // },
-        // animation:false // 是否开启动画
-      },
-      {
-        data: MinVal>0?MinValList:[],
-        name: '最小值',
-        type: 'line',
-        symbolSize: 0,
-        connectNulls: true,
-        itemStyle: {
-          color: '#5591f4',
-        },
-        lineStyle: {
-          width: 2,
-        },
-        endLabel: {
-          show: true,
-          offset: [-50, -10],
-          formatter: '{a}',
-          color: '#5591f4',
-        },
-        // animation:false // 是否开启动画
-      },
-      {
-        data: ParamValList,
-        name: '在线',
-        type: 'line',
-        symbolSize: 1,
-        connectNulls: true,
-        itemStyle: {
-          color: '#00cc90',
-        },
-        lineStyle: {
-          width: 1,
-        },
-        // animation:false // 是否开启动画
-      },
-    ],
+    series: seriesData,
   };
   myChart.value.setOption(options);
   window.onresize = function () {
@@ -234,4 +207,9 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.warnLineData {
+  min-height: 230px;
+  color: #ffffff;
+}
+</style>

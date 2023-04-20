@@ -47,19 +47,28 @@ declare namespace API {
       Page: number;
       PageSize: number;
       ProId: string; // 项目id
-      Type: number;  // 1参数异常(环境参数) 2虫情异常
+      Type: number; // 1参数异常(环境参数) 2虫情异常
     }
     interface HistoryDataPayload extends DevInfoPayload {
-      Bdate: string;
-      Edate: string;
+      Bdate: string; // 开始时间
+      Edate: string; // 结束时间
     }
     // tss
     interface ProId extends Params {
       ProId: string;
     }
     interface WarnAccount extends ProId {
-      Account:string;
-      AccountType:Number;
+      Account: string;
+      AccountType: Number;
+    }
+    interface WarnDataPayload extends Params {
+      Bdate: string; // 开始时间
+      Edate: string; // 结束时间
+      ObjId?: string; // 设备id
+      ObjIds?: string[];  // 选择参数id
+      Page?: number;
+      PageSize?: number;
+      DevId?: string; // 设备id
     }
   }
 }

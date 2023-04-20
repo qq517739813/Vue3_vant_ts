@@ -1,5 +1,5 @@
 <template>
-  <div class="deviceSwitch">
+  <div class="commonCalendar">
     <van-calendar
       ref="calendarRef"
       :max-range="7"
@@ -11,6 +11,7 @@
       allow-same-day
       :show-mark="false"
       @confirm="handleConfirm"
+      @close="handleClose"
     />
   </div>
 </template>
@@ -19,7 +20,7 @@
 import { ref, computed, onMounted, reactive } from 'vue';
 import type { Ref } from 'vue';
 import type { CalendarInstance } from 'vant';
-import { formatDate } from '@/utils/utils';
+import moment from 'moment';
 import { DateItem } from './index';
 
 interface Props {
@@ -56,20 +57,23 @@ const show = computed({
 const handleConfirm = (values: any) => {
   const [start, end] = values;
   rangeCalendar.calendar = {
-    Bdate: formatDate(start),
-    Edate: formatDate(end),
+    Bdate: moment(start).format('YYYY-MM-DD'),
+    Edate: moment(end).format('YYYY-MM-DD'),
   };
   calendarRef.value?.reset();
   emit('calendarConfirm', rangeCalendar);
 };
+// 日期取消事件
+const handleClose = () => {
+  calendarRef.value?.reset();
+}
 // 自定义日期范围
 const customDate = () => {
-  const nowDate = new Date();
-  const dateY = nowDate.getFullYear();
-  const dateM = nowDate.getMonth();
-  const dateD = nowDate.getDate();
-  minDate.value = new Date(dateY - 1, dateM, dateD);
-  maxDate.value = new Date(dateY, dateM, dateD);
+  const dateY:string = moment().format('YYYY');
+  const dateM: string = moment().format('MM');
+  const dateD: string = moment().format('MM');
+  minDate.value = new Date(Number(dateY)-1,0, 1);
+  maxDate.value = new Date(Number(dateY), Number(dateM), Number(dateD));
 };
 onMounted(async () => {
   customDate();

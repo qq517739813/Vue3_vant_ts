@@ -33,7 +33,7 @@
       width="343"
       class="autoDevList-dialog"
       closeOnClickOverlay
-      @closeDialog="handleCloseDialog"
+      @closed="handleCloseDialog"
       @touchmove.stop.prevent="moveHandle"
     >
       <template #title>

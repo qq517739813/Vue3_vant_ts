@@ -26,7 +26,7 @@
       width="343"
       class="autoIrrigate-dialog"
       closeOnClickOverlay
-      @closeDialog="handleCloseDialog"
+      @closed="handleCloseDialog"
       @touchmove.stop.prevent="moveHandle"
     >
       <template #title>

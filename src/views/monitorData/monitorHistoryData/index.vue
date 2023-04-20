@@ -78,7 +78,7 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetHistoryDataList } from '@/api/monitorData';
-import { formatDate } from '@/utils/utils';
+import moment from 'moment';
 import CommonCalendar from '@/components/commonCalendar.vue';
 import LineChart from './lineChart.vue';
 import Empty from '@/components/empty.vue';
@@ -158,8 +158,8 @@ const onConfirm = (values: DateItem) => {
 };
 onMounted(async () => {
   rangeCalendar.calendar = {
-    Bdate: formatDate(new Date()),
-    Edate: formatDate(new Date()),
+    Bdate: moment().format('YYYY-MM-DD'),
+    Edate: moment().format('YYYY-MM-DD'),
   };
   // 获取设备列表
   await getDevBaseInfo(countObjId.value, rangeCalendar);

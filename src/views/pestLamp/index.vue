@@ -31,10 +31,13 @@
           <span class="choose-time">选择时间</span>
         </div>
       </div>
-      <!-- 空气温度 -->
-      <air-temperature v-if="!loading && lineChartInfo.pestList.length > 0" />
-      <!-- 环境湿度 -->
-      <air-humidity v-if="!loading && lineChartInfo.pestList.length > 0" />
+      <div v-if="!loading && lineChartInfo.pestList.length > 0">
+        <!-- 空气温度 -->
+        <air-temperature />
+        <!-- 环境湿度 -->
+        <air-humidity />
+      </div>
+      <empty v-else />
       <div class="img-title">
         <div class="temp-title-left">
           <span>拍摄图片</span>
@@ -48,6 +51,7 @@
       </div>
       <!-- 拍摄图片 -->
       <take-pictures v-if="!loading && pestImgInfo.pestImgsList.length > 0" />
+      <empty v-else />
     </pull-refresh>
     <!-- 选择时间 -->
     <common-calendar v-model:show-calendar="calendarVisible" @calendar-confirm="onConfirm" />
@@ -64,7 +68,7 @@ import { showLoadingToast, closeToast } from 'vant';
 import { GetDevInfo } from '@/api/equipment';
 import { getPestDataList, getPestImagesList } from '@/api/pestLamp';
 import { getdevList } from '@/utils/base';
-import { formatDate } from '@/utils/utils';
+import moment from 'moment';
 import { DevInfoItem, DevListBaseItem, DateItem } from '@/components/index';
 import { LineChartItem, ImglistItem } from './index';
 import pullRefresh from '@/components/pullRefresh.vue';
@@ -74,6 +78,7 @@ import CommonCalendar from '@/components/commonCalendar.vue';
 import AirTemperature from './airTemperature.vue';
 import AirHumidity from './airHumidity.vue';
 import TakePictures from './takePictures.vue';
+import empty from '@/components/empty.vue';
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store = userStore();
@@ -174,8 +179,8 @@ const handClickDev = (item: DevListBaseItem) => {
 };
 onMounted(async () => {
   rangeCalendar.calendar = {
-    Bdate: formatDate(new Date()),
-    Edate: formatDate(new Date()),
+    Bdate:moment().format('YYYY-MM-DD'),
+    Edate: moment().format('YYYY-MM-DD'),
   };
   // 获取设备列表
   await getdevList(countFuncode.value);
@@ -223,11 +228,11 @@ onMounted(async () => {
         font-size: 16px;
         color: #ffffff;
       }
-      span{
+      span {
         font-size: 16px;
         color: #797a7e;
       }
-      .green{
+      .green {
         color: #00cc90;
       }
     }

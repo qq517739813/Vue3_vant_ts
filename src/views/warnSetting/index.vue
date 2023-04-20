@@ -221,7 +221,7 @@ const initData = async () => {
   await GetWarnAccount(payload).then((res) => {
     if ((res as any).IsSuccess) {
       const { Data } = res as any;
-      console.log(Data);
+      // console.log(Data);
       WarnAccountListEmail.list = []
       WarnAccountListPhone.list = []
       for (const key of Data) {
@@ -264,7 +264,7 @@ const submitWeekData = () => {
   });
   newweekdays.Btime = Btime.value
   newweekdays.Etime = Etime.value
-  console.log(newweekdays);
+  // console.log(newweekdays);
 
   WarnTimeConfig(newweekdays).then(() => {
     initData();
@@ -285,7 +285,7 @@ const addWarnAccount = (types: number) => {
   };
   WarnAccount(warnAccount).then(res => {
     if ((res as any).IsSuccess) {
-      console.log(res);
+      // console.log(res);
       initData()
       warnEmailValue.value = ''
       warnPhoneValue.value = ''
