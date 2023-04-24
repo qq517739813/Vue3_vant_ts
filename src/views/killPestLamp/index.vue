@@ -22,7 +22,11 @@
       <!-- 设备状态 -->
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
       <!-- 设备切换 -->
-      <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-switch
+        v-model:popup-visbile="showPopup"
+        @handele-dev="handClickDev"
+        :curentDevId="equipmentId"
+      />
       <van-nav-bar
         class="pest-title"
         :border="false"

@@ -11,7 +11,7 @@
       @click-right="onClickRight"
     >
       <template #left>
-        <van-icon name="arrow-left" size="20" color="#FFFFFF" style="margin-left: 11px" />
+        <van-icon name="arrow-left" size="20" color="#FFFFFF" />
       </template>
       <template #right>
         <van-icon name="sort" size="20" color="#00cc90" style="transform: rotate(90deg)" />
@@ -19,7 +19,11 @@
       </template>
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
-      <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-switch
+        v-model:popup-visbile="showPopup"
+        @handele-dev="handClickDev"
+        :curentDevId="equipmentId"
+      />
       <div class="warnData-totalNum">
         <div class="totalNum-left">
           <span>参数报警统计次数</span>
@@ -62,7 +66,7 @@
         :tableDataList="tableData"
         :paramIds="paramIds"
         :rangeCalendar="rangeCalendar"
-        @edit-requestPageSize="editRequestPageSize"
+        @edit-requestPage="editRequestPage"
         v-if="!loading && tabsActive === 0 && tableData.tableDataList?.length"
       />
       <empty v-else-if="tabsActive === 0" />
@@ -157,7 +161,7 @@ const tabsActive: Ref<number> = ref(0);
 // 控制dialog显示与隐藏
 const dialogShow: Ref<boolean> = ref(false);
 // 页码尺寸
-const requestPageSize: Ref<number> = ref(10);
+const requestPage: Ref<number> = ref(1);
 // dialog复选框选中值
 const checkedIds: Ref<string[]> = ref([]);
 // 自定义tabs列表
@@ -232,15 +236,16 @@ const getWarnTableData = async (paramId: string, item: DateItem) => {
     Edate: item.calendar.Edate,
     Token: store.userInfo.Token,
     ObjIds: paramId.split(',') || [],
-    Page: 1,
-    PageSize: requestPageSize.value,
+    Page: requestPage.value,
+    PageSize: 10,
   };
-   loading.value = true;
+  loading.value = true;
   const warnTableDataRes: any = await GetWarnTableDataList(payload);
+  tableData.Page = warnTableDataRes.Data.Page;
   tableData.PageSize = warnTableDataRes.Data.PageSize;
   tableData.RecordNum = warnTableDataRes.Data?.RecordNum;
   tableData.tableDataList = warnTableDataRes.Data?.Datas;
-   loading.value = false;
+  loading.value = false;
   closeToast();
 };
 // 根据时间获取参数预警曲线数据(折线图)
@@ -292,9 +297,26 @@ const handleTabsClick = (index: number) => {
   tabsActive.value = index;
 };
 // 修改表格页码尺寸大小
-const editRequestPageSize = (pageSize: number) => {
-  requestPageSize.value = pageSize;
-  getWarnTableData(paramIds.value, rangeCalendar);
+const editRequestPage = async (pageSize: number) => {
+  if (requestPage.value === pageSize) {
+    return
+  }
+  requestPage.value = pageSize;
+  const payload = {
+    Bdate: rangeCalendar.calendar.Bdate,
+    Edate: rangeCalendar.calendar.Edate,
+    Token: store.userInfo.Token,
+    ObjIds: paramIds.value.split(',') || [],
+    Page: requestPage.value,
+    PageSize: 10,
+  };
+  const warnTableDataRes: any = await GetWarnTableDataList(payload);
+  tableData.Page = warnTableDataRes.Data.Page;
+  tableData.PageSize = warnTableDataRes.Data.PageSize;
+  tableData.RecordNum = warnTableDataRes.Data?.RecordNum;
+  tableData.tableDataList = [
+    ...new Set([...tableData.tableDataList, ...warnTableDataRes.Data?.Datas]),
+  ];
 };
 // 打开弹窗
 const handleShowDialog = () => {
@@ -334,7 +356,7 @@ const handleCheckIds = (ids: string[]) => {
   ids.forEach((item: string) => {
     lineChartList.forEach((ele: lineBaseItem) => {
       if (item === ele.ParamId) {
-        arr.push(ele)
+        arr.push(ele);
       }
     });
   });
@@ -386,7 +408,6 @@ onMounted(async () => {
       span:last-child {
         margin-left: 10px;
         font-size: 14px;
-        color: #ffffff;
       }
     }
     .totalNum-right {

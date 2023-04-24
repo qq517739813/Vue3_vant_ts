@@ -65,10 +65,17 @@ declare namespace API {
       Bdate: string; // 开始时间
       Edate: string; // 结束时间
       ObjId?: string; // 设备id
-      ObjIds?: string[];  // 选择参数id
+      ObjIds?: string[]; // 选择参数id
       Page?: number;
       PageSize?: number;
       DevId?: string; // 设备id
+    }
+    interface AnalysisDataPayload extends Params {
+      Month?: string; // 月份
+      ObjId?: string; // 设备id
+      ParamId?:string;  // 设备参数id
+      Months?: string[]; // 多个月份
+      ParamId?: string; // 选择参数id
     }
   }
 }

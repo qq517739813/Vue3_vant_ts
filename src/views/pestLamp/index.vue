@@ -20,7 +20,11 @@
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
-      <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-switch
+        v-model:popup-visbile="showPopup"
+        @handele-dev="handClickDev"
+        :curentDevId="equipmentId"
+      />
       <div class="temp-title">
         <div class="temp-title-left">
           <span>温/湿度走势图</span>
@@ -179,7 +183,7 @@ const handClickDev = (item: DevListBaseItem) => {
 };
 onMounted(async () => {
   rangeCalendar.calendar = {
-    Bdate:moment().format('YYYY-MM-DD'),
+    Bdate: moment().format('YYYY-MM-DD'),
     Edate: moment().format('YYYY-MM-DD'),
   };
   // 获取设备列表

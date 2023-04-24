@@ -18,7 +18,6 @@ const props = withDefaults(defineProps<Props>(), {
 // 绘制图表
 const initChart = () => {
   const main = document.getElementById('barChartMain') as HTMLDivElement;
-  //   myChart.value = echarts.init(main);
   const myChart = echarts.init(main);
   const { barGraphList } = props;
   const XValList = barGraphList.map((item) => item.ParamName);

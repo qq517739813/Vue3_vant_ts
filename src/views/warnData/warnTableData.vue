@@ -59,16 +59,16 @@ const props = withDefaults(defineProps<Props>(), {
 });
 // 父子传方法
 const emit = defineEmits<{
-  (e: 'editRequestPageSize', value: number): void;
+  (e: 'editRequestPage', value: number): void;
 }>();
 
 const loading: Ref<boolean> = ref(false);
 const finished: Ref<boolean> = ref(false);
 const onLoad = () => {
-  const { tableDataList, RecordNum, PageSize } = props.tableDataList;
+  const { tableDataList, RecordNum, Page } = props.tableDataList;
   setTimeout(() => {
     loading.value = true;
-    emit('editRequestPageSize', PageSize + 10);
+    emit('editRequestPage', Page + 1);
     loading.value = false;
     if (tableDataList.length >= RecordNum) {
       finished.value = true;

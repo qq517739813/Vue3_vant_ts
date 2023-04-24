@@ -20,7 +20,11 @@
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
-      <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-switch
+        v-model:popup-visbile="showPopup"
+        @handele-dev="handClickDev"
+        :curentDevId="equipmentId"
+      />
       <fertilizer-data :fertilizerData="fertilizer.fertilizerInfo.Param" />
       <!-- <fertilizer-list :fertilizerList="fertilizer.fertilizerInfo.CtrlParam" @getData="getDevBaseInfo" :equipmentId="equipmentId"/> -->
       <fertilizer-list

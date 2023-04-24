@@ -19,7 +19,11 @@
       </template>
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
-      <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-switch
+        v-model:popup-visbile="showPopup"
+        @handele-dev="handClickDev"
+        :curentDevId="equipmentId"
+      />
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
       <real-data :realList="realInfo.realList" :equipmentId="equipmentId" :realTime="timeStr" />
     </pull-refresh>
@@ -27,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, computed, ref, reactive,onActivated, onDeactivated  } from 'vue';
+import { onMounted, computed, ref, reactive, onActivated, onDeactivated } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import { useRoute } from 'vue-router';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
@@ -104,12 +108,12 @@ onMounted(async () => {
 onActivated(() => {
   // 调用时机为首次挂载
   // 以及每次从缓存中被重新插入时
-})
+});
 
 onDeactivated(() => {
   // 在从 DOM 上移除、进入缓存
   // 以及组件卸载时调用
-})
+});
 </script>
 
 <style scoped lang="less">

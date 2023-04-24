@@ -1,34 +1,72 @@
 <template>
-  <div class="paramQues"  v-if="props.paramData?.length">
-    <div class="paramQues-item" v-for="item in props.paramData" :key="item.Id">
-      <div class="item-head">
-        <span>参数异常</span>
-        <span>{{ item.Ctime }}</span>
+  <div class="paramQues">
+    <van-list
+      v-model:loading="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+      offset="50"
+      :immediate-check="false"
+    >
+      <div class="paramQues-item" v-for="item in props.paramData.DataList" :key="item.Id">
+        <div class="item-head">
+          <span>参数异常</span>
+          <span>{{ item.Ctime }}</span>
+        </div>
+        <div class="item-main">
+          <div class="item-msgTitle">{{ item.MsgTitle }}</div>
+          <div class="item-msgContent">{{ item.MsgContent }}</div>
+        </div>
       </div>
-      <div class="item-main">
-        <div class="item-msgTitle">{{ item.MsgTitle }}</div>
-        <div class="item-msgContent">{{ item.MsgContent }}</div>
-      </div>
-    </div>
+    </van-list>
   </div>
-  <empty v-else />
 </template>
 
 <script lang="ts" setup>
-import { CommonItem } from './index';
-import Empty from '@/components/empty.vue';
+import { ref } from 'vue';
+import type { Ref } from 'vue';
+import { WarnMsgBaseItem } from './index';
 
 interface Props {
-  paramData: CommonItem[];
+  paramData: WarnMsgBaseItem;
 }
 // 父传子数据
 const props = withDefaults(defineProps<Props>(), {
-  paramData: () => [],
+  paramData: () => {
+    return {
+      Condition: '',
+      DataList: [],
+      Page: 1,
+      PageSize: 10,
+      TotalPage: 1,
+      TotalRecord: 10,
+    };
+  },
 });
+// 父子传方法
+const emit = defineEmits<{
+  (e: 'editRequestPage', value: number): void;
+}>();
+const loading: Ref<boolean> = ref(false);
+const finished: Ref<boolean> = ref(false);
+
+const onLoad = () => {
+  const { DataList, TotalRecord, Page } = props.paramData;
+  setTimeout(() => {
+    loading.value = true;
+    emit('editRequestPage', Page + 1);
+    loading.value = false;
+    if (DataList.length >= TotalRecord) {
+      finished.value = true;
+    }
+  }, 1000);
+};
 </script>
 
 <style scoped lang="less">
 .paramQues {
+  // height: calc(100vh - 90px);
+  // overflow: auto;
   // margin-top: 14px;
   padding: 0 16px;
   .paramQues-item {
@@ -57,7 +95,7 @@ const props = withDefaults(defineProps<Props>(), {
         }
       }
     }
-    .item-main{
+    .item-main {
       padding: 8px 12px;
       font-size: 14px;
       line-height: 21px;
