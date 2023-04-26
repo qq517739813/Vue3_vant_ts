@@ -1,30 +1,32 @@
 <template>
-  <div class="commonDatePicker">
-    <van-popup
-      v-model:show="show"
-      :style="{ height: '50%' }"
-      position="bottom"
-      @close="handleCancel"
+  <van-popup
+    v-model:show="show"
+    :style="{ height: '50%' }"
+    position="bottom"
+    @close="handleCancel"
+    mode="multiple"
+    teleport="body"
+    class="commonDatePicker"
+    transition-appear
+  >
+    <van-date-picker
+      v-model="currentDate.confirmDate"
+      :min-date="minDate"
+      :max-date="maxDate"
+      :formatter="formatter"
+      :columns-type="['year', 'month']"
+      :show-mark="false"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
     >
-      <van-date-picker
-        v-model="currentDate.confirmDate"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :formatter="formatter"
-        :columns-type="['year', 'month']"
-        :show-mark="false"
-        @confirm="handleConfirm"
-        @cancel="handleCancel"
-      >
-        <template #cancel>
-          <span class="cancel">取消</span>
-        </template>
-        <template #confirm>
-          <span class="confirm">确定</span>
-        </template>
-      </van-date-picker>
-    </van-popup>
-  </div>
+      <template #cancel>
+        <span class="cancel">取消</span>
+      </template>
+      <template #confirm>
+        <span class="confirm">确定</span>
+      </template>
+    </van-date-picker>
+  </van-popup>
 </template>
 
 <script lang="ts" setup>
@@ -89,10 +91,10 @@ const handleCancel = () => {
 };
 // 自定义日期范围
 const customDate = () => {
-  const dateY:string = moment().format('YYYY');
+  const dateY: string = moment().format('YYYY');
   const dateM: string = moment().format('MM');
   currentDate.confirmDate = [dateY, dateM];
-  minDate.value = new Date(Number(dateY)-10, 0);
+  minDate.value = new Date(Number(dateY) - 10, 0);
   maxDate.value = new Date(Number(dateY), Number(dateM));
 };
 // 格式化选项

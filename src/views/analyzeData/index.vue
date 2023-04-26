@@ -18,11 +18,6 @@
         <span class="head-change">切换</span>
       </template>
     </van-nav-bar>
-    <device-switch
-      v-model:popup-visbile="showPopup"
-      @handele-dev="handClickDev"
-      :curentDevId="equipmentId"
-    />
     <van-tabs
       v-model:active="activeId"
       swipeable
@@ -63,6 +58,12 @@
       </van-tab>
     </van-tabs>
   </div>
+  <!-- 设备切换 -->
+  <device-switch
+    v-model:popup-visbile="showPopup"
+    @handele-dev="handClickDev"
+    :curentDevId="equipmentId"
+  />
   <!-- 表格汇总图形汇总选择时间 -->
   <common-date-picker v-model:show-calendar="datePickerVisible" @calendar-confirm="onConfirm" />
   <!-- 图形汇总切换数据 -->
@@ -225,13 +226,15 @@ const getTableDataList = async (ObjId: string, item: DateItem) => {
 };
 // 获取对比分析
 const getQoqDataList = async (ParamId: string, item: DateItem) => {
+  loading.value = true;
   showLoadingToast({
     message: 'loading...',
     forbidClick: true,
     loadingType: 'spinner',
     duration: 0,
   });
-  const MonthList = [...new Set(Object.values(item.calendar))];
+  // const MonthList = [...new Set(Object.values(item.calendar))];
+  const MonthList = item.calendar.Bdate.split(',');
   const payload = {
     Months: MonthList,
     ParamId,
@@ -239,6 +242,7 @@ const getQoqDataList = async (ParamId: string, item: DateItem) => {
   };
   const { Data: analysisQoqData } = (await GetAnalysisQoqData(payload)) as any;
   analyzeQoq.analysisQoqList = analysisQoqData;
+  loading.value = false;
   closeToast();
 };
 // 获取图形(汇总)分析

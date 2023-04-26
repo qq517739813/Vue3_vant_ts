@@ -21,7 +21,7 @@
       </template>
       <div class="average-month">
         <span class="month-left">月平均值分析</span>
-        <span class="month-right">添加对比</span>
+        <span class="month-right" @click="openDialogShow">添加对比</span>
       </div>
       <div class="chart">
         <div class="head">{{ countBarTitle }}环比分析</div>
@@ -32,6 +32,8 @@
       <empty v-else />
     </van-pull-refresh>
   </div>
+  <!-- 添加对比弹窗 -->
+  <compare-dialog v-model:dialog-visible="dialogShow"  @confirm-dialog="confirmDialogShow" />
 </template>
 
 <script lang="ts" setup>
@@ -42,6 +44,7 @@ import { QoqDataItem } from '../index';
 import empty from '@/components/empty.vue';
 import BarDiagram from './barDiagram.vue';
 import QoqdataList from './qoqdataList.vue';
+import CompareDialog from './compareDialog.vue';
 
 // 接收数据
 const qoqList = inject('analysisQoqList') as QoqDataItem;
@@ -62,6 +65,8 @@ const emit = defineEmits<{
 }>();
 // 刷新状态
 const refreshLoading: Ref<boolean> = ref(false);
+// 添加对比dialog弹窗状态
+const dialogShow: Ref<boolean> = ref(false);
 // 计算柱状图标题
 const countBarTitle: ComputedRef = computed(() => {
   const newestBarTitle = qoqList.analysisQoqList.ParamName;
@@ -73,6 +78,15 @@ const onRefresh = () => {
   emit('getQoqList', props.equipmentId, props.rangeCalendar);
   refreshLoading.value = false;
 };
+// 添加对比打开弹窗事件
+const openDialogShow = () => {
+  dialogShow.value = true;
+};
+// 弹窗确认事件
+const confirmDialogShow = (paramId: string, item: DateItem) => {
+  emit('getQoqList', paramId, item);
+  dialogShow.value = false;
+}
 </script>
 
 <style scoped lang="less">
