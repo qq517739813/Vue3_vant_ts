@@ -56,7 +56,7 @@ const initChart = () => {
   const options = {
     title: {
       text: '运行状态',
-      left: '30%',
+      left: '20%',
       top: 'center',
       textStyle: {
         fontSize: 14,
@@ -101,12 +101,12 @@ const initChart = () => {
       {
         name: 'Access From',
         type: 'pie',
-        radius: ['45%', '75%'],
-        center: ['40%', '50%'],
+        radius: ['40%', '80%'],
+        center: ['30%', '50%'],
         avoidLabelOverlap: false,
         label: {
           show: true,
-          position: 'outside',
+          position: 'inside',
           color: '#FFFFFF',
           fontSize: 12,
           formatter(param: any) {
@@ -115,7 +115,7 @@ const initChart = () => {
           },
         },
         labelLine: {
-          show: true,
+          show: false,
           length: 10,
           length2: 10,
         },

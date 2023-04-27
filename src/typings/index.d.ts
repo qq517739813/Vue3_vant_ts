@@ -53,7 +53,6 @@ declare namespace API {
       Bdate: string; // 开始时间
       Edate: string; // 结束时间
     }
-    // tss
     interface ProId extends Params {
       ProId: string;
     }
@@ -76,6 +75,10 @@ declare namespace API {
       ParamId?:string;  // 设备参数id
       Months?: string[]; // 多个月份
       ParamId?: string; // 选择参数id
+    }
+    interface VideoMovePayload extends Params{
+      DevId: string|any;
+      Val: string;  // 'up'上  'down'下  'left'左  'right'右  'zoomin' 拉近  'zoomout'拉远
     }
   }
 }

@@ -22,12 +22,16 @@ import type { Ref } from 'vue';
 import { ImglistItem } from './index';
 // 接收数据
 const { pestImgsList } = inject('pestImgsList') as ImglistItem;
+// 图片预览状态
 const imgPreviewShow: Ref<boolean> = ref(false);
+// 图片预览第几张
 const imgIndex: Ref<number> = ref(0);
+// 点击图片开启预览
 const handleClick = (index: number) => {
   imgIndex.value = index;
   imgPreviewShow.value = true;
 };
+// 图片切换
 const onChange = (newIndex: number) => {
   imgIndex.value = newIndex;
 };
