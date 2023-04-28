@@ -6,6 +6,7 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import * as echarts from 'echarts';
 import { HistoryItem } from './index';
+import moment from 'moment';
 
 interface Props {
   chartData: HistoryItem;
@@ -47,7 +48,7 @@ const initChart = () => {
       trigger: 'axis',
     },
     grid: {
-      top: '12%',
+      top: '7%',
       right: '4%',
       bottom: '0%',
       left: '2%',
@@ -89,15 +90,7 @@ const initChart = () => {
           borderWidth: 1,
           formatter(params: any) {
             const paramStr = MonitorList.filter((item) => item.Ctime === params.value)[0].ParamVal
-            const nowDate = new Date(params.value);
-            const year = nowDate.getFullYear(); // 返回当前日期的年  2019
-            let month: number | string = nowDate.getMonth() + 1; // 月份 返回的月份小1个月   记得月份+1 呦
-            month = month < 10 ? `0${month}` : month;
-            let dates: number | string = nowDate.getDate(); // 返回的是 几号
-            dates = dates < 10 ? `0${dates}` : dates;
-            let time: number | string = nowDate.getHours(); // 返回的是 几时
-            time = time < 10 ? `0${time}` : time;
-            const toTime = `${year}-${month}-${dates}\xa0${time}`;
+            const toTime = moment(params.value).format('YYYY-MM-DD HH');
             return `${ParamName}\n${paramStr}${ParamUnit}\n${toTime}`;
           },
         },
@@ -113,12 +106,8 @@ const initChart = () => {
         align: 'center',
         margin: 12,
         formatter(value: any) {
-          const date = new Date(value);
-          let day: number | string = date.getDate(); // 返回的是 几号
-          day = day < 10 ? `0${day}` : day;
-          let time: number | string = date.getHours(); // 返回的是 几时
-          time = time < 10 ? `0${time}` : time;
-          return `${day}日${time}时`;
+          const timeStr = moment(value).format('DD日HH时');
+          return timeStr;
         },
         color: '#ffffff',
       },
@@ -161,6 +150,10 @@ const initChart = () => {
           width: 0.5,
           type: 'solid',
         },
+      },
+      axisLabel: {
+        // 坐标轴刻度标签的相关设置
+        color: '#ffffff',
       },
     },
     series: [

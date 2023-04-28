@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { showFailToast } from 'vant';
+import { showFailToast, showToast } from 'vant';
 import { redirectLogin } from '@/utils/utils';
 
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API
   baseURL: 'http://111.21.231.41:20101/api',
-
 });
 
 // Request interceptors
@@ -39,11 +38,15 @@ service.interceptors.response.use(
           });
         return;
       }
-      res.Message &&
-        showFailToast({
-          forbidClick: true,
-          message: res.Message,
-        });
+      res.Message
+        ? showFailToast({
+            forbidClick: true,
+            message: res.Message,
+          })
+        : showToast({
+            message: '未知错误',
+            duration: 1000,
+          });
       return Promise.reject(res.IsSuccess);
     } else {
       return response.data;

@@ -15,6 +15,7 @@
       <van-cell-group class="cell-list" :border="false">
         <van-cell
           class="cell-item"
+          :class="{ curent: item.DevId === props.curentDevId }"
           v-for="item in store.devList"
           :key="item.DevId"
           :title="item.DevName"
@@ -32,9 +33,11 @@ import { DevListBaseItem } from '@/components/index';
 
 interface Props {
   popupVisbile: boolean;
+  curentDevId: string;
 }
 const props = withDefaults(defineProps<Props>(), {
   popupVisbile: false,
+  curentDevId: '',
 });
 // 父子传方法
 const emit = defineEmits(['update:popupVisbile', 'handeleDev']);
@@ -74,6 +77,9 @@ const handleCellClick = (item: DevListBaseItem) => {
       .cell-item {
         background: #1f2228;
         font-size: 14px;
+        color: #ffffff;
+      }
+       .curent {
         color: #00cc90;
       }
       .cell-item::after {

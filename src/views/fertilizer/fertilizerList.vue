@@ -16,7 +16,7 @@
       width="343"
       class="fertilizer-dialog"
       closeOnClickOverlay
-      @closeDialog="handleCloseDialog"
+      @closed="handleCloseDialog"
       @touchmove.stop.prevent="moveHandle"
     >
       <template #title>

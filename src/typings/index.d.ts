@@ -47,13 +47,12 @@ declare namespace API {
       Page: number;
       PageSize: number;
       ProId: string; // 项目id
-      Type: number;  // 1参数异常(环境参数) 2虫情异常
+      Type: number; // 1参数异常(环境参数) 2虫情异常
     }
     interface HistoryDataPayload extends DevInfoPayload {
-      Bdate: string;
-      Edate: string;
+      Bdate: string; // 开始时间
+      Edate: string; // 结束时间
     }
-    // tss
     interface ProId extends Params {
       ProId: string;
     }
@@ -91,7 +90,26 @@ declare namespace API {
       Frequency:number;
       Btime:string;
       Etime:string;
-
+    }
+    interface WarnDataPayload extends Params {
+      Bdate: string; // 开始时间
+      Edate: string; // 结束时间
+      ObjId?: string; // 设备id
+      ObjIds?: string[]; // 选择参数id
+      Page?: number;
+      PageSize?: number;
+      DevId?: string; // 设备id
+    }
+    interface AnalysisDataPayload extends Params {
+      Month?: string; // 月份
+      ObjId?: string; // 设备id
+      ParamId?:string;  // 设备参数id
+      Months?: string[]; // 多个月份
+      ParamId?: string; // 选择参数id
+    }
+    interface VideoMovePayload extends Params{
+      DevId: string|any;
+      Val: string;  // 'up'上  'down'下  'left'左  'right'右  'zoomin' 拉近  'zoomout'拉远
     }
   }
 }

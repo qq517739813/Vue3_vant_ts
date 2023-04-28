@@ -5,11 +5,11 @@ import request from '@/utils/request';
  * @param {API.Global.ControlParamPayload}
  * @return {Promise<*>}
  */
-export function GetControlParamList(params: API.Global.ControlParamPayload) {
+export function GetControlParamList(data: API.Global.ControlParamPayload) {
   return request({
     url: '/ControllerService/ControlParam',
     method: 'post',
-    data: params,
+    data,
   });
 }
 

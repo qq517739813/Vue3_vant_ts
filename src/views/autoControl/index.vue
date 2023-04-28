@@ -20,7 +20,11 @@
     </van-nav-bar>
     <pull-refresh @pull-method="getDevBaseInfo" :equipmentId="equipmentId">
       <device-state :devBaseInfo="devInfo.devBaseInfo" />
-      <device-switch v-model:popup-visbile="showPopup" @handele-dev="handClickDev" />
+      <device-switch
+        v-model:popup-visbile="showPopup"
+        @handele-dev="handClickDev"
+        :curentDevId="equipmentId"
+      />
       <!-- <auto-dev-list :autoControlList="autoControlList.controlInfo.ChannelList" @getData="getDevBaseInfo" /> -->
       <auto-dev-list :autoControlList="autoControlList.controlInfo.ChannelList" />
     </pull-refresh>
@@ -83,7 +87,7 @@ const getDevBaseInfo = async (DevId: string) => {
   const res: any = await GetDevInfo(devInfoPayload);
   devInfo.devBaseInfo = res.Data;
   const info: any = await GetControlParamList(controlPayload);
-  autoControlList.controlInfo=info.Data
+  autoControlList.controlInfo = info.Data;
   closeToast();
 };
 // 导航栏左侧事件

@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CommonCalendar: typeof import('./src/components/commonCalendar.vue')['default']
+    CommonDatePicker: typeof import('./src/components/commonDatePicker.vue')['default']
     DeviceState: typeof import('./src/components/deviceState.vue')['default']
     DeviceSwitch: typeof import('./src/components/deviceSwitch.vue')['default']
     Empty: typeof import('./src/components/empty.vue')['default']

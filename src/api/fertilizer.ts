@@ -5,11 +5,11 @@ import request from '@/utils/request';
  * @param {API.Global.FertilizerPayload}
  * @return {Promise<*>}
  */
-export function GetFertilizerList(params: API.Global.FertilizerPayload) {
+export function GetFertilizerList(data: API.Global.FertilizerPayload) {
   return request({
     url: '/IrrigationService/getFertilizerData',
     method: 'post',
-    data: params,
+    data,
   });
 }
 /**
@@ -17,10 +17,10 @@ export function GetFertilizerList(params: API.Global.FertilizerPayload) {
  * @param {API.Global.ControlCommandPayload}
  * @return {Promise<*>}
  */
-export function SendFertilizerCommand(params: API.Global.ControlCommandPayload) {
+export function SendFertilizerCommand(data: API.Global.ControlCommandPayload) {
   return request({
     url: '/IrrigationService/FertilizerCommand',
     method: 'post',
-    data: params,
+    data,
   });
 }

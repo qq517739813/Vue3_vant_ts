@@ -5,11 +5,11 @@ import request from '@/utils/request';
  * @param {API.Global.AutoIrrigatePayload}
  * @return {Promise<*>}
  */
-export function GetIrrigateList(params: API.Global.AutoIrrigatePayload) {
+export function GetIrrigateList(data: API.Global.AutoIrrigatePayload) {
   return request({
     url: '/IrrigationService/getValveListByUser',
     method: 'post',
-    data: params,
+    data,
   });
 }
 /**
@@ -17,10 +17,10 @@ export function GetIrrigateList(params: API.Global.AutoIrrigatePayload) {
  * @param {API.Global.ControlCommandPayload}
  * @return {Promise<*>}
  */
-export function SendControlCommand(params: API.Global.ControlCommandPayload) {
+export function SendControlCommand(data: API.Global.ControlCommandPayload) {
   return request({
     url: '/IrrigationService/sendCtrolCommand',
     method: 'post',
-    data: params,
+    data,
   });
 }

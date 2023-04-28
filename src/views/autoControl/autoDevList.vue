@@ -7,8 +7,7 @@
           <span :style="item.IsOnline ? 'color: #00cc90' : 'color: #FF8935'">{{
             item.IsOnline ? '在线' : '待机'
           }}</span>
-          <van-button @click="handleShowDialog(item, 'setting')" class="setting">
-            <!-- <van-button class="setting" @click="handleShowDialog(item, 'setting')"> -->
+          <van-button class="setting" @click="handleShowDialog(item, 'setting')">
             <template #icon>
               <img src="@/assets/autoControlSetting.svg" alt="" />
             </template>
@@ -29,8 +28,14 @@
         </div>
       </div>
     </div>
-    <van-dialog v-model:show="dialogShow" width="343" class="autoDevList-dialog" closeOnClickOverlay
-      @closeDialog="handleCloseDialog" @touchmove.stop.prevent="moveHandle">
+    <van-dialog
+      v-model:show="dialogShow"
+      width="343"
+      class="autoDevList-dialog"
+      closeOnClickOverlay
+      @closed="handleCloseDialog"
+      @touchmove.stop.prevent="moveHandle"
+    >
       <template #title>
         <van-nav-bar left-text="密码验证" class="dialog-title" @click-right="onClickRight">
           <template #right>

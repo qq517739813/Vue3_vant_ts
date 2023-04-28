@@ -5,11 +5,11 @@ import request from '@/utils/request';
  * @param {API.Global.VersionManagePayload}
  * @return {Promise<*>}
  */
-export function getVersionList(params: API.Global.VersionManagePayload) {
+export function getVersionList(data: API.Global.VersionManagePayload) {
   return request({
     url: '/AppService/AppUpdateList',
     method: 'post',
-    data: params,
+    data,
   });
 }
 

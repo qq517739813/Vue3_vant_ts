@@ -13,7 +13,7 @@ import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetEquipmentsList } from '@/api/equipment';
-import { DevListtem,CommonItem } from './index';
+import { DevListtem, CommonItem } from './index';
 import { MAP_KEY, SECURITY_JS_CODE } from '@/config/base';
 import { getMarkersIcon } from '@/utils/base';
 
@@ -82,7 +82,8 @@ const initMap = () => {
       if (DevList.length > 0) {
         map.clearMap();
       }
-      DevList.forEach((marker) => {
+      const LngLatArray = DevList.filter((item) => item?.Lat || item?.Lng);
+      LngLatArray.forEach((marker) => {
         const marks = new AMap.Marker({
           map,
           // icon: getMarkersIcon(marker),
@@ -110,15 +111,14 @@ const initMap = () => {
 };
 // 打开详情弹窗
 const openDialog = (e: Event) => {
-  // console.log('e :>> ', (e.target as any)._originOpts.extData);
-  const item:CommonItem=(e.target as any)._originOpts.extData
-   router.push({
+  const item: CommonItem = (e.target as any)._originOpts.extData;
+  router.push({
     name: item.FunCode[0],
     params: {
       FunCode: item.FunCode[0],
     },
     query: {
-      ObjId:item.DevId ,
+      ObjId: item.DevId,
     },
   });
 };
