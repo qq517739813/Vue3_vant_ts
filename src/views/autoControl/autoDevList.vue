@@ -7,7 +7,7 @@
           <span :style="item.IsOnline ? 'color: #00cc90' : 'color: #FF8935'">{{
             item.IsOnline ? '在线' : '待机'
           }}</span>
-          <van-button class="setting">
+          <van-button @click="handleShowDialog(item, 'setting')" class="setting">
             <!-- <van-button class="setting" @click="handleShowDialog(item, 'setting')"> -->
             <template #icon>
               <img src="@/assets/autoControlSetting.svg" alt="" />
@@ -29,14 +29,8 @@
         </div>
       </div>
     </div>
-    <van-dialog
-      v-model:show="dialogShow"
-      width="343"
-      class="autoDevList-dialog"
-      closeOnClickOverlay
-      @closeDialog="handleCloseDialog"
-      @touchmove.stop.prevent="moveHandle"
-    >
+    <van-dialog v-model:show="dialogShow" width="343" class="autoDevList-dialog" closeOnClickOverlay
+      @closeDialog="handleCloseDialog" @touchmove.stop.prevent="moveHandle">
       <template #title>
         <van-nav-bar left-text="密码验证" class="dialog-title" @click-right="onClickRight">
           <template #right>
@@ -46,15 +40,8 @@
       </template>
       <template #footer>
         <van-form class="form" @submit="onSubmit" ref="formRef" :show-error-message="false">
-          <van-field
-            type="password"
-            class="form-input"
-            v-model.trim="ControlPwd"
-            name="ControlPwd"
-            placeholder="输入密码进行操作验证"
-            autocomplete="off"
-            :rules="[{ required: true, message: '请输入密码进行操作验证' }]"
-          />
+          <van-field type="password" class="form-input" v-model.trim="ControlPwd" name="ControlPwd"
+            placeholder="输入密码进行操作验证" autocomplete="off" :rules="[{ required: true, message: '请输入密码进行操作验证' }]" />
           <div class="edit-pwd">
             <van-button native-type="submit">确定</van-button>
           </div>
@@ -72,6 +59,10 @@ import { ChannelItem, ChannelInfoItem } from './index';
 import { showSuccessToast, showFailToast } from 'vant';
 import type { FormInstance } from 'vant';
 import { SendControlCommand } from '@/api/autoIrrigate';
+import { useRouter } from "vue-router";
+import type { Router } from "vue-router";
+
+const router: Router = useRouter()
 
 interface Props {
   autoControlList: ChannelItem[];
@@ -101,6 +92,8 @@ const handleShowDialog = (item: ChannelItem, text: string) => {
   controlStatus.value = text;
   // 打开弹窗
   dialogShow.value = true;
+  // console.log(channelItem.channelInfo,'channelItem');
+  
 };
 // 关闭弹窗
 const handleCloseDialog = () => {
@@ -116,13 +109,14 @@ const handleCloseDialog = () => {
   // emit('getData', store.userInfo.Uid);
   // 关闭弹窗
   dialogShow.value = false;
+  // 设置flag为false
 };
 // 导航栏右侧事件
 const onClickRight = () => {
   handleCloseDialog();
 };
 // 阻止dialog页面滑动
-const moveHandle = () => {};
+const moveHandle = () => { };
 // 表单事件
 const onSubmit = (values: any) => {
   const { channelInfo } = channelItem;
@@ -138,7 +132,6 @@ const onSubmit = (values: any) => {
     });
     return;
   }
-  
   const payload = {
     ObjId: channelInfo.CtrlId, // 设备id
     Uid: store.userInfo.Uid,
@@ -146,9 +139,14 @@ const onSubmit = (values: any) => {
     Token: store.userInfo.Token,
   };
   switch (controlStatus.value) {
-    // case 'setting':
-    //   { ...payload, Command: 1 };
-    //   return ;
+    case 'setting':
+      router.push({
+      name: 'controlSeeting',
+      query: {
+        CtrlId: channelInfo.CtrlId
+      },
+    });
+      return ;
     case 'on':
       payload.Command = 1;
       break;
@@ -182,10 +180,12 @@ const onSubmit = (values: any) => {
     font-size: 16px;
     color: #cccccc;
   }
+
   .autoDevList-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+
     .autoDevList-item {
       box-sizing: border-box;
       margin-bottom: 14px;
@@ -194,22 +194,26 @@ const onSubmit = (values: any) => {
       min-height: 180px;
       border-radius: 4px;
       border: 0.5px solid #333333;
+
       .item-head {
         display: flex;
         justify-content: space-between;
         margin-bottom: 17px;
         font-size: 14px;
+
         .setting {
           padding: 0;
           border: none;
           background: none;
           height: 20px;
           width: 20px;
+
           img {
             vertical-align: middle;
           }
         }
       }
+
       .item-center {
         display: flex;
         flex-direction: column;
@@ -218,15 +222,18 @@ const onSubmit = (values: any) => {
         margin-bottom: 20px;
         font-size: 12px;
         color: #9e9e9e;
+
         img {
           width: 45px;
           height: 45px;
           margin-bottom: 5px;
         }
       }
+
       .item-footer-isTurn,
       .item-footer {
         display: flex;
+
         button {
           width: 40px;
           height: 25px;
@@ -237,43 +244,55 @@ const onSubmit = (values: any) => {
           border: 0.5px solid rgba(255, 255, 255, 0.2);
           font-size: 12px;
           color: #ffffff;
+
           &:last-child {
             color: #00cc90;
           }
         }
       }
+
       .item-footer-isTurn {
         justify-content: space-between;
       }
+
       .item-footer {
         justify-content: center;
+
         button:first-child {
           margin-right: 12px;
         }
       }
     }
   }
+
   :deep(.autoDevList-dialog) {
     background: #1f2228;
+
     .van-dialog__header--isolated {
       padding: 0;
+
       .dialog-title {
         background: #1f2228;
+
         .van-nav-bar__text {
           font-weight: normal;
           font-size: 16px;
           color: #ffffff;
         }
+
         &::after {
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
       }
     }
+
     .form {
       padding-left: 16px;
+
       .form-input {
         margin-top: 22px;
         background: #1f2228;
+
         .van-field__control {
           font-size: 14px;
           padding-left: 16px;
@@ -282,14 +301,17 @@ const onSubmit = (values: any) => {
           border-radius: 4px;
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         &::after {
           border-bottom: none;
         }
       }
+
       .edit-pwd {
         margin: 6px 0 32px;
         display: flex;
         justify-content: center;
+
         button {
           width: 150px;
           height: 33px;

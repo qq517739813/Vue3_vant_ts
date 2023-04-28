@@ -160,6 +160,12 @@ const constantRoutes = [
     component: () => import('@/views/autoControl/index.vue'),
     meta: { title: '智能控制' },
   },
+  // 导入智能控制设置组件
+  {
+    path:'/controlSeeting/',
+    name:'controlSeeting',
+    component:()=> import('@/views/controlSeeting/index.vue'),
+  },
   // 无权限页面
   {
     path: '/no-permission',

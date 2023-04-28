@@ -18,8 +18,8 @@
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
         <template #title>
-            <img src="@/assets/warnSetting.svg" alt="" />
-            <span class="content-cell-title">报警设置</span>
+          <img src="@/assets/warnSetting.svg" alt="" />
+          <span class="content-cell-title">报警设置</span>
         </template>
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('VersionManage')">
@@ -38,6 +38,8 @@ import { userStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
+import { onMounted } from 'vue'
+import { showLoadingToast, closeToast } from 'vant';
 
 const store = userStore();
 const router: Router = useRouter();
@@ -48,6 +50,17 @@ const handeleCellClick = (item: string) => {
     name: item,
   });
 };
+onMounted(() => {
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0,
+  });
+  setTimeout(() => {
+    closeToast()
+  }, 500);
+})
 
 // 点击退出
 const logOut = () => {
@@ -63,6 +76,7 @@ const logOut = () => {
   .title {
     :deep(.van-nav-bar--fixed) {
       background: #1f2228;
+
       .van-nav-bar__title {
         font-weight: normal;
         font-size: 18px;
@@ -70,12 +84,14 @@ const logOut = () => {
       }
     }
   }
+
   .content {
     .content-cell {
       display: flex;
       align-items: flex-end;
       background: #1f2228;
       padding: 0;
+
       .userIcon {
         display: flex;
         align-items: center;
@@ -85,50 +101,61 @@ const logOut = () => {
         border-radius: 8px;
         background: rgba(0, 204, 144, 0.4);
         border: 1px solid rgba(0, 204, 144, 0.4);
+
         img {
           width: 40px;
           height: 40px;
         }
       }
+
       .content-cell-userOne {
         margin-bottom: 3px;
         margin-left: 16px;
         font-size: 16px;
         color: #cccccc;
       }
+
       .content-cell-userTwo {
         margin-left: 16px;
         font-size: 14px;
         color: #9e9e9e;
       }
-      img{
+
+      img {
         vertical-align: sub;
       }
+
       .content-cell-title {
         margin-left: 11px;
         font-size: 16px;
         color: #cccccc;
       }
+
       :deep(.van-cell__right-icon) {
         font-size: 20px;
       }
     }
+
     .content-cell:after {
       border-bottom: none;
     }
+
     .content-cell:nth-child(1) {
       display: flex;
       align-items: center;
     }
+
     .content-cell:nth-child(2) {
       padding-top: 64px;
       padding-bottom: 28px;
       border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
     }
+
     .content-cell:nth-child(3) {
       padding-top: 38px;
     }
   }
+
   .loginOut {
     margin-top: 134px;
     width: 100%;

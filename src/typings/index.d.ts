@@ -58,8 +58,40 @@ declare namespace API {
       ProId: string;
     }
     interface WarnAccount extends ProId {
-      Account:string;
-      AccountType:Number;
+      Account: string;
+      AccountType: Number;
+    }
+    interface CtrlID extends Params {
+      CtrlID: string; // 控制器id
+    }
+    interface SetTimerCtrl {
+      Bdate:string;
+      CtrId:string; 
+      Edate:string;
+      Enabled:boolean;
+      IsDate:boolean;
+      Opaction:string | number;
+      Optime:string
+    }
+    interface SetParamCtrl{
+      CtrId:string;
+      Enabled:boolean;
+      Opaction:string | number;
+      ParamId:string;
+      Type: string | number;
+      Value: number;  
+    }
+    interface SetLoopCtrl{
+      Bdate:string;
+      CtrId:string; 
+      Edate:string;
+      Enabled:boolean;
+      Duration:number;
+      Action:number;
+      Frequency:number;
+      Btime:string;
+      Etime:string;
+
     }
   }
 }

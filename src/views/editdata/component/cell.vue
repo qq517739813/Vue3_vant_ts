@@ -70,8 +70,6 @@ const NewPwd = ref<string>('');
 
 
 const onSubmit = (values: any) => {
-  console.log(values);
-
   // eslint-disable-next-line no-param-reassign
   values.title = props.title
 
@@ -264,7 +262,8 @@ defineExpose({
     flex-direction: column;
 
     :deep(.van-button) {
-      margin: 10px 92px;
+      margin: 10px auto;
+      width: 120px;
     }
   }
 }
