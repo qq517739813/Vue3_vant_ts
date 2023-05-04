@@ -94,6 +94,7 @@ import type { Ref } from 'vue';
 import CtrlPopup from '../TimeCtrl/CtrlPopup.vue'
 import { showToast, TimePickerColumnType } from 'vant';
 import { SetLoopCtrl } from "@/api/autoControl"
+import moment from 'moment';
 // 定义数据和引用   
 // 定时控制操作动作
 const Opaction = ref('1');
@@ -191,9 +192,9 @@ const saveSetLoopCtrl = async () => {
 
 }
 const init = () => {
-    if (props.GetLoopCtrlres.CtrId) {
-        Bdate.value = props.GetLoopCtrlres.Bdate.split(' ')[0].split('-')
-        Edate.value = props.GetLoopCtrlres.Edate.split(' ')[0].split('-')
+    if (props.GetLoopCtrlres.CtrId) {       
+        Bdate.value = moment(props.GetLoopCtrlres.Bdate).format('YYYY-MM-DD').split('-')
+        Edate.value = moment(props.GetLoopCtrlres.Edate).format('YYYY-MM-DD').split('-')
         Enabled.value = props.GetLoopCtrlres.Enabled;
         Duration.value = props.GetLoopCtrlres.Duration;
         Opaction.value = props.GetLoopCtrlres.Action.toString();
@@ -206,8 +207,8 @@ const init = () => {
 }
 watch(() => props.GetLoopCtrlres, (newValue: any) => {
     if (newValue.CtrId) {
-        Bdate.value = newValue.Bdate.split(' ')[0].split('-')
-        Edate.value = newValue.Edate.split(' ')[0].split('-')
+        Bdate.value = moment(props.GetLoopCtrlres.Bdate).format('YYYY-MM-DD').split('-')
+        Edate.value = moment(props.GetLoopCtrlres.Edate).format('YYYY-MM-DD').split('-')
         Enabled.value = newValue.Enabled;
         Duration.value = newValue.Duration;
         Opaction.value = newValue.Action.toString();

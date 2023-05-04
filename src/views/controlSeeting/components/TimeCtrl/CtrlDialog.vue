@@ -91,7 +91,7 @@ import { showToast } from 'vant';
 import type { TimePickerColumnType } from 'vant';
 import { SetTimerCtrl } from "@/api/autoControl";
 import CtrlPopup from './CtrlPopup.vue'
-
+import moment from 'moment';
 // 定义数据和引用  
 const router = useRoute()
 // 定时控制操作动作
@@ -212,8 +212,8 @@ watch(() => props.ctrolItem, (newValue?: any) => {
         Enabled.value = newValue.Enabled;
         Optime.value = newValue.Optime.split(":");
         Optimestr.value = newValue.Optime;
-        Bdate.value = newValue.Bdate.split(' ')[0].split('-')
-        Edate.value = newValue.Edate.split(' ')[0].split('-')
+        Bdate.value = moment(newValue.Bdate).format('YYYY-MM-DD').split('-')
+        Edate.value = moment(newValue.Edate).format('YYYY-MM-DD').split('-')
     } else {
         reset()
     }
