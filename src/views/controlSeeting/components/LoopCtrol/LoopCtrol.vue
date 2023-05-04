@@ -190,31 +190,35 @@ const saveSetLoopCtrl = async () => {
     });
 
 }
-const  init =() =>{
-    Bdate.value = props.GetLoopCtrlres.Bdate.split(' ')[0].split('-')
-    Edate.value = props.GetLoopCtrlres.Edate.split(' ')[0].split('-')
-    Enabled.value = props.GetLoopCtrlres.Enabled;
-    Duration.value = props.GetLoopCtrlres.Duration;
-    Opaction.value = props.GetLoopCtrlres.Action.toString();
-    Frequency.value = props.GetLoopCtrlres.Frequency;
-    Optime.value = props.GetLoopCtrlres.Btime.split(":");
-    Optimestr.value = props.GetLoopCtrlres.Btime
-    Optime2.value = props.GetLoopCtrlres.Etime.split(":");
-    OptimestrT.value = props.GetLoopCtrlres.Etime
+const init = () => {
+    if (props.GetLoopCtrlres.CtrId) {
+        Bdate.value = props.GetLoopCtrlres.Bdate.split(' ')[0].split('-')
+        Edate.value = props.GetLoopCtrlres.Edate.split(' ')[0].split('-')
+        Enabled.value = props.GetLoopCtrlres.Enabled;
+        Duration.value = props.GetLoopCtrlres.Duration;
+        Opaction.value = props.GetLoopCtrlres.Action.toString();
+        Frequency.value = props.GetLoopCtrlres.Frequency;
+        Optime.value = props.GetLoopCtrlres.Btime.split(":");
+        Optimestr.value = props.GetLoopCtrlres.Btime
+        Optime2.value = props.GetLoopCtrlres.Etime.split(":");
+        OptimestrT.value = props.GetLoopCtrlres.Etime
+    }
 }
 watch(() => props.GetLoopCtrlres, (newValue: any) => {
-    Bdate.value = newValue.Bdate.split(' ')[0].split('-')
-    Edate.value = newValue.Edate.split(' ')[0].split('-')
-    Enabled.value = newValue.Enabled;
-    Duration.value = newValue.Duration;
-    Opaction.value = newValue.Action.toString();
-    Frequency.value = newValue.Frequency;
-    Optime.value = newValue.Btime.split(":");
-    Optimestr.value = newValue.Btime
-    Optime2.value = newValue.Etime.split(":");
-    OptimestrT.value = newValue.Etime
+    if (newValue.CtrId) {
+        Bdate.value = newValue.Bdate.split(' ')[0].split('-')
+        Edate.value = newValue.Edate.split(' ')[0].split('-')
+        Enabled.value = newValue.Enabled;
+        Duration.value = newValue.Duration;
+        Opaction.value = newValue.Action.toString();
+        Frequency.value = newValue.Frequency;
+        Optime.value = newValue.Btime.split(":");
+        Optimestr.value = newValue.Btime
+        Optime2.value = newValue.Etime.split(":");
+        OptimestrT.value = newValue.Etime
+    }
 })
-onMounted(()=>{
+onMounted(() => {
     init()
 })
 </script>
@@ -247,9 +251,10 @@ onMounted(()=>{
     display: flex;
     justify-content: center;
     margin: 20px 0;
+
     .van-button--normal {
         padding: 0 30px;
-        
+
 
     }
 }
