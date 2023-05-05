@@ -2,7 +2,7 @@
   <div class="userInfo">
     <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="我的" />
     <van-cell-group :border="false" class="content">
-      <van-cell class="content-cell" is-link center @click="handeleCellClick('EditData')">
+      <van-cell class="content-cell"  center>
         <template #icon>
           <div class="userIcon">
             <img src="@/assets/user.svg" alt="" />
@@ -16,16 +16,22 @@
           <span class="content-cell-userTwo">管理员</span>
         </template>
       </van-cell>
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('EditData')">
+        <template #title>
+          <img src="@/assets/edit.svg" alt="" />
+          <span class="content-cell-title">编辑信息</span>
+        </template>
+      </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
         <template #title>
-          <img src="@/assets/warnSetting.svg" alt="" />
-          <span class="content-cell-title">报警设置</span>
+          <img src="@/assets/pwd.svg" alt="" />
+          <span class="content-cell-title">修改密码</span>
         </template>
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('VersionManage')">
         <template #title>
-          <img src="@/assets/versionUpdate.svg" alt="" />
-          <span class="content-cell-title">版本更新日志</span>
+          <img src="@/assets/system.svg" alt="" />
+          <span class="content-cell-title">系统升级</span>
         </template>
       </van-cell>
     </van-cell-group>
@@ -136,8 +142,13 @@ const logOut = () => {
       padding-bottom: 28px;
       border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
     }
-
     .content-cell:nth-child(3) {
+      padding-top: 38px;
+      padding-bottom: 28px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .content-cell:nth-child(4) {
       padding-top: 38px;
     }
   }

@@ -11,6 +11,7 @@
       <!-- <van-cell title="头像" is-link /> -->
       <CellComponent title="头像" />
       <CellComponent title="昵称" v-bind:value="{ getcomputerName }" @handle-UserInfo="handleUserInfo" ref="nickNameRef" />
+      <CellComponent title="姓名" v-bind:value="{ getcomputerName }" @handle-UserInfo="handleUserInfo" ref="nickNameRef" />
       <CellComponent title="密码" v-bind:value="{ getcomputerPwd }" @handle-UserInfo="handleUserInfo" ref="pwdRef" />
       <CellComponent title="手机" v-bind:value="{ getcomputerPhone }" @handle-UserInfo="handleUserInfo" ref="phoneRef" />
       <CellComponent title="邮箱" v-bind:value="{ getcomputerEmail }" @handle-UserInfo="handleUserInfo" ref="emailRef" />
@@ -141,7 +142,7 @@ const handleUserInfo = (data: any) => {
 <style scoped lang="less" >
 .editData {
   :deep(.van-cell-group) {
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    // border: 0.5px solid rgba(255, 255, 255, 0.3);
     background: none;
   }
 
@@ -168,6 +169,7 @@ const handleUserInfo = (data: any) => {
       background: #1B1E23;
       padding: 20px 17px;
       color: #cccc;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.3);
     }
   }
 
