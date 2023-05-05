@@ -46,13 +46,13 @@ const constantRoutes = [
         component: () => import('@/views/home/index.vue'),
         meta: { title: '首页' },
       },
-      // 导入地图组件
-      {
-        path: '/map',
-        name: 'Map',
-        component: () => import('@/views/map/index.vue'),
-        meta: { title: '地图' },
-      },
+      // // 导入地图组件
+      // {
+      //   path: '/map',
+      //   name: 'Map',
+      //   component: () => import('@/views/map/index.vue'),
+      //   meta: { title: '地图' },
+      // },
       // 导入设备组件
       {
         path: '/equipment',
