@@ -1,6 +1,6 @@
 export interface LoginItem {
-  LoginName: string;
-  LoginPwd: string;
+  name: string;
+  password: string;
 }
 
 interface BaseItem {
@@ -22,7 +22,4 @@ interface BaseItem {
   SysType?: number;
   TelPhone?: string;
   WebSite?: string;
-}
-export interface SystemItem {
-  systemBaseInfo: BaseItem;
 }

@@ -3,28 +3,40 @@
     <header class="header">
       <div class="title">首页</div>
       <div class="desc">
-        <p>您好，欢迎使用</p>
-        <p>{{ systemInfo.systemBaseInfo.SysName }}</p>
+        <p>欢迎登录</p>
       </div>
     </header>
     <main class="main">
       <van-form @submit="onSubmit" class="form" label-align="top" :show-error-message="false">
         <van-cell-group :border="false" class="form-cell">
-          <van-field v-model="loginForm.LoginName" name="LoginName" placeholder="请输入账号" class="form-input"
-            autocomplete="off" :rules="[{ required: true, message: '请输入账号' }]">
+          <van-field
+            v-model="loginForm.name"
+            name="name"
+            placeholder="请输入账号"
+            class="form-input"
+            autocomplete="off"
+            :rules="[{ required: true, message: '请输入账号' }]"
+          >
             <template #label>
               <span class="lable-text">账号</span>
             </template>
           </van-field>
-          <van-field v-model="loginForm.LoginPwd" type="password" name="LoginPwd" placeholder="请输入密码" class="form-input"
-            autocomplete="off" :rules="[{ required: true, message: '请输入密码' }]">
+          <van-field
+            v-model="loginForm.password"
+            type="password"
+            name="password"
+            placeholder="请输入密码"
+            class="form-input"
+            autocomplete="off"
+            :rules="[{ required: true, message: '请输入密码' }]"
+          >
             <template #label>
               <span class="lable-text">密码</span>
             </template>
           </van-field>
         </van-cell-group>
         <div class="login-submit">
-          <van-button block type="primary" native-type="submit" :loading="loginLoding">
+          <van-button block type="primary" native-type="submit" :loading="loginLoding" loading-type="spinner">
             登录
           </van-button>
         </div>
@@ -36,52 +48,35 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
 import { userStore } from '@/store/user';
-import { useRouter } from "vue-router";
-import { LoginItem , SystemItem } from './index'
-import { login, getSystemInfo } from '@/api/login'
+import { useRouter } from 'vue-router';
+import { LoginItem } from './index';
+import { login } from '@/api/login';
 
-const loading = ref(false)
 const store = userStore();
 const router = useRouter();
-const loginLoding = ref(false)
+const loginLoding = ref(false);
 // 登录表单
 const loginForm = reactive<LoginItem>({
-  // LoginName: 'qh_admin',
-  // LoginName: 'kiwi_admin',
-  LoginName: 'kiwi_hy',
-  LoginPwd: 'rt123456'
-})
-// 系统信息
-const systemInfo = reactive<SystemItem>({
-  systemBaseInfo:{}
-}) 
-const onSubmit = (values: any) => {
-  loginLoding.value = true
-  login(values).then(res => {
-    if ((res as any).IsSuccess) {
-      const { Data } = (res as any);
-      store.upDateUserInfo(Data)
-      router.push('/')
-    }
-  }).finally(() => {
-    loginLoding.value = false;
-  })
-};
-// 获取系统基本信息
-const initData = () => {
-  getSystemInfo({}).then(res => {
-    loading.value = true
-    if ((res as any).IsSuccess) {
-      const { Data } = (res as any);
-      systemInfo.systemBaseInfo=Data
-      store.upDateSystemInfo(Data)
-      loading.value = false;
-    }
-  })
-}
-onMounted(() => {
-  initData()
+  // name: 'laixiandong', //客户
+  // name: 'chenli',  // 工作人员
+  name: 'wangqingshan', // 管理员
+  password: 'rt123456',
 });
+const onSubmit = (values: any) => {
+  loginLoding.value = true;
+  login(values)
+    .then((res) => {
+      if ((res as any).isSuccess) {
+        const { data } = res as any;
+        store.upDateUserInfo(data);
+        router.push('/');
+      }
+    })
+    .finally(() => {
+      loginLoding.value = false;
+    });
+};
+onMounted(() => {});
 </script>
 
 <style scoped lang="less">
@@ -90,7 +85,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF;
+  color: #ffffff;
 
   .title {
     padding-top: 10px;
@@ -101,12 +96,8 @@ onMounted(() => {
     margin-top: 93px;
     text-align: center;
     font-size: 16px;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 0px;
-
-    p:nth-child(2) {
-      margin-top: 22px;
-    }
   }
 }
 
@@ -116,13 +107,13 @@ onMounted(() => {
   .form {
     .form-cell {
       .van-cell {
-        background: #1F2228;
+        background: #1f2228;
         padding: 0;
         padding-bottom: 20px;
 
         .lable-text {
           font-size: 16px;
-          color: #EEEEEE;
+          color: #eeeeee;
         }
 
         :deep(.van-field__control) {
@@ -134,7 +125,7 @@ onMounted(() => {
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        :deep(.van-field__control::-webkit-input-placeholder)  {
+        :deep(.van-field__control::-webkit-input-placeholder) {
           font-size: 14px;
           color: #999999;
         }
@@ -155,7 +146,7 @@ onMounted(() => {
       height: 48px;
       border-radius: 4px;
       border: none;
-      background: #00CC90;
+      background: #00cc90;
     }
   }
 }

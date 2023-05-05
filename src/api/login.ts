@@ -7,7 +7,7 @@ import request from '@/utils/request'
  */
 export function login(data: API.Global.LoginPayload) {
   return request({
-    url: '/UserService/UserLogin',
+    url: '/admin/Authorize/Login',
     method: 'post',
     data,
   });

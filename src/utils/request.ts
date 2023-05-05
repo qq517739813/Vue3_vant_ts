@@ -1,19 +1,21 @@
 import axios from 'axios';
-import { showFailToast, showToast } from 'vant';
+import { showFailToast } from 'vant';
 import { redirectLogin } from '@/utils/utils';
+import { userStore } from '@/store/user';
 
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API
-  baseURL: 'http://111.21.231.41:20101/api',
+  baseURL: 'http://111.21.231.41:20107/api/',
 });
 
 // Request interceptors
 service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
-    const token = sessionStorage.getItem('token') || '';
+    const store = userStore();
+    const {token} = store.userInfo;
     if (token) {
-      Object.assign(config.headers, { Authorization: token });
+      Object.assign(config.headers, { Authorization: `Bearer ${token}` });
     }
     return config;
   },
@@ -26,28 +28,25 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const res = response.data;
-    if (!res.IsSuccess) {
-      if (res.Code === 401 || res.Code === 400) {
-        res.Message &&
+    if (!res.isSuccess) {
+      if (res.code === 401 || res.code === 400) {
+        res.message &&
           showFailToast({
             forbidClick: true,
-            message: res.Message,
+            message: res.message,
             onClose: () => {
               redirectLogin();
             },
           });
         return;
       }
-      res.Message
-        ? showFailToast({
-            forbidClick: true,
-            message: res.Message,
-          })
-        : showToast({
-            message: '未知错误',
-            duration: 1000,
-          });
-      return Promise.reject(res.IsSuccess);
+      res.message &&
+        showFailToast({
+          forbidClick: true,
+          message: res.message,
+        });
+
+      return Promise.reject(res.isSuccess);
     } else {
       return response.data;
     }

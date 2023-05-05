@@ -30,7 +30,6 @@ const store = userStore();
  */
 export const redirectLogin = () => {
   store.upDateUserInfo({});
-  store.upDateSystemInfo({});
   store.upDateDevList({});
   window.location.href = '/login';
 };

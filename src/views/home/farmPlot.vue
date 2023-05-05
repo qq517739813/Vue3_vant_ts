@@ -20,26 +20,18 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
-import type { Router } from 'vue-router';
 import { BaseItem } from './index';
 
 interface Props {
   plotData: BaseItem[];
 }
-const router: Router = useRouter();
 // 父传子数据
 const props = withDefaults(defineProps<Props>(), {
   plotData: () => [],
 });
 // 农场地块点击事件
 const handleClick = (item: BaseItem) => {
-  router.push({
-    name: item.FunCode,
-    params: {
-      FunCode: item.FunCode,
-    },
-  });
+  console.log('item', item)
 };
 </script>
 

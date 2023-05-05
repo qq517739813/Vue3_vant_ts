@@ -19,8 +19,8 @@ import type { Ref } from 'vue'
 import { TabbarItem } from './index'
 import HomeActive from '@/assets/home_active.svg'
 import HomeInactive from '@/assets/home_inactive.svg'
-import EquipmentActive from '@/assets/equipment_active.svg'
-import EquipmentInactive from '@/assets/equipment_inactive.svg'
+import FarmActive from '@/assets/farm_active.svg';
+import FarmInActive from '@/assets/farm_inactive.svg';
 import UserInfoActive from '@/assets/userInfo_active.svg'
 import UserInfoInactive from '@/assets/userInfo_inactive.svg'
 
@@ -35,9 +35,9 @@ const tabbarList: TabbarItem[] = [
   },
   {
     title: '农事活动',
-    path: '/equipment',
-    active: EquipmentActive,
-    inactive: EquipmentInactive,
+    path: '/farm',
+    active: FarmActive,
+    inactive: FarmInActive,
   },
   {
     title: '我的',
