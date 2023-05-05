@@ -38,8 +38,6 @@ import { userStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
-import { onMounted } from 'vue'
-import { showLoadingToast, closeToast } from 'vant';
 
 const store = userStore();
 const router: Router = useRouter();
@@ -50,18 +48,6 @@ const handeleCellClick = (item: string) => {
     name: item,
   });
 };
-onMounted(() => {
-  showLoadingToast({
-    message: 'loading...',
-    forbidClick: true,
-    loadingType: 'spinner',
-    duration: 0,
-  });
-  setTimeout(() => {
-    closeToast()
-  }, 500);
-})
-
 // 点击退出
 const logOut = () => {
   redirectLogin()
