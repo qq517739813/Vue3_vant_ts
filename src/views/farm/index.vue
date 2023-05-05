@@ -34,14 +34,12 @@
 <script lang="ts" setup>
 import { onMounted, ref, reactive } from 'vue';
 import { userStore } from '@/store/user';
-import { useRouter } from 'vue-router';
 import { showLoadingToast, closeToast } from 'vant';
 import { GetUserEquips } from '@/api/equipment';
 import { getEquipImg } from '@/utils/base';
 import { UserEquipsItem, CommonItem } from './index';
 
 const store = userStore();
-const router = useRouter();
 const loading = ref<boolean>(false);
 const refreshLoading = ref<boolean>(false);
 
@@ -78,12 +76,7 @@ const onRefresh = () => {
 };
 // 设备点击事件
 const handleClick = (item: CommonItem) => {
-  router.push({
-    name: item.ModuleCode,
-    params: {
-      FunCode:item.ModuleCode
-    },
-  });
+  console.log('item', item)
 };
 onMounted(() => {
   initData();

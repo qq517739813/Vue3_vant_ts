@@ -27,7 +27,7 @@ const constantRoutes = [
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
     meta: {
-      title: '智慧农场',
+      title: '认养系统',
     },
   },
   {
@@ -46,12 +46,12 @@ const constantRoutes = [
         component: () => import('@/views/home/index.vue'),
         meta: { title: '首页' },
       },
-      // 导入设备组件
+      // 导入农事活动组件
       {
-        path: '/equipment',
-        name: 'Equipment',
-        component: () => import('@/views/equipment/index.vue'),
-        meta: { title: '设备' },
+        path: '/farm',
+        name: 'Farm',
+        component: () => import('@/views/farm/index.vue'),
+        meta: { title: '农事活动' },
       },
       // 导入我的组件
       {
@@ -61,103 +61,6 @@ const constantRoutes = [
         meta: { title: '我的' },
       },
     ],
-  },
-  // 导入版本更新日志组件
-  {
-    path: '/versionManage',
-    name: 'VersionManage',
-    component: () => import('@/views/versionManage/index.vue'),
-    meta: { title: '版本更新记录' },
-  },
-  // 导入报警设置组件
-  {
-    path: '/warnSetting',
-    name: 'WarnSetting',
-    component: () => import('@/views/warnSetting/index.vue'),
-    meta: { title: '报警设置' },
-  },
-  // 导入气象站、土壤墒情站、监测数据数据组件
-  {
-    path: '/MonitorData/:FunCode',
-    name: 'MonitorData',
-    component: () => import('@/views/monitorData/index.vue'),
-    meta: { title: '实时数据', keepAlive :true},
-  },
-  // 导入气象站、土壤墒情站、监测数据数据组件图表组件
-  {
-    path: '/MonitorData/HistoryData',
-    name: 'MonitorHistoryData',
-    component: () => import('@/views/monitorData/monitorHistoryData/index.vue'),
-    meta: { title: '历史数据曲线' },
-  },
-  // 导入摄像机(视频直播)组件
-  {
-    path: '/VideoData/:FunCode',
-    name: 'VideoData',
-    component: () => import('@/views/videoData/index.vue'),
-    meta: { title: '视频监控' },
-  },
-  // 导入虫情测报仪(虫情测报)组件
-  {
-    path: '/PestLamp/:FunCode',
-    name: 'PestLamp',
-    component: () => import('@/views/pestLamp/index.vue'),
-    meta: { title: '虫情测报' },
-  },
-  // 导入杀虫灯(虫情监测)组件
-  {
-    path: '/KillPestLamp/:FunCode',
-    name: 'KillPestLamp',
-    component: () => import('@/views/killPestLamp/index.vue'),
-    meta: { title: '虫情监测' },
-  },
-  // 导入灌溉阀门(智能灌溉)组件
-  {
-    path: '/AutoIrrigate/:FunCode',
-    name: 'AutoIrrigate',
-    component: () => import('@/views/autoIrrigate/index.vue'),
-    meta: { title: '智能灌溉' },
-  },
-  // 导入数据分析组件
-  {
-    path: '/AnalyzeData/:FunCode',
-    name: 'AnalyzeData',
-    component: () => import('@/views/analyzeData/index.vue'),
-    meta: { title: '数据分析' },
-  },
-  // 导入预警统计组件
-  {
-    path: '/WarnData/:FunCode',
-    name: 'WarnData',
-    component: () => import('@/views/warnData/index.vue'),
-    meta: { title: '预警统计' },
-  },
-  // 导入预警通知组件
-  {
-    path: '/WarnMsgData/:FunCode',
-    name: 'WarnMsgData',
-    component: () => import('@/views/warnMsgData/index.vue'),
-    meta: { title: '预警通知' },
-  },
-  // 导入施肥机(水肥控制)组件
-  {
-    path: '/Fertilizer/:FunCode',
-    name: 'Fertilizer',
-    component: () => import('@/views/fertilizer/index.vue'),
-    meta: { title: '施肥机' },
-  },
-  // 导入控制器(智能控制)组件
-  {
-    path: '/AutoControl/:FunCode',
-    name: 'AutoControl',
-    component: () => import('@/views/autoControl/index.vue'),
-    meta: { title: '智能控制' },
-  },
-  // 导入智能控制设置组件
-  {
-    path:'/controlSeeting/',
-    name:'controlSeeting',
-    component:()=> import('@/views/controlSeeting/index.vue'),
   },
   // 无权限页面
   {
@@ -200,8 +103,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // window.document.title = to.meta.title as string;
   const userInfo = window.sessionStorage.getItem('userInfo');
-  const Token = JSON.parse(userInfo as any)?.userInfo?.Token;
-  if (Token) {
+  const token = JSON.parse(userInfo as any)?.userInfo?.token;
+  if (token) {
     next();
   } else if (whiteList.indexOf(to.path) !== -1) {
     next();

@@ -35,18 +35,13 @@
 
 <script lang="ts" setup>
 import { userStore } from '@/store/user';
-import { useRouter } from 'vue-router';
-import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
 
 const store = userStore();
-const router: Router = useRouter();
 
 // 点击每个单元格
 const handeleCellClick = (item: string) => {
-  router.push({
-    name: item,
-  });
+  console.log('item', item)
 };
 // 点击退出
 const logOut = () => {
