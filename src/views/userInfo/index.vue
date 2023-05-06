@@ -33,25 +33,22 @@
       </van-cell>
     </van-cell-group>
     <van-button class="loginOut" @click="logOut" type="success">退出账号</van-button>
-    <van-dialog style="padding: 10px;" v-model:show="show" :closeOnClickOverlay="true" :showConfirmButton="false">
-      <span>重置密码</span>
-      <van-field placeholder="请输入密码"  type="password" label-width="70" name="val" v-model="val" :border="false" />
-      <div class="btns">
-        <van-button type="success" @click="sava">保存</van-button>
-        <van-button @click="show = !show" type="success">取消</van-button>
-      </div>
-    </van-dialog>
+    <userdialog type="修改密码" @handle-Save="sava" @handle-Close="handleclose" :isShow="show" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
 import { ref } from 'vue';
 import { showLoadingToast, closeToast, showToast } from 'vant';
 import { ResetPwd } from "@/api/user"
+import userdialog from "./components/userdialog.vue";
 
 const store = userStore();
+const router: Router = useRouter();
 const show = ref<boolean>(false);
 const val = ref<string>('')
 // 点击每个单元格
@@ -59,17 +56,21 @@ const handeleCellClick = (item: string) => {
   console.log('item', item)
   if (item === 'ResetPwd') {
     show.value = !show.value;
+  } else if (item === 'EditData') {
+    console.log(item);
+
+    router.push({ name: item })
   }
 };
 // 点击退出
 const logOut = () => {
   redirectLogin()
 };
-// 点击修改密码
-const sava = () => {
-  console.log(store.userInfo.user.uid, '123', val.value);
+// 点击保存
+const sava = (item: String) => {
+  console.log(store.userInfo.user.uid, '123', val.value, 'item', item);
   const userpwd = {
-    val: val.value,
+    val: item[0] as string,
     id: store.userInfo.user.uid
   }
   showLoadingToast({
@@ -79,13 +80,16 @@ const sava = () => {
     duration: 0,
   });
   ResetPwd(userpwd).then(() => {
-    val.value = ''
     closeToast()
     showToast('修改成功');
+    show.value = false;
   }).catch(() => {
     showToast('修改失败');
-    val.value = ''
+    show.value = false;
   });
+}
+const handleclose = () => {
+  show.value = false
 }
 </script>
 
@@ -105,6 +109,7 @@ const sava = () => {
       }
     }
   }
+
   .content {
     .content-cell {
       display: flex;
@@ -190,13 +195,6 @@ const sava = () => {
     background: #00cc90;
     font-size: 14px;
     color: #ffffff;
-  }
-}
-.btns{
-  display: flex;
-  justify-content: space-around;
-  .van-button--normal{
-    width: 45%;
   }
 }
 </style>

@@ -14,17 +14,28 @@ export function ResetPwd(data: API.Global.ResetPwd) {
   })
 }
 
-
 /**
- * @description 重置昵称
+ * @description 重置手机号码
  * @param data 
  * @returns 
  */
-export function ResetName(data: any) {
+export function ResetPhone(data: API.Global.ResetPwd) {
   return request({
-    url: 'UserService/ResetName',
+    url: 'admin/UserCenter/SetPhone',
     method: 'post',
     data
   })
 }
 
+/**
+ * @description 重置邮箱
+ * @param data 
+ * @returns 
+ */
+export function Resetemail(data: API.Global.ResetPwd) {
+  return request({
+    url: 'admin/UserCenter/SetEmail',
+    method: 'post',
+    data
+  })
+}

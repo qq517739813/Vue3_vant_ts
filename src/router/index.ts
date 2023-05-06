@@ -89,7 +89,7 @@ const constantRoutes = [
   {
     path: '/EditData',
     name: 'EditData',
-    component: () => import('@/views/editdata/index.vue'),
+    component: () => import('@/views/userInfo/editdata/index.vue'),
     meta: { title: '编辑资料' },
   },
 ];
