@@ -10,7 +10,7 @@
     <div class="edit-cell">
       <van-cell title="头像" :border="false">
         <template #value>
-          <img src="@/assets/userheader.svg" alt="" />
+          <img :src="store.userInfo.user.avatar" alt="" style="width: 30px;" />
         </template>
       </van-cell>
       <van-cell title="昵称" :border="false">
