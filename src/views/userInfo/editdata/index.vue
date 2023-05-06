@@ -70,6 +70,7 @@ const sava = (item: any) => {
         closeToast()
         showToast('修改成功');
         show.value = false;
+        store.userInfo.user.phone = info.val
       }).catch(() => {
         showToast('修改失败');
         show.value = false;
@@ -80,6 +81,7 @@ const sava = (item: any) => {
         closeToast()
         showToast('修改成功');
         show.value = false;
+        store.userInfo.user.email = info.val
       }).catch(() => {
         showToast('修改失败');
         show.value = false;
