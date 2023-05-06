@@ -3,6 +3,9 @@ import { defineStore } from 'pinia';
 interface UserStoreState {
   [propName: string]: any;
 }
+interface UserCompleteStoreState {
+  [propName: string]: any;
+}
 interface DevListStoreState {
   [propName: string]: any;
 }
@@ -11,11 +14,15 @@ export const userStore = defineStore('userInfo', {
     return {
       userInfo: {},
       devList: {},
+      userCompleteInfo: {},
     };
   },
   actions: {
     upDateUserInfo(info: UserStoreState) {
       this.$state.userInfo = info;
+    },
+    upDateUserCompleteInfo(info: UserCompleteStoreState) {
+      this.$state.userCompleteInfo = info;
     },
     upDateDevList(info: DevListStoreState) {
       this.$state.devList = info;

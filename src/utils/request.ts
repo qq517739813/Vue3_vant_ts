@@ -29,21 +29,21 @@ service.interceptors.response.use(
   (response) => {
     const res = response.data;
     if (!res.isSuccess) {
-      if (res.code === 401 || res.code === 400) {
-        res.message &&
+      if (res.Code === 401 || res.Code === 400) {
+        res.Msg &&
           showFailToast({
             forbidClick: true,
-            message: res.message,
+            message: res.Msg,
             onClose: () => {
               redirectLogin();
             },
           });
         return;
       }
-      res.message &&
+      res.Msg &&
         showFailToast({
           forbidClick: true,
-          message: res.message,
+          message: res.Msg,
         });
 
       return Promise.reject(res.isSuccess);

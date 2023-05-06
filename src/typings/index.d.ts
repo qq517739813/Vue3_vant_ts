@@ -8,20 +8,24 @@
 
 declare namespace API {
   namespace Global {
-    interface Params {
-      Token: string | null;
-    }
+    // 登录参数
     interface LoginPayload {
       name: string; // 用户名
       password: string; // 密码
     }
-    interface CommonPayload extends Params {
+    // 用户信息参数
+    interface UserPayLoad {
+      id?: string; // 用户uid
+    }
+    // 地块信息参数
+    interface FieldPayLoad {
+      page: number; // 当前页数
+      pageSize: number; // 分页大小
+      isAll: boolean; // 是否全部展示true是
+    }
+    interface CommonPayload {
       Uid: string; // 用户id
       FunCode?: string;
-    }
-    interface DevInfoPayload extends Params {
-      Uid?: string; // 用户id
-      ObjId: string; // 设备id
     }
   }
 }

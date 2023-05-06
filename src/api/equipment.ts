@@ -24,27 +24,5 @@ export function GetEquipmentsList(data: API.Global.CommonPayload) {
     data,
   });
 }
-/**
- * @description 获取设备汇总
- * @param {API.Global.CommonPayload}
- * @return {Promise<*>}
- */
-export function devSummary(data: API.Global.CommonPayload) {
-  return request({
-    url: '/UserService/DevSummary',
-    method: 'post',
-    data,
-  });
-}
-/**
- * @description 获取设备基本信息
- * @param {API.Global.DevInfoPayload}
- * @return {Promise<*>}
- */
-export function GetDevInfo(data: API.Global.DevInfoPayload) {
-  return request({
-    url: '/DataService/GetDevInfo',
-    method: 'post',
-    data,
-  });
-}
+
+

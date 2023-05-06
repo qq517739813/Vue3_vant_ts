@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="header">
-      <div class="title">首页</div>
+      <div class="title">认养系统</div>
       <div class="desc">
         <p>欢迎登录</p>
       </div>
@@ -36,7 +36,13 @@
           </van-field>
         </van-cell-group>
         <div class="login-submit">
-          <van-button block type="primary" native-type="submit" :loading="loginLoding" loading-type="spinner">
+          <van-button
+            block
+            type="primary"
+            native-type="submit"
+            :loading="loginLoding"
+            loading-type="spinner"
+          >
             登录
           </van-button>
         </div>
@@ -49,11 +55,13 @@
 import { onMounted, reactive, ref } from 'vue';
 import { userStore } from '@/store/user';
 import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
 import { LoginItem } from './index';
 import { login } from '@/api/login';
+import { getUserInfo } from '@/api/user';
 
 const store = userStore();
-const router = useRouter();
+const router: Router  = useRouter();
 const loginLoding = ref(false);
 // 登录表单
 const loginForm = reactive<LoginItem>({
@@ -62,19 +70,14 @@ const loginForm = reactive<LoginItem>({
   name: 'wangqingshan', // 管理员
   password: 'rt123456',
 });
-const onSubmit = (values: any) => {
+const onSubmit = async (values: any) => {
   loginLoding.value = true;
-  login(values)
-    .then((res) => {
-      if ((res as any).isSuccess) {
-        const { data } = res as any;
-        store.upDateUserInfo(data);
-        router.push('/');
-      }
-    })
-    .finally(() => {
-      loginLoding.value = false;
-    });
+  const { data: loginRes } = await login(values);
+  store.upDateUserInfo(loginRes);
+  router.push('/');
+  loginLoding.value = false;
+  const { data: userRes } = await getUserInfo({ id: loginRes.user.uid });
+  store.upDateUserCompleteInfo(userRes)
 };
 onMounted(() => {});
 </script>
