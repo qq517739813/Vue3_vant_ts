@@ -23,5 +23,9 @@ declare namespace API {
       Uid?: string; // 用户id
       ObjId: string; // 设备id
     }
+    interface ResetPwd {
+      val: string;
+      id: string | number;
+    }
   }
 }

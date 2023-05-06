@@ -2,19 +2,16 @@
   <div class="userInfo">
     <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="我的" />
     <van-cell-group :border="false" class="content">
-      <van-cell class="content-cell"  center>
+      <van-cell class="content-cell" center>
         <template #icon>
           <div class="userIcon">
             <img src="@/assets/user.svg" alt="" />
           </div>
         </template>
         <template #title>
-          <span class="content-cell-userOne">{{ store.userInfo.UserName }}</span>
+          <span class="content-cell-userOne">{{ store.userInfo.user.name }}</span>
         </template>
-        <template #label>
-          <!-- <span class="content-cell-userTwo">{{ store.userInfo.UserName }}</span> -->
-          <span class="content-cell-userTwo">管理员</span>
-        </template>
+
       </van-cell>
       <van-cell class="content-cell" is-link center @click="handeleCellClick('EditData')">
         <template #title>
@@ -22,13 +19,13 @@
           <span class="content-cell-title">编辑信息</span>
         </template>
       </van-cell>
-      <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('ResetPwd')">
         <template #title>
           <img src="@/assets/pwd.svg" alt="" />
           <span class="content-cell-title">修改密码</span>
         </template>
       </van-cell>
-      <van-cell class="content-cell" is-link center @click="handeleCellClick('VersionManage')">
+      <van-cell class="content-cell" is-link center>
         <template #title>
           <img src="@/assets/system.svg" alt="" />
           <span class="content-cell-title">系统升级</span>
@@ -36,23 +33,60 @@
       </van-cell>
     </van-cell-group>
     <van-button class="loginOut" @click="logOut" type="success">退出账号</van-button>
+    <van-dialog style="padding: 10px;" v-model:show="show" :closeOnClickOverlay="true" :showConfirmButton="false">
+      <span>重置密码</span>
+      <van-field placeholder="请输入密码"  type="password" label-width="70" name="val" v-model="val" :border="false" />
+      <div class="btns">
+        <van-button type="success" @click="sava">保存</van-button>
+        <van-button @click="show = !show" type="success">取消</van-button>
+      </div>
+    </van-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { userStore } from '@/store/user';
 import { redirectLogin } from '@/utils/utils';
+import { ref } from 'vue';
+import { showLoadingToast, closeToast, showToast } from 'vant';
+import { ResetPwd } from "@/api/user"
 
 const store = userStore();
-
+const show = ref<boolean>(false);
+const val = ref<string>('')
 // 点击每个单元格
 const handeleCellClick = (item: string) => {
   console.log('item', item)
+  if (item === 'ResetPwd') {
+    show.value = !show.value;
+  }
 };
 // 点击退出
 const logOut = () => {
   redirectLogin()
 };
+// 点击修改密码
+const sava = () => {
+  console.log(store.userInfo.user.uid, '123', val.value);
+  const userpwd = {
+    val: val.value,
+    id: store.userInfo.user.uid
+  }
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0,
+  });
+  ResetPwd(userpwd).then(() => {
+    val.value = ''
+    closeToast()
+    showToast('修改成功');
+  }).catch(() => {
+    showToast('修改失败');
+    val.value = ''
+  });
+}
 </script>
 
 <style scoped lang="less">
@@ -71,7 +105,6 @@ const logOut = () => {
       }
     }
   }
-
   .content {
     .content-cell {
       display: flex;
@@ -137,6 +170,7 @@ const logOut = () => {
       padding-bottom: 28px;
       border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
     }
+
     .content-cell:nth-child(3) {
       padding-top: 38px;
       padding-bottom: 28px;
@@ -156,6 +190,13 @@ const logOut = () => {
     background: #00cc90;
     font-size: 14px;
     color: #ffffff;
+  }
+}
+.btns{
+  display: flex;
+  justify-content: space-around;
+  .van-button--normal{
+    width: 45%;
   }
 }
 </style>
