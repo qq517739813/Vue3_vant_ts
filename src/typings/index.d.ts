@@ -27,5 +27,9 @@ declare namespace API {
       Uid: string; // 用户id
       FunCode?: string;
     }
+    interface ResetPwd {
+      val: string;
+      id: string | number;
+    }
   }
 }

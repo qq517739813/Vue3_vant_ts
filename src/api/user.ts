@@ -13,51 +13,26 @@ export function getUserInfo(data: API.Global.UserPayLoad) {
   });
 }
 /**
- * @description 重置头像
- * @param data
- * @returns
- */
-export function SetUserHead(data: any) {
-  return request({
-    url: 'UserService/SetUserHead',
-    method: 'post',
-    data,
-  });
-}
-/**
- * @description 重置昵称
- * @param data
- * @returns
- */
-export function ResetName(data: any) {
-  return request({
-    url: 'UserService/ResetName',
-    method: 'post',
-    data,
-  });
-}
-
-/**
  * @description 重置密码
  * @param data
  * @returns
  */
-export function ResetPwd(data: any) {
+export function ResetPwd(data: API.Global.ResetPwd) {
   return request({
-    url: 'UserService/ResetPwd ',
+    url: 'admin/UserCenter/SetPwd',
     method: 'post',
     data,
   });
 }
 
 /**
- * @description 重置手机
- * @param data
- * @returns
+ * @description 重置手机号码
+ * @param data 
+ * @returns 
  */
-export function ResetPhone(data: any) {
+export function ResetPhone(data: API.Global.ResetPwd) {
   return request({
-    url: 'UserService/ResetPhone ',
+    url: 'admin/UserCenter/SetPhone',
     method: 'post',
     data,
   });
@@ -68,9 +43,9 @@ export function ResetPhone(data: any) {
  * @param data
  * @returns
  */
-export function ResetEmail(data: any) {
+export function Resetemail(data: API.Global.ResetPwd) {
   return request({
-    url: 'UserService/ResetEmail  ',
+    url: 'admin/UserCenter/SetEmail',
     method: 'post',
     data,
   });

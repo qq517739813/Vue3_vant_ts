@@ -2,51 +2,95 @@
   <div class="userInfo">
     <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="我的" />
     <van-cell-group :border="false" class="content">
-      <van-cell class="content-cell" is-link center @click="handeleCellClick('EditData')">
+      <van-cell class="content-cell" center>
         <template #icon>
           <div class="userIcon">
             <img src="@/assets/user.svg" alt="" />
           </div>
         </template>
         <template #title>
-          <span class="content-cell-userOne">{{ store.userInfo.UserName }}</span>
+          <span class="content-cell-userOne">{{ store.userInfo.user.name }}</span>
         </template>
-        <template #label>
-          <!-- <span class="content-cell-userTwo">{{ store.userInfo.UserName }}</span> -->
-          <span class="content-cell-userTwo">管理员</span>
+
+      </van-cell>
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('EditData')">
+        <template #title>
+          <img src="@/assets/edit.svg" alt="" />
+          <span class="content-cell-title">编辑信息</span>
         </template>
       </van-cell>
-      <van-cell class="content-cell" is-link center @click="handeleCellClick('WarnSetting')">
+      <van-cell class="content-cell" is-link center @click="handeleCellClick('ResetPwd')">
         <template #title>
-          <img src="@/assets/warnSetting.svg" alt="" />
-          <span class="content-cell-title">报警设置</span>
+          <img src="@/assets/pwd.svg" alt="" />
+          <span class="content-cell-title">修改密码</span>
         </template>
       </van-cell>
-      <van-cell class="content-cell" is-link center @click="handeleCellClick('VersionManage')">
+      <van-cell class="content-cell" is-link center>
         <template #title>
-          <img src="@/assets/versionUpdate.svg" alt="" />
-          <span class="content-cell-title">版本更新日志</span>
+          <img src="@/assets/system.svg" alt="" />
+          <span class="content-cell-title">系统升级</span>
         </template>
       </van-cell>
     </van-cell-group>
     <van-button class="loginOut" @click="logOut" type="success">退出账号</van-button>
+    <userdialog type="修改密码" @handle-Save="sava" @handle-Close="handleclose" :isShow="show" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { userStore } from '@/store/user';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
+import { ref } from 'vue';
+import { showLoadingToast, closeToast, showToast } from 'vant';
+import { ResetPwd } from "@/api/user"
+import userdialog from "./components/userdialog.vue";
 
 const store = userStore();
-
+const router: Router = useRouter();
+const show = ref<boolean>(false);
+const val = ref<string>('')
 // 点击每个单元格
 const handeleCellClick = (item: string) => {
   console.log('item', item)
+  if (item === 'ResetPwd') {
+    show.value = !show.value;
+  } else if (item === 'EditData') {
+    console.log(item);
+
+    router.push({ name: item })
+  }
 };
 // 点击退出
 const logOut = () => {
   redirectLogin()
 };
+// 点击保存
+const sava = (item: String) => {
+  console.log(store.userInfo.user.uid, '123', val.value, 'item', item);
+  const userpwd = {
+    val: item[0] as string,
+    id: store.userInfo.user.uid
+  }
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0,
+  });
+  ResetPwd(userpwd).then(() => {
+    closeToast()
+    showToast('修改成功');
+    show.value = false;
+  }).catch(() => {
+    showToast('修改失败');
+    show.value = false;
+  });
+}
+const handleclose = () => {
+  show.value = false
+}
 </script>
 
 <style scoped lang="less">
@@ -133,6 +177,12 @@ const logOut = () => {
     }
 
     .content-cell:nth-child(3) {
+      padding-top: 38px;
+      padding-bottom: 28px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .content-cell:nth-child(4) {
       padding-top: 38px;
     }
   }
