@@ -43,7 +43,7 @@ import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
 import { ref } from 'vue';
-import { showLoadingToast, closeToast, showToast } from 'vant';
+import { showLoadingToast, closeToast, showToast, showConfirmDialog } from 'vant';
 import { ResetPwd } from "@/api/user"
 import userdialog from "./components/userdialog.vue";
 
@@ -64,7 +64,14 @@ const handeleCellClick = (item: string) => {
 };
 // 点击退出
 const logOut = () => {
-  redirectLogin()
+  showConfirmDialog({
+    title: '提示',
+    message:
+      '确定要退出登录吗？',
+  })
+    .then(() => {
+      redirectLogin()
+    })
 };
 // 点击保存
 const sava = (item: String) => {
