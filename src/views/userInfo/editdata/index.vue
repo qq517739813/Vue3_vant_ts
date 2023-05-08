@@ -1,7 +1,14 @@
 <template>
   <div class="editData">
-    <van-nav-bar title="编辑资料" class="title" fixed :border="false" placeholder safe-area-inset-top
-      @click-left="onClickLeft">
+    <van-nav-bar
+      title="编辑资料"
+      class="title"
+      fixed
+      :border="false"
+      placeholder
+      safe-area-inset-top
+      @click-left="onClickLeft"
+    >
       <template #left>
         <van-icon name="arrow-left" size="20" color="#FFFFFF" />
       </template>
@@ -10,7 +17,7 @@
     <div class="edit-cell">
       <van-cell title="头像" :border="false">
         <template #value>
-          <img :src="store.userInfo.user.avatar" alt="" style="width: 30px;" />
+          <img :src="store.userInfo.user.avatar" alt="" style="width: 30px" />
         </template>
       </van-cell>
       <van-cell title="昵称" :border="false">
@@ -44,20 +51,20 @@
 import { ref } from 'vue';
 import { userStore } from '@/store/user';
 import userdialog from '../components/userdialog.vue';
-import { ResetPhone, Resetemail } from "@/api/user"
+import { ResetPhone, Resetemail } from '@/api/user';
 import { showLoadingToast, closeToast, showToast } from 'vant';
 
 const store = userStore();
 const onClickLeft = () => history.back();
-const title = ref<string>('')
+const title = ref<string>('');
 const show = ref<boolean>(false);
 const sava = (item: any) => {
   console.log('sava', item);
   console.log(store.userInfo.user.uid, '123', 'item', item);
   const info = {
     val: item[0] as string,
-    id: store.userInfo.user.uid
-  }
+    id: store.userInfo.user.uid,
+  };
   showLoadingToast({
     message: 'loading...',
     forbidClick: true,
@@ -66,46 +73,46 @@ const sava = (item: any) => {
   });
   switch (item[1]) {
     case '修改电话':
-      ResetPhone(info).then(() => {
-        closeToast()
-        showToast('修改成功');
-        show.value = false;
-        store.userInfo.user.phone = info.val
-      }).catch(() => {
-        showToast('修改失败');
-        show.value = false;
-      });
+      ResetPhone(info)
+        .then(() => {
+          closeToast();
+          showToast('修改成功');
+          show.value = false;
+          store.userInfo.user.phone = info.val;
+        })
+        .catch(() => {
+          showToast('修改失败');
+          show.value = false;
+        });
       break;
     case '修改邮箱':
-      Resetemail(info).then(() => {
-        closeToast()
-        showToast('修改成功');
-        show.value = false;
-        store.userInfo.user.email = info.val
-      }).catch(() => {
-        showToast('修改失败');
-        show.value = false;
-      });
+      Resetemail(info)
+        .then(() => {
+          closeToast();
+          showToast('修改成功');
+          show.value = false;
+          store.userInfo.user.email = info.val;
+        })
+        .catch(() => {
+          showToast('修改失败');
+          show.value = false;
+        });
       break;
     default:
       break;
   }
-
-}
+};
 const handleclick = (item: string) => {
   show.value = true;
-  title.value = item
-}
+  title.value = item;
+};
 const handleclose = () => {
-  show.value = false
-}
-
-
+  show.value = false;
+};
 </script>
 
-<style scoped lang="less" >
+<style scoped lang="less">
 .editData {
-
   //title
   .title {
     :deep(.van-nav-bar--fixed) {
@@ -125,18 +132,11 @@ const handleclose = () => {
     }
   }
 
-  :deep(.van-cell-group) {
-    // border-bottom: 0.5px solid rgba(255, 255, 255, 0.3);
-    // background: none;
-  }
-
-
-
   .edit-cell {
     padding: 10px;
 
     :deep(.van-cell) {
-      background: #1B1E23;
+      background: #1b1e23;
       padding: 20px 17px;
       color: #cccc;
       border-bottom: 0.5px solid rgba(255, 255, 255, 0.3);
@@ -146,15 +146,5 @@ const handleclose = () => {
       }
     }
   }
-
-  // :deep(.van-dialog) {
-  //   background: #1f2228;
-  //   border-radius: 10px;
-  //   border: 0.5px solid rgba(255, 255, 255, 0.3);
-  // }
-
-  // :deep(.van-cell__value) {
-  //   min-width: 65%;
-  // }
 }
 </style>

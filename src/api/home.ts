@@ -25,3 +25,16 @@ export function getFieldList(data: API.Global.FieldPayLoad) {
     data,
   });
 }
+
+/**
+ * @description 获取农事记录列表（农事活动）
+ *  @param {API.Global.FieldPayLoad}
+ * @return {Promise<*>}
+ */
+export function getActList(data: API.Global.FieldPayLoad) {
+  return request({
+    url: '/admin/act/getList',
+    method: 'post',
+    data,
+  });
+}

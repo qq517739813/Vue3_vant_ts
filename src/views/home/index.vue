@@ -1,5 +1,5 @@
 <template>
-  <div class="home" >
+  <div class="home">
     <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="首页" />
     <!-- 认养信息 -->
     <adoption-info v-if="!loading" :adoptInfo="adopt.adoptInfo" />
@@ -8,7 +8,7 @@
     <field-info v-if="!loading" :fieldInfo="field.fieldInfo" />
     <div class="line" v-if="!loading"></div>
     <!-- 农事记录 -->
-    <farm-record v-if="!loading" />
+    <farm-record v-if="!loading" :farmRecord="farm.farmInfo"/>
   </div>
 </template>
 
@@ -16,8 +16,8 @@
 import { onMounted, reactive, ref } from 'vue';
 import type { Ref } from 'vue';
 import { showLoadingToast, closeToast } from 'vant';
-import { getUserSummaryData, getFieldList } from '@/api/home';
-import { AdoptionInfoItem, FieldInfoItem } from './index';
+import { getUserSummaryData, getFieldList, getActList } from '@/api/home';
+import { AdoptionInfoItem, FieldInfoItem, FarmRecordItem } from './index';
 import AdoptionInfo from './adoptionInfo.vue';
 import FieldInfo from './fieldInfo.vue';
 import FarmRecord from './farmRecord.vue';
@@ -28,6 +28,8 @@ const loading: Ref<boolean> = ref(false);
 const adopt = reactive<AdoptionInfoItem>({ adoptInfo: {} });
 // 地块信息
 const field = reactive<FieldInfoItem>({ fieldInfo: {} });
+// 农事记录
+const farm = reactive<FarmRecordItem>({ farmInfo: {} });
 // 获取地块信息
 const getFieldData = async (isAll: boolean) => {
   const payload = {
@@ -37,6 +39,16 @@ const getFieldData = async (isAll: boolean) => {
   };
   const { data: fieldRes } = await getFieldList(payload);
   field.fieldInfo = fieldRes;
+};
+// 获取农事记录
+const getFarmRecord = async (isAll: boolean) => {
+  const payload = {
+    page: 1,
+    pageSize: 10,
+    isAll,
+  };
+  const { data: farmRes } = await getActList(payload);
+  farm.farmInfo = farmRes;
 };
 // 获取数据
 const initData = async () => {
@@ -50,6 +62,7 @@ const initData = async () => {
   const { data: plotRes } = await getUserSummaryData({});
   getFieldData(false);
   adopt.adoptInfo = plotRes;
+  getFarmRecord(false);
   loading.value = false;
   closeToast();
 };
@@ -74,8 +87,7 @@ onMounted(() => {
   .line {
     margin-top: 16px;
     height: 5px;
-    // background: rgba(255, 255, 255, 0.02);
-    background: red;
+    background: rgba(255, 255, 255, 0.02);
   }
 }
 </style>
