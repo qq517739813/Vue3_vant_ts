@@ -62,6 +62,20 @@ const constantRoutes = [
       },
     ],
   },
+  // 导入地块信息更多
+  {
+    path: '/fieldMore',
+    name: 'FieldMore',
+    component: () => import('@/views/field/fieldMore.vue'),
+    meta: { title: '地块信息更多' },
+  },
+  // 导入地块信息详情
+  {
+    path: '/fieldDetail',
+    name: 'FieldDetail',
+    component: () => import('@/views/field/fieldDetail.vue'),
+    meta: { title: '地块信息详情' },
+  },
   // 无权限页面
   {
     path: '/no-permission',

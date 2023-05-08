@@ -8,7 +8,7 @@
     <field-info v-if="!loading" :fieldInfo="field.fieldInfo" />
     <div class="line" v-if="!loading"></div>
     <!-- 农事记录 -->
-    <farm-record v-if="!loading" :farmRecord="farm.farmInfo"/>
+    <farm-record v-if="!loading" :farmRecord="farm.farmInfo" />
   </div>
 </template>
 

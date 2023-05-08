@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 
+const AdoptApi = '/adopt-api';
 /**
  * @description 获取用户信息
  *  @param {API.Global.UserPayLoad}
@@ -7,7 +8,7 @@ import request from '@/utils/request';
  */
 export function getUserInfo(data: API.Global.UserPayLoad) {
   return request({
-    url: '/admin/UserCenter/get',
+    url: `${AdoptApi}/admin/UserCenter/get`,
     method: 'post',
     data,
   });
@@ -19,7 +20,7 @@ export function getUserInfo(data: API.Global.UserPayLoad) {
  */
 export function ResetPwd(data: API.Global.ResetPwd) {
   return request({
-    url: 'admin/UserCenter/SetPwd',
+    url: `${AdoptApi}admin/UserCenter/SetPwd`,
     method: 'post',
     data,
   });
@@ -32,7 +33,7 @@ export function ResetPwd(data: API.Global.ResetPwd) {
  */
 export function ResetPhone(data: API.Global.ResetPwd) {
   return request({
-    url: 'admin/UserCenter/SetPhone',
+    url: `${AdoptApi}admin/UserCenter/SetPhone`,
     method: 'post',
     data,
   });
@@ -45,7 +46,7 @@ export function ResetPhone(data: API.Global.ResetPwd) {
  */
 export function Resetemail(data: API.Global.ResetPwd) {
   return request({
-    url: 'admin/UserCenter/SetEmail',
+    url: `${AdoptApi}admin/UserCenter/SetEmail`,
     method: 'post',
     data,
   });

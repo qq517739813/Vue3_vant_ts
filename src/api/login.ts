@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+const AdoptApi = '/adopt-api';
 /**
  * @description 用户登录
  * @param {API.Global.LoginPayload}  
@@ -7,7 +8,7 @@ import request from '@/utils/request'
  */
 export function login(data: API.Global.LoginPayload) {
   return request({
-    url: '/admin/Authorize/Login',
+    url: `${AdoptApi}/admin/Authorize/Login`,
     method: 'post',
     data,
   });
@@ -19,7 +20,7 @@ export function login(data: API.Global.LoginPayload) {
  */
 export function getSystemInfo(data:any) {
   return request({
-    url: '/CommService/SysInfo',
+    url: `${AdoptApi}/CommService/SysInfo`,
     method: 'post',
     data,
   });

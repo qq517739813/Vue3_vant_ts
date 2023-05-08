@@ -10,7 +10,7 @@ export interface AdoptionInfoBaseItem {
   fieldData?: string; // 种植地块
   managerData?: string; // 权限为customer为农事负责人
 }
-interface FieldItem {
+export interface FieldItem {
   tenantName: string;
   mainName: string;
   managerName: string; // 工作人员名字
@@ -31,7 +31,7 @@ interface FieldItem {
   isActive: boolean;
   id: string; // 地块id
 }
-interface FarmItem {
+export interface FarmItem {
   mainName: string; // 农事主体
   creationTime: string; // 农事时间
   creatorId: string; // 农事负责人id

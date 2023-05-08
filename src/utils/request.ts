@@ -5,7 +5,7 @@ import { userStore } from '@/store/user';
 
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API
-  baseURL: 'http://111.21.231.41:20107/api/',
+  // baseURL: 'http://111.21.231.41:20107/api/',
 });
 
 // Request interceptors
