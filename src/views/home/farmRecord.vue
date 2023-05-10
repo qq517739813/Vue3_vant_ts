@@ -8,13 +8,7 @@
       </van-button>
     </div>
     <van-cell-group class="record" :border="false">
-      <van-cell
-        title="单元格"
-        value="内容"
-        is-link
-        v-for="item in props.farmRecord.dataList"
-        :key="item.id"
-      >
+      <van-cell is-link v-for="item in props.farmRecord.dataList" :key="item.id">
         <template #title>
           <span class="actName">{{ item.actName }}</span>
         </template>

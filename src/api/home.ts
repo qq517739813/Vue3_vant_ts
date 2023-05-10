@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 
+const AdoptApi = '/adopt-api';
 /**
  * @description 获取用户汇总数据（认养信息）
  *  @param {} 空对象{}
@@ -7,7 +8,7 @@ import request from '@/utils/request';
  */
 export function getUserSummaryData(data: any) {
   return request({
-    url: '/webApi/UserDataService/UserDataSummary',
+    url: `${AdoptApi}/webApi/UserDataService/UserDataSummary`,
     method: 'post',
     data,
   });
@@ -20,7 +21,7 @@ export function getUserSummaryData(data: any) {
  */
 export function getFieldList(data: API.Global.FieldPayLoad) {
   return request({
-    url: '/admin/field/getList',
+    url: `${AdoptApi}/admin/field/getList`,
     method: 'post',
     data,
   });
@@ -33,7 +34,7 @@ export function getFieldList(data: API.Global.FieldPayLoad) {
  */
 export function getActList(data: API.Global.FieldPayLoad) {
   return request({
-    url: '/admin/act/getList',
+    url: `${AdoptApi}/admin/act/getList`,
     method: 'post',
     data,
   });

@@ -53,6 +53,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
+import { showToast } from 'vant';
 import { userStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
@@ -61,7 +62,7 @@ import { login } from '@/api/login';
 import { getUserInfo } from '@/api/user';
 
 const store = userStore();
-const router: Router  = useRouter();
+const router: Router = useRouter();
 const loginLoding = ref(false);
 // 登录表单
 const loginForm = reactive<LoginItem>({
@@ -77,7 +78,11 @@ const onSubmit = async (values: any) => {
   router.push('/');
   loginLoding.value = false;
   const { data: userRes } = await getUserInfo({ id: loginRes.user.uid });
-  store.upDateUserCompleteInfo(userRes)
+  store.upDateUserCompleteInfo(userRes);
+  showToast({
+    message: '登录成功',
+    position: 'bottom',
+  });
 };
 onMounted(() => {});
 </script>

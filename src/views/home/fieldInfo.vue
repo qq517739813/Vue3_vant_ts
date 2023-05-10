@@ -2,23 +2,23 @@
   <div class="fieldInfo">
     <div class="title">
       <span>地块信息</span>
-      <van-button @click="handleMore">
+      <van-button @click.self="handleMore">
         <span>更多</span>
         <van-icon name="arrow" color="#A5A7A9" />
       </van-button>
     </div>
-    <div class="item" v-for="item in props.fieldInfo.dataList" :key="item.id">
+    <div class="main" v-for="item in props.fieldInfo.dataList" :key="item.id">
       <div class="head">
-        <div class="left">
+        <div class="field">
           <img src="@/assets/field.svg" alt="" />
           <span>{{ item.fieldName }}</span>
         </div>
-        <div class="right">
+        <div class="area">
           <img src="@/assets/area.svg" alt="" />
           <span>{{ item.area.toFixed(2) }}m&sup2;</span>
         </div>
       </div>
-      <div class="content">
+      <div class="content" @click="handClickItem(item)">
         <div class="content-item">
           <span>工作人员：</span>
           <span>{{ item.managerName }}</span>
@@ -33,7 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { FieldInfoBaseItem } from './index';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
+import { FieldInfoBaseItem, FieldItem } from './index';
 
 interface Props {
   fieldInfo: FieldInfoBaseItem;
@@ -49,8 +51,17 @@ const props = withDefaults(defineProps<Props>(), {
     };
   },
 });
+const router: Router = useRouter();
+// 点击更多
 const handleMore = () => {
-  console.log('item');
+  router.push('/fieldMore');
+};
+// 点击地块信息每一项
+const handClickItem = (item: FieldItem) => {
+  router.push({
+    name: 'FieldDetail',
+    query: { fieldId: item.id, managerName: item.managerName },
+  });
 };
 </script>
 
@@ -66,7 +77,7 @@ const handleMore = () => {
     color: #ffffff;
     button {
       border: none;
-      padding-right: 0;
+      padding: 0;
       background: #1f2228;
       height: auto;
       span {
@@ -76,7 +87,7 @@ const handleMore = () => {
       }
     }
   }
-  .item {
+  .main {
     margin-bottom: 14px;
     .head {
       display: flex;
@@ -87,8 +98,8 @@ const handleMore = () => {
       min-height: 32px;
       border-radius: 4px 4px 0px 0px;
       background: rgba(255, 255, 255, 0.1);
-      .left,
-      .right {
+      .field,
+      .area {
         display: flex;
         align-items: center;
         img {
