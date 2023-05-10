@@ -33,8 +33,10 @@ declare module '@vue/runtime-core' {
     VanPullRefresh: typeof import('vant/es')['PullRefresh']
     VanRow: typeof import('vant/es')['Row']
     VanSwitch: typeof import('vant/es')['Switch']
+    VanTab: typeof import('vant/es')['Tab']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
+    VanTabs: typeof import('vant/es')['Tabs']
     VantCol: typeof import('vant/es')['tCol']
     VanTimePicker: typeof import('vant/es')['TimePicker']
   }

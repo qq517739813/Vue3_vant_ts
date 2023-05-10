@@ -13,7 +13,7 @@
         </div>
         <div class="item">
           <span>占地面积：</span>
-          <span>{{ props.adoptInfo.fieldArea }}m&sup2;</span>
+          <span>{{ props.adoptInfo.fieldArea?.toFixed(2) }}m&sup2;</span>
         </div>
         <div class="item double">
           <div class="item-text">

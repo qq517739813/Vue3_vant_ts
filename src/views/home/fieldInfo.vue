@@ -60,7 +60,7 @@ const handleMore = () => {
 const handClickItem = (item: FieldItem) => {
   router.push({
     name: 'FieldDetail',
-    query: { fieldId: item.id },
+    query: { fieldId: item.id, managerName: item.managerName },
   });
 };
 </script>

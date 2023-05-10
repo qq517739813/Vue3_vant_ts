@@ -73,7 +73,7 @@ const constantRoutes = [
   {
     path: '/fieldDetail',
     name: 'FieldDetail',
-    component: () => import('@/views/field/fieldDetail.vue'),
+    component: () => import('@/views/field/detail/index.vue'),
     meta: { title: '地块信息详情' },
   },
   // 无权限页面

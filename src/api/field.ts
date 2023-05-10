@@ -4,7 +4,7 @@ const AdoptApi = '/adopt-api';
 const FarmApi = '/farm-api';
 /**
  * @description 获取地块
- *  @param {API.Global.FieldPayLoad}
+ * @param {API.Global.FieldPayLoad}
  * @return {Promise<*>}
  */
 export function getField(data: API.Global.FieldPayLoad) {
@@ -16,7 +16,7 @@ export function getField(data: API.Global.FieldPayLoad) {
 }
 /**
  * @description 获取地块信息摄像头切换列表虫情测报，气象参数，土壤参数列表
- *  @param {API.Global.FieldPayLoad}
+ * @param {API.Global.DevListPayload}
  * @return {Promise<*>}
  */
 export function getDevListByDevId(data: API.Global.DevListPayload) {
@@ -51,7 +51,7 @@ export function getPestDataList(data: API.Global.HistoryDataPayload) {
   });
 }
 /**
- * @description 获取虫情测报灯图片(虫情测报) 时间为1天
+ * @description 获取虫情测报灯图片(虫情测报) 时间为3天
  * @param {API.Global.HistoryDataPayload}
  * @return {Promise<*>}
  */

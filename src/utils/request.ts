@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { showFailToast } from 'vant';
+import { showFailToast, showToast } from 'vant';
 import { redirectLogin } from '@/utils/utils';
 import { userStore } from '@/store/user';
 
@@ -13,7 +13,7 @@ service.interceptors.request.use(
   (config) => {
     // Add X-Access-Token header to every request, you can add other custom headers here
     const store = userStore();
-    const {token} = store.userInfo;
+    const { token } = store.userInfo;
     if (token) {
       Object.assign(config.headers, { Authorization: `Bearer ${token}` });
     }
@@ -28,27 +28,55 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const res = response.data;
-    if (!res.isSuccess) {
-      if (res.Code === 401 || res.Code === 400) {
-        res.Msg &&
-          showFailToast({
-            forbidClick: true,
-            message: res.Msg,
-            onClose: () => {
-              redirectLogin();
-            },
-          });
-        return;
-      }
-      res.Msg &&
-        showFailToast({
-          forbidClick: true,
-          message: res.Msg,
-        });
-
-      return Promise.reject(res.isSuccess);
+    if (res.isSuccess || res.IsSuccess) {
+      return res;
     } else {
-      return response.data;
+      if (res.isSuccess===false) {
+        if (res.code === 401 || res.code === 400 || res.Code === 401) {
+          (res.msg || res.Msg) &&
+            showFailToast({
+              forbidClick: true,
+              message: res.msg || res.Msg,
+              onClose: () => {
+                redirectLogin();
+              },
+            });
+          return;
+        }
+        res.msg || res.Msg
+          ? showFailToast({
+              forbidClick: true,
+              message: res.msg || res.Msg,
+            })
+          : showToast({
+              message: '未知错误',
+              duration: 1000,
+            });
+        return Promise.reject(res.isSuccess);
+      }
+      if (res.IsSuccess===false) {
+        if (res.Code === 401 || res.Code === 400) {
+          (res.Message || res.Msg) &&
+            showFailToast({
+              forbidClick: true,
+              message: res.Message || res.Msg,
+              onClose: () => {
+                redirectLogin();
+              },
+            });
+          return;
+        }
+        res.Message || res.Msg
+          ? showFailToast({
+              forbidClick: true,
+              message: res.Message || res.Msg,
+            })
+          : showToast({
+              message: '未知错误',
+              duration: 1000,
+            });
+        return Promise.reject(res.IsSuccess);
+      }
     }
   },
   (error) => {

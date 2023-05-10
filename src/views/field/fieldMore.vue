@@ -20,7 +20,7 @@
             </div>
             <div class="area">
               <img src="@/assets/area.svg" alt="" />
-              <span>{{ item.area.toFixed(2) }}m&sup2;</span>
+              <span>{{ item.area?.toFixed(2) }}m&sup2;</span>
             </div>
           </div>
           <div class="right">
@@ -37,7 +37,7 @@
           </div>
           <div class="content-item">
             <span>当前作物：</span>
-            <span>{{ item.cropList.join() }}</span>
+            <span>{{ item.cropList?.join() }}</span>
           </div>
         </div>
       </div>
