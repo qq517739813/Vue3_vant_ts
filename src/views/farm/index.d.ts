@@ -1,3 +1,83 @@
+export interface BaseItem {
+  totalRecord: number;
+  totalPage: number;
+  page: number;
+  pageSize: number;
+}
+interface main extends BaseItem {
+  dataList: mainItem[]
+}
+
+interface mainItem {
+  creationTime: string;
+  creatorId: any;
+  id: string;
+  iotAccount: string;
+  iotPwd: string;
+  mainIntro: string;
+  mainName: string;
+  mainType: number | string;
+  status: number | string;
+  tenantId: string;
+  tenantName: string;
+
+}
+interface field extends BaseItem {
+  dataList: fieldItem[]
+}
+interface FieldItem {
+  id: string;
+  tenantId: string;
+  tenantName: string;
+  mainId: string;
+  mainName: string;
+  fieldName: string;
+  area: number;
+  position: string;
+  elevation: number;
+  customer: string;
+  customerName: string;
+  manager: string;
+  managerName: string;
+  devList: string[];
+  cropIds: string[];
+  cropList: string[];
+  actList: any[];
+  isActive: boolean;
+  fieldIntro: string;
+}
+
+interface acttype extends BaseItem {
+  dataList: acttypeItem[]
+}
+interface acttypeItem {
+  actionName: string;
+  enabled: boolean;
+  id: string;
+  mainId: string;
+  mainName: string;
+  tenantId: string;
+  tenantName: string;
+}
+
+// 主体农场
+export interface MainInfoItem {
+  mainInfo: main | any;
+}
+// 工作地块
+export interface fieldInfoItem {
+  fieldInfo: field | any;
+}
+// 农事类型
+export interface acttypeInfoItem {
+  acttypeInfo: acttype | any;
+}
+
+
+
+
+
+
 interface FarmItem {
   mainName: string; // 农事主体
   creationTime: string; // 农事时间

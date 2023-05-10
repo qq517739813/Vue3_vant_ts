@@ -31,5 +31,8 @@ declare namespace API {
       val: string;
       id: string | number;
     }
+    interface IsAll {
+      IsAll:boolean; // 是否全部展示
+    }
   }
 }
