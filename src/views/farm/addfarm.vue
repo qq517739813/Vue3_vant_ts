@@ -47,8 +47,7 @@
         <van-cell :border=false title="农事内容">
             <template #label>
                 <div class="lable">
-                    <textarea rows="3" cols="50" style="border: none; background-color: transparent;"
-                        placeholder="请输入您的文章内容..."></textarea>
+                    <van-field v-model="actIntro" rows="3" type="textarea" autosize placeholder="请输入您的文章内容" />
                 </div>
             </template>
         </van-cell>
@@ -56,12 +55,18 @@
         <van-cell :border=false title="工作照片">
             <template #label>
                 <div class="lable">
-                    <van-uploader v-model="fileList.file1" :after-read="afterRead" />
-                    <van-uploader :after-read="afterRead" />
-                    <van-uploader :after-read="afterRead" />
+                    <van-uploader v-model="fileList.file1" :after-read="afterRead" name="file1" :max-count="1" />
+                    <van-uploader v-model="fileList.file2" :after-read="afterRead" name="file2" :max-count="1" />
+                    <van-uploader v-model="fileList.file3" :after-read="afterRead" name="file3" :max-count="1" />
                 </div>
             </template>
         </van-cell>
+
+        <div class="savabtn">
+            <van-button round type="success">圆形按钮</van-button>
+        </div>
+
+
 
 
         <van-dialog v-model:show="show" :show-confirm-button="false" closeOnClickOverlay>
@@ -109,12 +114,22 @@ const values = ref([])
 const title = ref('')
 const show = ref(false)
 const farmName = ref('');
+const actIntro = ref('')
+
 // 图片1
 const fileList = reactive({
-    file1: [{ url: '' }]
+    file1: [{ url: '' }],
+    file2: [{ url: '' }],
+    file3: [{ url: '' }]
+});
+const filerequestlist = ref({
+    file: [] as any[]
 });
 // 获取农场主体，农事地块，农事类型
 const init = async () => {
+    fileList.file1 = [];
+    fileList.file2 = [];
+    fileList.file3 = [];
     const payload = {
         IsAll: true
     }
@@ -173,32 +188,52 @@ const handlecaellvalue = (item: any) => {
         case '1':
             mainId.value = item.id
             show.value = false;
+            btns.btn.main = item.mainName
             break
             ;
         case '2':
             fieldId.value = item.id
             show.value = false;
+            btns.btn.field = item.fieldName
             break
             ;
         case '3':
             typeId.value = item.id
             show.value = false;
+            btns.btn.actType = item.actionName
             break;
         default:
             break;
     }
 
 }
-const afterRead = (file: any) => {
+const afterRead = async (file: any, type: any) => {
     // 此时可以自行将文件上传至服务器
-    console.log(file);
     const formData = new FormData();
     formData.append('file', file.file);
     formData.append('type', 'Activity');
-    uploadPhoto(formData).then((res: any) => {
-        fileList.file1 = [{ url: `${res.filePath}${res.fileName}` }]
+
+    await uploadPhoto(formData).then((res: any) => {
+        switch (type.name) {
+            case 'file1':
+                fileList.file1 = [{ url: `${res.filePath}${res.fileName}` }]
+                filerequestlist.value.file.push(res.fileName)
+                break;
+            case 'file2':
+                fileList.file2 = [{ url: `${res.filePath}${res.fileName}` }]
+                filerequestlist.value.file.push(res.fileName)
+                break;
+            case 'file3':
+                fileList.file3 = [{ url: `${res.filePath}${res.fileName}` }]
+                filerequestlist.value.file.push(res.fileName)
+                break;
+            default:
+                break;
+        }
 
     }).catch((err) => { return err })
+
+
 };
 const onClickLeft = () => history.back();
 
@@ -240,6 +275,13 @@ onMounted(() => {
         text-align: center;
         font-weight: 700;
         padding: 5px 0;
+    }
+
+    .savabtn {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 40px 0px 20px;
     }
 
 }

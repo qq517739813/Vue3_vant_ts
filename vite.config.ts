@@ -91,6 +91,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (apiPath) => apiPath.replace(/^\/farm-api/, 'api'),
         },
+        '/farmupload-api': {
+          target: 'http://111.21.231.41:20122',
+          changeOrigin: true,
+          rewrite: (apiPath) => apiPath.replace(/^\/farmupload-api/, 'api'),
+        }
       },
     },
   };

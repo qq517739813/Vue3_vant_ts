@@ -93,7 +93,6 @@ const handleClick = (item: any) => {
 };
 // 点击右侧按钮
 const onClickRight = ()=>{
-  console.log(123);
   router.push({name: 'AddFarm'})
   
 }

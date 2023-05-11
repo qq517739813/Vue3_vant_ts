@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 
+const AdoptApi = '/adopt-api';
+const FarmApi = '/farmupload-api';
 /**
  * @description 获取添加农事活动农场主体
  *  @param {API.Global.IsAll} 
@@ -7,7 +9,7 @@ import request from '@/utils/request';
  */
 export function getMainGetList(data: API.Global.IsAll) {
   return request({
-    url: '/admin/main/getList',
+    url: `${AdoptApi}/admin/main/getList`,
     method: 'post',
     data,
   });
@@ -21,7 +23,7 @@ export function getMainGetList(data: API.Global.IsAll) {
  */
 export function getTypeList(data: API.Global.IsAll) {
   return request({
-    url: '/admin/actType/getTypeList',
+    url: `${AdoptApi}/admin/actType/getTypeList`,
     method: 'post',
     data,
   });
@@ -35,7 +37,7 @@ export function getTypeList(data: API.Global.IsAll) {
  */
 export function getFieldList(data: API.Global.IsAll) {
   return request({
-    url: '/admin/field/getList',
+    url: `${AdoptApi}/admin/field/getList`,
     method: 'post',
     data,
   });
@@ -48,7 +50,7 @@ export function getFieldList(data: API.Global.IsAll) {
  */
 export function uploadPhoto(data: any) {
   return request({
-    url: '/admin/file/uploadPhoto',
+    url: `${FarmApi}/admin/file/uploadPhoto`,
     headers:{"Content-Type":"multipart/form-data"},
     method: 'post',
     data,
