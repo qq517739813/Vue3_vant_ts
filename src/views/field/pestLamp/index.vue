@@ -10,38 +10,51 @@
         </div>
       </div>
     </div>
-    <div class="line" v-if="lampList.pestList?.length">
+    <div class="line" v-if="pestList?.length">
       <!-- 空气温度 -->
       <air-temperature />
       <!-- 环境湿度 -->
       <air-humidity />
     </div>
+    <div class="head">
+      <div class="title">
+        <span>温/湿度走势图</span>
+        <span>(共计{{ pestImgsList.length }}张)</span>
+      </div>
+      <div class="date">
+        <div class="text">{{ computedTitle }}</div>
+      </div>
+    </div>
+    <!-- 拍摄图片 -->
+    <take-pictures v-if="pestImgsList?.length" />
   </div>
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, computed, reactive } from 'vue';
+import { inject, onMounted, computed, reactive } from 'vue';
 import type { ComputedRef } from 'vue';
 import moment from 'moment';
-import { DateItem,LineChartItem } from '../index';
+import { DateItem, LineChartItem, ImglistItem } from '../index';
 import AirTemperature from './airTemperature.vue';
 import AirHumidity from './airHumidity.vue';
+import TakePictures from './takePictures.vue';
 
 // 接收数据
-const lampList = inject('pestLampList') as LineChartItem;
-
+const { pestList } = inject('pestLampList') as LineChartItem;
+const { pestImgsList } = inject('pestImgsList') as ImglistItem;
 // 日期范围
 const rangeCalendar = reactive<DateItem>({
   calendar: { Bdate: '', Edate: '' },
 });
 // 计算时间标题
 const computedTitle: ComputedRef = computed(() => {
-  const text = `${rangeCalendar.calendar.Bdate}—${rangeCalendar.calendar.Edate}`;
-  return text;
+  const list = [...new Set(Object.values(rangeCalendar.calendar))];
+  return list.join('—');
 });
 onMounted(async () => {
   rangeCalendar.calendar = {
-    Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
+    // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
+    Bdate: moment().format('YYYY-MM-DD'),
     Edate: moment().format('YYYY-MM-DD'),
   };
 });
@@ -49,7 +62,6 @@ onMounted(async () => {
 
 <style scoped lang="less">
 .pestLamp {
-  color: #fff;
   padding-top: 14px;
   height: calc(100vh - 510px);
   overflow: auto;
@@ -57,6 +69,7 @@ onMounted(async () => {
     display: none;
   }
   .head {
+    margin-bottom: 14px;
     .title {
       font-size: 14px;
       color: #cccccc;

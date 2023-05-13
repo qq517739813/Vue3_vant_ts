@@ -1,50 +1,54 @@
 <template>
-  <div class="airTemperature">
-    <div class="head">
-      <div class="head-left">
-        <img src="@/assets/atmosphereTemperature.svg" alt="" />
-        <span>空气温度</span>
-      </div>
-      <div class="head-right">
-        <span>最新:</span>
-        <span>{{ countNewestTemperature }}℃</span>
-      </div>
-    </div>
-    <div id="airTemperatureMain" style="width: 100%; height: 180px"></div>
-  </div>
+  <div id="main" style="width: 100%; height: 250px"></div>
 </template>
+
 <script lang="ts" setup>
-import { inject, onMounted, onUnmounted, ref, computed } from 'vue';
-import type { ComputedRef } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import * as echarts from 'echarts';
-import { LineChartItem } from '../index';
+import { HistoryItem } from './index';
 import moment from 'moment';
-// 接收数据
-const electricList = inject('pestLampList') as LineChartItem;
-// 计算最新环境温度
-const countNewestTemperature: ComputedRef = computed(() => {
-  const newestNum = electricList.pestList.slice(-1)[0].At;
-  return newestNum.toFixed(1);
+
+interface Props {
+  chartData: HistoryItem;
+}
+// 父传子数据
+const props = withDefaults(defineProps<Props>(), {
+  // chartData: () => [],
+  chartData: () => {
+    return {
+      ParamId: '',
+      ParamCode: '',
+      ParamName: '',
+      ParamUnit: '',
+      MaxVal: 0,
+      MinVal: 0,
+      ParamIcon: '',
+      MonitorList: [],
+    };
+  },
 });
 // chart实列
 const myChart: any = ref(null);
 // 绘制图表
 const initChart = () => {
-  const main = document.getElementById('airTemperatureMain') as HTMLDivElement;
+  const main = document.getElementById('main') as HTMLDivElement;
   myChart.value = echarts.init(main);
-  const { pestList } = electricList;
-  const ParamValList = pestList.map((item) => item.At);
-  const XValList = pestList.map((item) => item.Ctime);
+  const { MonitorList, ParamName, ParamUnit, MaxVal,MinVal } = props.chartData;
+  const MaxValList = MonitorList.map((item) => item.MaxVal);
+  const MinValList = MonitorList.map((item) => item.MinVal);
+  const ParamValList = MonitorList.map((item) => item.ParamVal);
+  const MaxFlag = ParamValList.some((item) => item > MaxVal);
+  const XValList = MonitorList.map((item) => item.Ctime);
   const options = {
     legend: {
-      data: ['空气温度'],
+      data: ['最大值', '最小值', '在线'],
       show: false,
     },
     tooltip: {
       trigger: 'axis',
     },
     grid: {
-      top: '8%',
+      top: '7%',
       right: '4%',
       bottom: '0%',
       left: '2%',
@@ -85,8 +89,9 @@ const initChart = () => {
           borderColor: '#ffffff',
           borderWidth: 1,
           formatter(params: any) {
-            const paramStr = pestList.filter((item) => item.Ctime === params.value)[0].At;
-            return `空气温度\n${paramStr}℃\n${params.value}`;
+            const paramStr = MonitorList.filter((item) => item.Ctime === params.value)[0].ParamVal
+            const toTime = moment(params.value).format('YYYY-MM-DD HH');
+            return `${ParamName}\n${paramStr}${ParamUnit}\n${toTime}`;
           },
         },
         lineStyle: {
@@ -153,10 +158,56 @@ const initChart = () => {
     },
     series: [
       {
-        data: ParamValList,
-        name: '空气温度',
+        data: MaxFlag ? MaxValList : [],
+        name: '最大值',
         type: 'line',
-        smooth: true, // 平滑曲线
+        symbolSize: 0, // 标记的大小
+        connectNulls: true, // 是否连接空数据
+        itemStyle: {
+          //  折线拐点标志的样式。
+          color: '#ff3c58',
+        },
+        lineStyle: {
+          // 线宽
+          width: 2,
+        },
+        endLabel: {
+          // 折线端点的标签。
+          show: true,
+          offset: [-50, -10],
+          formatter: '{a}',
+          color: '#ff3c58',
+        },
+        // areaStyle: {
+        //   // 区域填充样式。
+        //   color: 'rgba(241, 37, 37, 1)',
+        // },
+        // animation:false // 是否开启动画
+      },
+      {
+        data: MinVal>0?MinValList:[],
+        name: '最小值',
+        type: 'line',
+        symbolSize: 0,
+        connectNulls: true,
+        itemStyle: {
+          color: '#5591f4',
+        },
+        lineStyle: {
+          width: 2,
+        },
+        endLabel: {
+          show: true,
+          offset: [-50, -10],
+          formatter: '{a}',
+          color: '#5591f4',
+        },
+        // animation:false // 是否开启动画
+      },
+      {
+        data: ParamValList,
+        name: '在线',
+        type: 'line',
         symbolSize: 1,
         connectNulls: true,
         itemStyle: {
@@ -166,10 +217,6 @@ const initChart = () => {
           width: 1,
         },
         // animation:false // 是否开启动画
-        areaStyle: {
-          // 区域填充样式。
-          color: 'rgba(0, 204, 144, 0.1)',
-        },
       },
     ],
   };
@@ -187,33 +234,4 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped lang="less">
-.airTemperature {
-  padding: 16px 0px;
-  margin-bottom: 14px;
-  min-height: 180px;
-  box-sizing: border-box;
-  border: 0.5px solid #333333;
-  .head {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    font-size: 14px;
-    line-height: 20px;
-    color: #ffffff;
-    .head-left {
-      display: flex;
-      margin-right: 16px;
-      img {
-        margin-right: 5px;
-        height: 16px;
-      }
-    }
-    .head-right {
-      span:last-child {
-        color: #648eff;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="less"></style>

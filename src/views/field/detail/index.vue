@@ -72,11 +72,22 @@
           <!-- 虫情测报 -->
           <pest-lamp v-if="item.id === 2 && !pestLoading && pestList.devInfo?.length" />
           <!-- 气象参数 -->
-          <weather-monitor v-if="item.id === 3 && field.fieldInfo.actList?.length" />
+          <weather-monitor
+            v-if="item.id === 3 && weatherInfo.weatherList?.length"
+            :weatherList="weatherInfo.weatherList"
+            :weatherId="weatherId"
+          />
           <!-- 土壤参数 -->
-          <soil-monitor v-if="item.id === 4 && field.fieldInfo.actList?.length" />
+          <soil-monitor
+            v-if="item.id === 4 && soliInfo.soilList?.length"
+            :soilList="soliInfo.soilList"
+            :soilId="soilId"
+          />
           <!-- 历史图片 -->
-          <history-img v-if="item.id === 5 && field.fieldInfo.actList?.length" />
+          <history-img
+            v-if="item.id === 5 && imgList.takePhotoList?.length"
+            :imgList="imgList.takePhotoList"
+          />
         </template>
       </van-tab>
     </van-tabs>
@@ -84,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, computed, ref, reactive,provide } from 'vue';
+import { onMounted, computed, ref, reactive, provide } from 'vue';
 import type { ComputedRef, Ref } from 'vue';
 import { userStore } from '@/store/user';
 import { useRoute } from 'vue-router';
@@ -97,6 +108,8 @@ import {
   getVideoBaseInfo,
   getPestDataList,
   getPestImagesList,
+  getRealDataList,
+  getVideoImgList,
 } from '@/api/field';
 import {
   FieldDetailItem,
@@ -106,6 +119,9 @@ import {
   DateItem,
   LineChartItem,
   ImglistItem,
+  WeatherListItem,
+  SoilListItem,
+  ImgListItem,
 } from '../index';
 import { tabsList } from './base';
 import FarmActive from './farmActive.vue';
@@ -129,6 +145,10 @@ const loading: Ref<boolean> = ref(false);
 const pestLoading: Ref<boolean> = ref(false);
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
+// 气象参数id
+const weatherId: Ref<string> = ref('');
+// 土壤参数id
+const soilId: Ref<string> = ref('');
 // 切换Tab标签页id
 const tabtId: Ref<number> = ref(1);
 // 切换Tabs数据
@@ -136,7 +156,8 @@ const tabs = reactive({ list: tabsList });
 // 地块信息
 const field = reactive<FieldDetailItem>({ fieldInfo: {} });
 // 设备列表
-const devList = reactive<DevListItem>({ devInfo: [] });
+// const devList = reactive<DevListItem>({ devInfo: [] });
+const devList = reactive<any>({ devInfo: [] });
 // 摄像头列表
 const videoList = reactive<DevListItem>({ devInfo: [] });
 // 摄像机信息
@@ -151,8 +172,14 @@ provide('pestLampList', lineChartInfo);
 provide('pestImgsList', pestImgInfo);
 // 气象参数列表
 const weatherList = reactive<DevListItem>({ devInfo: [] });
+// 气象参数实时数据
+const weatherInfo = reactive<WeatherListItem>({ weatherList: [] });
 // 土壤参数列表
 const soilList = reactive<DevListItem>({ devInfo: [] });
+// 土壤参数实时数据
+const soliInfo = reactive<SoilListItem>({ soilList: [] });
+// 拍摄图片
+const imgList = reactive<ImgListItem>({ takePhotoList: [] });
 // 日期范围
 const rangeCalendar = reactive<DateItem>({
   calendar: { Bdate: '', Edate: '' },
@@ -186,12 +213,15 @@ const getDevList = async (ids: string[]) => {
     Val: '',
   };
   const { Data: listRes } = (await getDevListByDevId(payload)) as any;
-  devList.devInfo = listRes;
+  // devList.devInfo = listRes;
+  devList.devInfo.push(123213);
   videoList.devInfo = listRes.filter((item: any) => item.TypeCode === 'Camera');
   equipmentId.value = videoList.devInfo[0].DevId;
   pestList.devInfo = listRes.filter((item: any) => item.TypeCode === 'PestLamp');
   weatherList.devInfo = listRes.filter((item: any) => item.TypeCode === 'WeatherMonitor');
+  weatherId.value = weatherList.devInfo[0].DevId;
   soilList.devInfo = listRes.filter((item: any) => item.TypeCode === 'SoilMonitor');
+  soilId.value = soilList.devInfo[0].DevId;
 };
 // 获取摄像机基本信息
 const getVideoData = async (ObjId: string) => {
@@ -217,6 +247,35 @@ const getPestReportList = async (ObjId: string, item: DateItem) => {
   pestImgInfo.pestImgsList = pestImgsRes;
   pestLoading.value = false;
 };
+// 获取气象参数
+const getWeatherList = async (ObjId: string) => {
+  const payload = {
+    ObjId,
+    Token: store.userInfo.user.iotToken,
+  };
+  const { Data: weatherRes } = (await getRealDataList(payload)) as any;
+  weatherInfo.weatherList = weatherRes;
+};
+// 获取土壤参数
+const getSoilList = async (ObjId: string) => {
+  const payload = {
+    ObjId,
+    Token: store.userInfo.user.iotToken,
+  };
+  const { Data: soilRes } = (await getRealDataList(payload)) as any;
+  soliInfo.soilList = soilRes;
+};
+// 获取摄像机历史图片
+const getVideoHistortList = async (ObjId: string) => {
+  const payload = {
+    ObjId,
+    Bdate: moment().format('YYYY-MM-DD'),
+    Edate: moment().format('YYYY-MM-DD'),
+    Token: store.userInfo.user.iotToken,
+  };
+  const { Data: imgRes } = (await getVideoImgList(payload)) as any;
+  imgList.takePhotoList = imgRes;
+};
 onMounted(async () => {
   showLoadingToast({
     message: 'loading...',
@@ -225,12 +284,16 @@ onMounted(async () => {
     duration: 0,
   });
   rangeCalendar.calendar = {
-    Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
+    // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
+    Bdate: moment().format('YYYY-MM-DD'),
     Edate: moment().format('YYYY-MM-DD'),
   };
   await getFieldInfo(countField.value.fieldId);
   await getVideoData(equipmentId.value);
   await getPestReportList(pestList.devInfo[0].DevId, rangeCalendar);
+  await getWeatherList(weatherList.devInfo[0].DevId);
+  await getSoilList(soilList.devInfo[0].DevId);
+  await getVideoHistortList(equipmentId.value);
   closeToast();
 });
 </script>

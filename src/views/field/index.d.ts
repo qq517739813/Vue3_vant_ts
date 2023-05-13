@@ -124,6 +124,19 @@ export interface LineChartBaseItem {
   Id: number | string;
   InnerAt: number; // 加热仓温度
 }
+export interface WeatherBaseItem {
+  ParamUnit: string;
+  ParamIcon: string;
+  ParamCode: string;
+  ParamVal: string | number;
+  MaxVal: string | number;
+  MinVal: string | number;
+  Ctime: string;
+  DevId?: string;
+  DevName?: string;
+  ParamId: string;
+  ParamName: string;
+}
 // 地块信息
 export interface FieldInfoItem {
   fieldInfo: FieldInfoBaseItem | any;
@@ -146,4 +159,16 @@ export interface LineChartItem {
 // 虫情测报图像
 export interface ImglistItem {
   pestImgsList: string[];
+}
+// 气象参数
+export interface WeatherListItem {
+  weatherList: WeatherBaseItem[];
+}
+// 土壤参数
+export interface SoilListItem {
+  soilList: WeatherBaseItem[];
+}
+// 历史图片
+export interface ImgListItem {
+  takePhotoList: string[];
 }

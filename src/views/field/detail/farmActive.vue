@@ -58,6 +58,9 @@ const handleClickDetail = () => {
     min-height: 120px;
     border-radius: 4px;
     border: 0.5px solid rgba(255, 255, 255, 0.1);
+    &:last-child{
+      margin-bottom: 0;
+    }
     .head {
       display: flex;
       justify-content: space-between;
