@@ -7,7 +7,7 @@
       placeholder
       safe-area-inset-top
       class="title"
-      title="地块信息"
+      title="地块详情"
       @click-left="onClickLeft"
     />
     <div class="head">
@@ -39,7 +39,7 @@
       @click-right="onClickVideoTitleRight"
     >
       <template #left>
-        <span>{{ videoList.devInfo.at(0)?.DevName }}</span>
+        <span>{{ videoInfo?.videoBaseInfo?.DevName }}</span>
       </template>
       <template #right>
         <van-icon name="sort" size="20" color="#00cc90" style="transform: rotate(90deg)" />
@@ -70,7 +70,12 @@
             :farmData="field.fieldInfo.actList"
           />
           <!-- 虫情测报 -->
-          <pest-lamp v-if="item.id === 2 && !pestLoading && pestList.devInfo?.length" />
+          <pest-lamp
+            v-if="item.id === 2 && !pestLoading && pestList.devInfo?.length"
+            :objId="pestList.devInfo[0].DevId"
+            :pestDate="pestRangeCalendar"
+            @getPestReportList="getPestReportList"
+          />
           <!-- 气象参数 -->
           <weather-monitor
             v-if="item.id === 3 && weatherInfo.weatherList?.length"
@@ -87,10 +92,20 @@
           <history-img
             v-if="item.id === 5 && imgList.takePhotoList?.length"
             :imgList="imgList.takePhotoList"
+            :objId="equipmentId"
+            :historyDate="historrRangeCalendar"
+            @getVideoHistortList="getVideoHistortList"
           />
         </template>
       </van-tab>
     </van-tabs>
+    <!-- 设备切换 -->
+    <video-switch
+      v-model:popup-visbile="showPopup"
+      @handele-dev="handClickDev"
+      :curentDevId="equipmentId"
+      :videoList="videoList.devInfo"
+    />
   </div>
 </template>
 
@@ -129,6 +144,7 @@ import PestLamp from '../pestLamp/index.vue';
 import WeatherMonitor from './weatherMonitor.vue';
 import SoilMonitor from './soilMonitor.vue';
 import HistoryImg from './historyImg.vue';
+import VideoSwitch from './videoSwitch.vue';
 
 const store = userStore();
 const route: RouteLocationNormalizedLoaded = useRoute();
@@ -145,6 +161,8 @@ const loading: Ref<boolean> = ref(false);
 const pestLoading: Ref<boolean> = ref(false);
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
+// 切换设备popup弹窗状态
+const showPopup: Ref<boolean> = ref(false);
 // 气象参数id
 const weatherId: Ref<string> = ref('');
 // 土壤参数id
@@ -180,15 +198,33 @@ const soilList = reactive<DevListItem>({ devInfo: [] });
 const soliInfo = reactive<SoilListItem>({ soilList: [] });
 // 拍摄图片
 const imgList = reactive<ImgListItem>({ takePhotoList: [] });
-// 日期范围
-const rangeCalendar = reactive<DateItem>({
+// 虫情测报日期范围
+const pestRangeCalendar = reactive<DateItem>({
+  calendar: { Bdate: '', Edate: '' },
+});
+// 历史图片日期范围
+const historrRangeCalendar = reactive<DateItem>({
   calendar: { Bdate: '', Edate: '' },
 });
 // 导航栏左侧事件
 const onClickLeft = () => history.back();
 // 摄像导航栏左侧事件
 const onClickVideoTitleRight = () => {
-  console.log('切换');
+  showPopup.value = true;
+};
+// 切换设备点击事件
+const handClickDev = (item: VideoBaseItem) => {
+  const rangeCalendar = {
+    calendar: {
+      // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
+      Bdate: moment().format('YYYY-MM-DD'),
+      Edate: moment().format('YYYY-MM-DD'),
+    },
+  };
+  equipmentId.value = item.DevId;
+  getVideoData(item.DevId);
+  getVideoHistortList(item.DevId,rangeCalendar);
+  showPopup.value = false;
 };
 // tab标签点击事件
 const handleClickTab = (name: number) => {
@@ -234,6 +270,12 @@ const getVideoData = async (ObjId: string) => {
 };
 // 根据时间获取虫情测报数据
 const getPestReportList = async (ObjId: string, item: DateItem) => {
+  showLoadingToast({
+    message: 'loading...',
+    forbidClick: true,
+    loadingType: 'spinner',
+    duration: 0,
+  });
   pestLoading.value = true;
   const payload = {
     Bdate: item.calendar.Bdate,
@@ -241,11 +283,13 @@ const getPestReportList = async (ObjId: string, item: DateItem) => {
     Token: store.userInfo.user.iotToken,
     ObjId,
   };
+  pestRangeCalendar.calendar = item.calendar;
   const { Data: pestListRes } = (await getPestDataList(payload)) as any;
   lineChartInfo.pestList = pestListRes;
   const { Data: pestImgsRes } = (await getPestImagesList(payload)) as any;
   pestImgInfo.pestImgsList = pestImgsRes;
   pestLoading.value = false;
+  closeToast();
 };
 // 获取气象参数
 const getWeatherList = async (ObjId: string) => {
@@ -266,35 +310,42 @@ const getSoilList = async (ObjId: string) => {
   soliInfo.soilList = soilRes;
 };
 // 获取摄像机历史图片
-const getVideoHistortList = async (ObjId: string) => {
+const getVideoHistortList = async (ObjId: string, item: DateItem) => {
   const payload = {
     ObjId,
-    Bdate: moment().format('YYYY-MM-DD'),
-    Edate: moment().format('YYYY-MM-DD'),
+    Bdate: item.calendar.Bdate,
+    Edate: item.calendar.Edate,
     Token: store.userInfo.user.iotToken,
   };
+  historrRangeCalendar.calendar = item.calendar;
   const { Data: imgRes } = (await getVideoImgList(payload)) as any;
   imgList.takePhotoList = imgRes;
 };
-onMounted(async () => {
+// 初始化数据
+const init = async (Id: string) => {
   showLoadingToast({
     message: 'loading...',
     forbidClick: true,
     loadingType: 'spinner',
     duration: 0,
   });
-  rangeCalendar.calendar = {
-    // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
-    Bdate: moment().format('YYYY-MM-DD'),
-    Edate: moment().format('YYYY-MM-DD'),
+  const rangeCalendar = {
+    calendar: {
+      // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
+      Bdate: moment().format('YYYY-MM-DD'),
+      Edate: moment().format('YYYY-MM-DD'),
+    },
   };
-  await getFieldInfo(countField.value.fieldId);
+  await getFieldInfo(Id);
   await getVideoData(equipmentId.value);
   await getPestReportList(pestList.devInfo[0].DevId, rangeCalendar);
   await getWeatherList(weatherList.devInfo[0].DevId);
   await getSoilList(soilList.devInfo[0].DevId);
-  await getVideoHistortList(equipmentId.value);
+  await getVideoHistortList(equipmentId.value, rangeCalendar);
   closeToast();
+};
+onMounted(async () => {
+  await init(countField.value.fieldId);
 });
 </script>
 

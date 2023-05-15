@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="right">
-            <van-button @click="onClickDetail">
+            <van-button @click="handClickItem(item)">
               <span>详情</span>
               <van-icon name="arrow" size="14" color="#A5A7A9" />
             </van-button>
@@ -49,10 +49,14 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import type { Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
 import { showLoadingToast, closeToast } from 'vant';
 import { getFieldList } from '@/api/home';
-import { FieldInfoItem } from './index';
+import { FieldInfoItem,FieldItem } from './index';
 import Empty from '@/components/empty.vue';
+
+const router: Router = useRouter();
 
 // 控制显示状态
 const loading: Ref<boolean> = ref(false);
@@ -79,9 +83,13 @@ const getFieldData = async (isAll: boolean) => {
 };
 // 导航栏左侧事件
 const onClickLeft = () => history.back();
-// 点击详情事件
-const onClickDetail = () => {
-  console.log('详情');
+// 点击地块信息每一项
+const handClickItem = (item: FieldItem) => {
+  console.log('item', item);
+  router.push({
+    name: 'FieldDetail',
+    query: { fieldId: item.id, managerName: item.managerName },
+  });
 };
 onMounted(() => {
   getFieldData(true);
@@ -140,6 +148,8 @@ onMounted(() => {
           }
         }
         .right {
+          display: flex;
+          align-items: center;
           button {
             border: none;
             padding-right: 0;

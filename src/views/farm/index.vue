@@ -84,7 +84,7 @@ const initData = async () => {
       farm.farmInfo = farmRes
       // equipInfo.UserEquips = Data;
       // loading.value = false;
-      console.log(farmRes);
+      // console.log(farmRes);
       closeToast();
     }
   });

@@ -14,7 +14,7 @@
         :key="index"
         @click="handleClick(index)"
       >
-        <van-image lazy-load :src="img" :key="index" show-error show-loading />
+        <van-image lazy-load :src="img" :key="index" show-error show-loading height="80" />
         <van-image-preview
           v-model:show="imgPreviewShow"
           closeable
@@ -43,7 +43,6 @@ const imgPreviewShow: Ref<boolean> = ref(false);
 const imgIndex: Ref<number> = ref(0);
 // 点击图片开启预览
 const handleClick = (index: number) => {
-  console.log('index', index)
   imgIndex.value = index;
   imgPreviewShow.value = true;
 };
