@@ -10,7 +10,7 @@
         <span>{{countNewestHumidity}}％</span>
       </div>
     </div>
-    <div id="airHumidityMain" style="width: 100%; height: 230px"></div>
+    <div id="airHumidityMain" style="width: 100%; height: 180px"></div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -44,7 +44,7 @@ const initChart = () => {
       trigger: 'axis',
     },
     grid: {
-      top: '7%',
+      top: '8%',
       right: '4%',
       bottom: '0%',
       left: '2%',
@@ -191,7 +191,8 @@ onUnmounted(() => {
 .airHumidity {
   padding: 16px 0px;
   margin-bottom: 14px;
-  min-height: 230px;
+  min-height: 180px;
+  box-sizing: border-box;
   border: 0.5px solid #333333;
   .head {
     display: flex;

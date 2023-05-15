@@ -74,7 +74,14 @@ const constantRoutes = [
     path: '/fieldDetail',
     name: 'FieldDetail',
     component: () => import('@/views/field/detail/index.vue'),
-    meta: { title: '地块信息详情' },
+    meta: { title: '地块信息详情'},
+  },
+  // 导入气象参数、土壤参数历史曲线数据图表组件
+  {
+    path: '/fieldDetail/historyLineData',
+    name: 'HistoryLineData',
+    component: () => import('@/views/field/historyLineData/index.vue'),
+    meta: { title: '历史数据曲线' },
   },
   // 无权限页面
   {

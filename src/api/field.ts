@@ -3,7 +3,7 @@ import request from '@/utils/request';
 const AdoptApi = '/adopt-api';
 const FarmApi = '/farm-api';
 /**
- * @description 获取地块
+ * @description 获取地块(活动数据)
  * @param {API.Global.FieldPayLoad}
  * @return {Promise<*>}
  */
@@ -67,9 +67,21 @@ export function getPestImagesList(data: API.Global.HistoryDataPayload) {
  * @param {API.Global.DevInfoPayload}
  * @return {Promise<*>}
  */
-export function GetRealDataList(data: API.Global.DevInfoPayload) {
+export function getRealDataList(data: API.Global.DevInfoPayload) {
   return request({
     url: `${FarmApi}/DataService/GetRealData`,
+    method: 'post',
+    data,
+  });
+}
+/**
+ * @description 获取历史采集数据
+ * @param {API.Global.HistoryDataPayload}
+ * @return {Promise<*>}
+ */
+export function getHistoryDataList(data: API.Global.HistoryDataPayload) {
+  return request({
+    url: `${FarmApi}/DataService/GetHistoryData`,
     method: 'post',
     data,
   });
@@ -86,3 +98,4 @@ export function getVideoImgList(data: API.Global.HistoryDataPayload) {
     data,
   });
 }
+
