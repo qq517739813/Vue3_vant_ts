@@ -1,51 +1,52 @@
 <template>
   <div class="equipment">
-    <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="农事活动" right-text="添加+"  @click-right="onClickRight" />
+    <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="农事活动" right-text="添加+"
+      @click-right="onClickRight" />
     <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh" class="equipment-pull-refresh">
-        <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
-        <template #pulling="props">
-          <div class="pulling" :style="{ height: props.distance }">
-            <van-icon name="arrow-down" />
-            <span>下拉即可刷新...</span>
-          </div>
-        </template>
-        <!-- 释放提示 -->
-        <template #loosing>
-          <div class="loosing">
-            <van-icon name="arrow-up" />
-            <span>释放即可刷新...</span>
-          </div>
-        </template>
-        <div class="act-content">
-          <div class="act-item" v-for="item in farm.farmInfo.dataList" :key="item.id" >
-            <!-- 每一项的title -->
-            <van-row class="acttitle">
-              <van-col span="19">
-                <span style="color:#fff">{{ item.actName }}</span>
-                <span>({{ format(item.creationTime) }})</span>
-              </van-col>
-              <van-col @click="handleClick(item)">
-                <span>详情</span>
-                <van-icon name="arrow" />
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col span="12">
-                <span>农事负责人:</span>
-                <span class="fontcolor">{{ item.creator }}</span>
-              </van-col>
-              <van-col>
-                <span>地块：</span>
-                <span class="fontcolor">{{ item.fieldName }}</span>
-              </van-col>
-            </van-row>
-            <van-row>
-              <van-col>
-                <span>农事内容：{{ item.actIntro }}</span>
-              </van-col>
-            </van-row>
-          </div>
+      <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
+      <template #pulling="props">
+        <div class="pulling" :style="{ height: props.distance }">
+          <van-icon name="arrow-down" />
+          <span>下拉即可刷新...</span>
         </div>
+      </template>
+      <!-- 释放提示 -->
+      <template #loosing>
+        <div class="loosing">
+          <van-icon name="arrow-up" />
+          <span>释放即可刷新...</span>
+        </div>
+      </template>
+      <div class="act-content">
+        <div class="act-item" v-for="item in farm.farmInfo.dataList" :key="item.id">
+          <!-- 每一项的title -->
+          <van-row class="acttitle">
+            <van-col span="19">
+              <span style="color:#fff">{{ item.actName }}</span>
+              <span>({{ format(item.creationTime) }})</span>
+            </van-col>
+            <van-col @click="handleClick(item)">
+              <span>详情</span>
+              <van-icon name="arrow" />
+            </van-col>
+          </van-row>
+          <van-row>
+            <van-col span="12">
+              <span>农事负责人:</span>
+              <span class="fontcolor">{{ item.creator }}</span>
+            </van-col>
+            <van-col>
+              <span>地块：</span>
+              <span class="fontcolor">{{ item.fieldName }}</span>
+            </van-col>
+          </van-row>
+          <van-row>
+            <van-col>
+              <span>农事内容：{{ item.actIntro }}</span>
+            </van-col>
+          </van-row>
+        </div>
+      </div>
     </van-pull-refresh>
   </div>
 </template>
@@ -89,12 +90,15 @@ const onRefresh = () => {
 };
 // 设备点击事件
 const handleClick = (item: any) => {
-  console.log('item', item)
+  router.push({
+    name: 'AddFarm',
+    query: { id: item.id }
+  })
 };
 // 点击右侧按钮
-const onClickRight = ()=>{
-  router.push({name: 'AddFarm'})
-  
+const onClickRight = () => {
+  router.push({ name: 'AddFarm' })
+
 }
 // 过滤时间
 const format = (item: string) => {
@@ -107,7 +111,7 @@ onMounted(() => {
 
 <style scoped lang="less">
 .equipment {
-    .title {
+  .title {
     :deep(.van-nav-bar--fixed) {
       background: #1f2228;
 
@@ -152,7 +156,8 @@ onMounted(() => {
       }
     }
   }
-  :deep(.van-nav-bar__text){
+
+  :deep(.van-nav-bar__text) {
     color: #ccc;
   }
 }

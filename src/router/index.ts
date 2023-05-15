@@ -111,6 +111,12 @@ const constantRoutes = [
     component: () => import('@/views/farm/addfarm.vue'),
     meta: { title: '农事活动上传' },
   },
+  {
+    path: '/AddGood',
+    name: 'AddGood',
+    component: () => import('@/views/farm/addgood.vue'),
+    meta: { title: '新增投入品' },
+  },
 ];
 
 const router = createRouter({

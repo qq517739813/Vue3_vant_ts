@@ -8,7 +8,7 @@ interface main extends BaseItem {
   dataList: mainItem[]
 }
 
-interface mainItem {
+export interface mainItem {
   creationTime: string;
   creatorId: any;
   id: string;
@@ -74,10 +74,6 @@ export interface acttypeInfoItem {
 }
 
 
-
-
-
-
 interface FarmItem {
   mainName: string; // 农事主体
   creationTime: string; // 农事时间
@@ -109,3 +105,46 @@ export interface FarmRecordBaseItem {
   dataList: FarmItem[];
 }
 
+
+// 投入品列表
+
+export interface goodsInfoItem {
+  goodsinfo: goods | any;
+}
+
+interface goods extends BaseItem {
+  dataList: goodsItem[]
+}
+
+interface goodsItem {
+  mainName: string;
+  creationTime: string;
+  creatorId: any;
+  tenantId: string;
+  mainId: string;
+  goodsName: string;
+  code: string;
+  stockNum: number;
+  unit: string;
+  isRecycle: boolean;
+  enabled: boolean;
+  id: string;
+
+}
+
+// 活动数据
+export interface actInfoItem {
+  actinfo: act | any
+}
+
+interface act {
+  id: string;
+  mainId: string;
+  fieldId: string;
+  typeId: string;
+  actName: string;
+  actIntro: string;
+  imgPath: string;
+  imgs: string[];
+  tenantId: string;
+}

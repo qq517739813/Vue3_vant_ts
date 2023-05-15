@@ -23,6 +23,7 @@ declare namespace API {
       pageSize?: number; // 分页大小
       isAll?: boolean; // 是否全部展示true是
       Id?: string; // 地块id
+      filter?: string; // filterid
     }
     // 地块信息摄像头切换列表虫情测报，气象参数，土壤参数列表参数
     interface DevListPayload {
