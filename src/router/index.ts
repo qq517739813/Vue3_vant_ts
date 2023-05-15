@@ -124,6 +124,12 @@ const constantRoutes = [
     component: () => import('@/views/farm/addgood.vue'),
     meta: { title: '新增投入品' },
   },
+  {
+    path:'/farmLog',
+    name: 'FarmLog',
+    component:()=>import('@/views/farm/index.vue'),
+    meta:{title:'农事记录'}
+  }
 ];
 
 const router = createRouter({

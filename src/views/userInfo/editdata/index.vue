@@ -59,8 +59,6 @@ const onClickLeft = () => history.back();
 const title = ref<string>('');
 const show = ref<boolean>(false);
 const sava = (item: any) => {
-  console.log('sava', item);
-  console.log(store.userInfo.user.uid, '123', 'item', item);
   const info = {
     val: item[0] as string,
     id: store.userInfo.user.uid,

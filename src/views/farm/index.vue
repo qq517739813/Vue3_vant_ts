@@ -1,7 +1,14 @@
 <template>
   <div class="equipment">
-    <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" title="农事活动" right-text="添加+"
-      @click-right="onClickRight" />
+    <van-nav-bar fixed :border="false" placeholder safe-area-inset-top class="title" :title="(route.meta.title as string)"
+      @click-right="onClickRight" @click-left="onClickLeft">
+      <template #left v-if="route.meta.title === '农事记录'">
+        <van-icon name="arrow-left" size="20" color="#FFFFFF" />
+      </template>
+      <template #right v-if="store.userInfo.roles[0] != 'customer'">
+        <span style="color: #ccc;">添加+</span>
+      </template>
+    </van-nav-bar>
     <van-pull-refresh v-model="refreshLoading" @refresh="onRefresh" class="equipment-pull-refresh">
       <!-- 下拉提示，通过 scale 实现一个缩放效果 -->
       <template #pulling="props">
@@ -53,13 +60,17 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { userStore } from '@/store/user';
 import { showLoadingToast, closeToast } from 'vant';
 import { getActList } from '@/api/home';
 import { FarmRecordItem } from './index';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import moment from 'moment';
 
+const store = userStore()
 const router = useRouter();
+const route: RouteLocationNormalizedLoaded = useRoute();
 const refreshLoading = ref<boolean>(false);
 const farm = reactive<FarmRecordItem>({ farmInfo: {} });
 const initData = async () => {
@@ -104,8 +115,11 @@ const onClickRight = () => {
 const format = (item: string) => {
   return moment(item).format('YYYY-MM-DD')
 }
+const onClickLeft = () => history.back();
+
 onMounted(() => {
   initData();
+
 });
 </script>
 

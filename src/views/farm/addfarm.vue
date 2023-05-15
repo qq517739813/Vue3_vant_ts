@@ -2,7 +2,7 @@
     <div class="addfarm">
         <van-nav-bar title="农事活动上传" class="title" fixed :border="false" placeholder safe-area-inset-top
             @click-left="onClickLeft">
-            <template #left>
+            <template #left >
                 <van-icon name="arrow-left" size="20" color="#FFFFFF" />
             </template>
         </van-nav-bar>
@@ -58,7 +58,7 @@
         </van-cell>
         <van-cell v-if="routeid.id" :border=false title="投入品信息">
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
-            <template #right-icon>
+            <template #right-icon v-if="store.userInfo.roles[0] != 'customer'">
                 <span style="color: #00CC90">
                     <span @click="handleAddGood">添加+</span>
                 </span>
@@ -67,7 +67,7 @@
                 <div class="lable" v-for="item in  goods.goodsinfo.dataList" :key="item.id">
                     <span>名称:{{ item.goodsName }}</span>
                     <span>数量:{{ item.num }}{{ item.unit }}</span>
-                    <span style="color: red;"><van-icon name="delete-o" @click="handleDelgood(item.id)" /></span>
+                    <span style="color: red;" v-if="store.userInfo.roles[0] != 'customer'"><van-icon name="delete-o" @click="handleDelgood(item.id)" /></span>
                 </div>
             </template>
         </van-cell>
@@ -97,7 +97,7 @@
             </template>
         </van-cell>
 
-        <div class="savabtn">
+        <div class="savabtn" v-if="store.userInfo.roles[0] != 'customer'">
             <van-button v-if="routeid.id" round type="danger" @click="handleDel">删除</van-button>
             <van-button round type="success" @click="handleSave">保存</van-button>
         </div>
@@ -122,11 +122,12 @@ import { onMounted, reactive, ref } from "vue";
 import { getMainGetList, getTypeList, getFieldList, uploadPhoto, actSave, getact, deleteact, getActGoodsList, deleteActGoods } from "@/api/farm";
 import { MainInfoItem, fieldInfoItem, acttypeInfoItem, actInfoItem, goodsInfoItem } from "./index"
 import { useRouter, useRoute } from 'vue-router';
+import { userStore } from '@/store/user';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 import { showConfirmDialog, showToast } from "vant";
 
 const router = useRouter();
-
+const store = userStore()
 const route: RouteLocationNormalizedLoaded = useRoute();
 // 拿到路由参数传过来的id
 const routeid = reactive({ id: route.query.id })
@@ -381,6 +382,11 @@ const handleDelgood = (id: string) => {
         });
 }
 const handleDel = () => {
+
+    // router.push({
+    //     name:'FarmLog'
+    // })
+
     deleteact({ id: [routeid.id] }).then(() => {
         router.push({
             name: 'Farm'

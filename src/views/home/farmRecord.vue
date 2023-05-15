@@ -8,7 +8,7 @@
       </van-button>
     </div>
     <van-cell-group class="record" :border="false">
-      <van-cell is-link v-for="item in props.farmRecord.dataList" :key="item.id">
+      <van-cell is-link v-for="item in props.farmRecord.dataList" :key="item.id" @click="handleitem(item)">
         <template #title>
           <span class="actName">{{ item.actName }}</span>
         </template>
@@ -21,7 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { FarmRecordBaseItem } from './index';
+
+const router = useRouter();
 
 interface Props {
   farmRecord: FarmRecordBaseItem;
@@ -37,14 +40,24 @@ const props = withDefaults(defineProps<Props>(), {
     };
   },
 });
+const handleitem = (item: any) => {
+  router.push({
+    name: 'AddFarm',
+    query: { id: item.id }
+  })
+
+}
 const handleMore = () => {
-  console.log('item');
+  router.push({
+    name: 'FarmLog'
+  })
 };
 </script>
 
 <style scoped lang="less">
 .farmRecord {
   margin: 0 16px;
+
   .title {
     display: flex;
     align-items: center;
@@ -52,11 +65,13 @@ const handleMore = () => {
     margin: 14px 0;
     font-size: 16px;
     color: #ffffff;
+
     button {
       border: none;
       padding-right: 0;
       background: #1f2228;
       height: auto;
+
       span {
         margin-right: 5px;
         font-size: 14px;
@@ -64,18 +79,22 @@ const handleMore = () => {
       }
     }
   }
+
   .record {
     .van-cell {
       padding: 10px;
       background: #1f2228;
       font-size: 14px;
+
       .actName {
         color: #ffffff;
       }
+
       .creator {
         color: #9e9e9e;
       }
     }
+
     .van-cell:after {
       left: 0;
       right: 0;
