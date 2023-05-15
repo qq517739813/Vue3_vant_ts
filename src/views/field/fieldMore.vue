@@ -85,7 +85,7 @@ const getFieldData = async (isAll: boolean) => {
 const onClickLeft = () => history.back();
 // 点击地块信息每一项
 const handClickItem = (item: FieldItem) => {
-  console.log('item', item);
+  // console.log('item', item);
   router.push({
     name: 'FieldDetail',
     query: { fieldId: item.id, managerName: item.managerName },

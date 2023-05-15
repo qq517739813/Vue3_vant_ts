@@ -106,13 +106,30 @@ const constantRoutes = [
     redirect: '/404',
   },
   // 我的-编辑资料 页面路由
-  // 我的-编辑资料 页面路由
   {
     path: '/EditData',
     name: 'EditData',
     component: () => import('@/views/userInfo/editdata/index.vue'),
     meta: { title: '编辑资料' },
   },
+  {
+    path: '/AddFarm',
+    name: 'AddFarm',
+    component: () => import('@/views/farm/addfarm.vue'),
+    meta: { title: '农事活动上传' },
+  },
+  {
+    path: '/AddGood',
+    name: 'AddGood',
+    component: () => import('@/views/farm/addgood.vue'),
+    meta: { title: '新增投入品' },
+  },
+  {
+    path:'/farmLog',
+    name: 'FarmLog',
+    component:()=>import('@/views/farm/index.vue'),
+    meta:{title:'农事记录'}
+  }
 ];
 
 const router = createRouter({

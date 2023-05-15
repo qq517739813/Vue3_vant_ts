@@ -58,7 +58,7 @@ const computedTitle: ComputedRef = computed(() => {
 });
 // 农场地块点击事件
 const handeleItemClick = (item: WeatherBaseItem) => {
-  console.log('item', item)
+  // console.log('item', item)
   emitter.emit('sendHistory', item);
   router.push({
     name: 'HistoryLineData',

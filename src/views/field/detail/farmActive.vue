@@ -6,7 +6,7 @@
           <span>{{ item.actName }}</span>
           <span>{{ `(${moment(item.creationTime).format('YYYY.MM.DD')})` }}</span>
         </div>
-        <div class="right" @click="handleClickDetail">
+        <div class="right" @click="handleClickDetail(item)">
           <span>详情</span>
           <van-icon name="arrow" size="14" color="#9e9e9e" />
         </div>
@@ -31,6 +31,9 @@
 <script setup lang="ts">
 import moment from 'moment';
 import { FarmItem } from '../index';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 interface Props {
   farmData: FarmItem[];
@@ -39,8 +42,11 @@ const props = withDefaults(defineProps<Props>(), {
   farmData: () => [],
 });
 // 查看详情
-const handleClickDetail = () => {
-  console.log('获取详情');
+const handleClickDetail = (item: any) => {
+  router.push({
+    name: 'AddFarm',
+    query: { id: item.id }
+  })
 };
 </script>
 
@@ -49,18 +55,22 @@ const handleClickDetail = () => {
   padding-top: 14px;
   height: calc(100vh - 510px);
   overflow: auto;
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   .content {
     margin-bottom: 14px;
     box-sizing: border-box;
     min-height: 120px;
     border-radius: 4px;
     border: 0.5px solid rgba(255, 255, 255, 0.1);
-    &:last-child{
+
+    &:last-child {
       margin-bottom: 0;
     }
+
     .head {
       display: flex;
       justify-content: space-between;
@@ -69,34 +79,42 @@ const handleClickDetail = () => {
       padding-right: 17px;
       height: 30px;
       border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+
       .left {
         font-size: 14px;
         color: #fff;
+
         span:nth-child(2) {
           color: #9e9e9e;
         }
       }
+
       .right {
         font-size: 14px;
         color: #9e9e9e;
       }
     }
+
     .text {
       padding: 0 11px 11px;
+
       .text-title {
         margin: 6px 0;
         padding-right: 25px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         div span {
           font-size: 14px;
           color: #9e9e9e;
+
           &:nth-child(2) {
             color: #fff;
           }
         }
       }
+
       .textarea {
         font-size: 14px;
         color: #999999;

@@ -50,14 +50,14 @@ import userdialog from "./components/userdialog.vue";
 const store = userStore();
 const router: Router = useRouter();
 const show = ref<boolean>(false);
-const val = ref<string>('')
+// const val = ref<string>('')
 // 点击每个单元格
 const handeleCellClick = (item: string) => {
-  console.log('item', item)
+  // console.log('item', item)
   if (item === 'ResetPwd') {
     show.value = !show.value;
   } else if (item === 'EditData') {
-    console.log(item);
+    // console.log(item);
 
     router.push({ name: item })
   }
@@ -75,7 +75,7 @@ const logOut = () => {
 };
 // 点击保存
 const sava = (item: String) => {
-  console.log(store.userInfo.user.uid, '123', val.value, 'item', item);
+  // console.log(store.userInfo.user.uid, '123', val.value, 'item', item);
   const userpwd = {
     val: item[0] as string,
     id: store.userInfo.user.uid
