@@ -39,7 +39,7 @@
             <template #label>
                 <div class="lable">
                     <input v-model="farmName" type="text" style="border: none; background-color: transparent;"
-                        placeholder="请输入名称">
+                        placeholder="输入农事名称">
                 </div>
             </template>
 
@@ -52,7 +52,7 @@
             </template>
             <template #label>
                 <div class="lable">
-                    <van-field v-model="actIntro" rows="2" type="textarea" autosize placeholder="请输入您的文章内容" />
+                    <van-field v-model="actIntro" rows="2" type="textarea" autosize placeholder="输入农事内容" />
                 </div>
             </template>
         </van-cell>
