@@ -12,6 +12,7 @@
       :show-mark="false"
       @confirm="handleConfirm"
       @close="handleClose"
+      teleport="body"
     />
   </div>
 </template>

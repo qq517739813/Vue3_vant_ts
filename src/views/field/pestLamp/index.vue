@@ -4,7 +4,7 @@
       <div class="title">温/湿度走势图</div>
       <div class="date">
         <div class="text">{{ computedTitle }}</div>
-        <div class="choose-time">
+        <div class="choose-time" @click="onClickChooseTime">
           <van-icon name="underway-o" size="16" color="#FFFFFF" />
           <span>选择时间</span>
         </div>
@@ -16,6 +16,7 @@
       <!-- 环境湿度 -->
       <air-humidity />
     </div>
+    <empty v-else />
     <div class="head">
       <div class="title">
         <span>温/湿度走势图</span>
@@ -27,37 +28,59 @@
     </div>
     <!-- 拍摄图片 -->
     <take-pictures v-if="pestImgsList?.length" />
+    <empty v-else />
+    <!-- 选择时间 -->
+    <common-calendar v-model:show-calendar="calendarVisible" @calendar-confirm="onConfirm" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, computed, reactive } from 'vue';
-import type { ComputedRef } from 'vue';
-import moment from 'moment';
+import { inject, onMounted, computed, ref } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
 import { DateItem, LineChartItem, ImglistItem } from '../index';
 import AirTemperature from './airTemperature.vue';
 import AirHumidity from './airHumidity.vue';
 import TakePictures from './takePictures.vue';
+import CommonCalendar from '@/components/commonCalendar.vue';
+import Empty from '@/components/empty.vue';
 
+interface Props {
+  objId: string;
+  pestDate: DateItem;
+}
+// 父子传数据
+const props = withDefaults(defineProps<Props>(), {
+  objId: '',
+  pestDate: () => {
+    return {
+      calendar: { Bdate: '', Edate: '' },
+    };
+  },
+});
+// 父子传方法
+const emit = defineEmits<{
+  (e: 'getPestReportList', ObjId: string, Item: DateItem): void;
+}>();
 // 接收数据
 const { pestList } = inject('pestLampList') as LineChartItem;
 const { pestImgsList } = inject('pestImgsList') as ImglistItem;
-// 日期范围
-const rangeCalendar = reactive<DateItem>({
-  calendar: { Bdate: '', Edate: '' },
-});
+// 控制日期选择器状态
+const calendarVisible: Ref<boolean> = ref(false);
 // 计算时间标题
 const computedTitle: ComputedRef = computed(() => {
-  const list = [...new Set(Object.values(rangeCalendar.calendar))];
+  const list = [...new Set(Object.values(props.pestDate.calendar))];
   return list.join('—');
 });
-onMounted(async () => {
-  rangeCalendar.calendar = {
-    // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
-    Bdate: moment().format('YYYY-MM-DD'),
-    Edate: moment().format('YYYY-MM-DD'),
-  };
-});
+// 选择时间事件
+const onClickChooseTime = () => {
+  calendarVisible.value = true;
+};
+// 日期确定事件
+const onConfirm = (values: DateItem) => {
+  calendarVisible.value = false;
+  emit('getPestReportList', props.objId, values);
+};
+onMounted(async () => {});
 </script>
 
 <style scoped lang="less">

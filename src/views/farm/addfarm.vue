@@ -289,7 +289,7 @@ const cellvaluecomputed = (item: any) => {
     }
 }
 const handlecaellvalue = (item: any) => {
-    console.log(item);
+    // console.log(item);
 
     switch (btntype.value) {
         case '1':
@@ -358,8 +358,9 @@ const handleSave = async () => {
         typeId: typeId.value,
     }
 
-    const { data: res } = await actSave(payload);
-    console.log(res);
+    // const { data: res } = await actSave(payload);
+    await actSave(payload);
+    // console.log(res);
 
     showToast('保存成功');
 
@@ -371,7 +372,7 @@ const handleDelgood = (id: string) => {
             '确定删除投入品吗?',
     })
         .then(() => {
-            console.log('cancel');
+            // console.log('cancel');
 
             deleteActGoods({ id: [id] }).then(() => {
                 init()
