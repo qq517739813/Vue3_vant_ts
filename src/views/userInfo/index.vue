@@ -34,6 +34,7 @@
     </van-cell-group>
     <van-button class="loginOut" @click="logOut" type="success">退出账号</van-button>
     <userdialog type="修改密码" @handle-Save="sava" @handle-Close="handleclose" :isShow="show" />
+    <div class="logput"></div>
   </div>
 </template>
 
@@ -66,6 +67,8 @@ const handeleCellClick = (item: string) => {
 const logOut = () => {
   showConfirmDialog({
     title: '提示',
+    teleport: '.userInfo',
+    cancelButtonColor: 'red',
     message:
       '确定要退出登录吗？',
   })
@@ -203,5 +206,32 @@ const handleclose = () => {
     font-size: 14px;
     color: #ffffff;
   }
+}
+
+:deep(.van-dialog) {
+  background: #1F2228;
+  color: #ccc;
+}
+
+:deep(.van-cell) {
+  background: #1F2228;
+  color: #ccc;
+}
+
+:deep(.van-field__control) {
+  color: #ccc;
+}
+
+:deep(.van-dialog__header) {
+  color: #ccc;
+}
+
+:deep(.van-button--default) {
+  background: #1F2228;
+}
+
+:deep(.van-field__control) {
+  color: #ccc;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
 }
 </style>
