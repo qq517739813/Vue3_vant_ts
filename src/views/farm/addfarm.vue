@@ -1,8 +1,8 @@
 <template>
-    <div class="addfarm">
+    <div id="addfarm">
         <van-nav-bar title="农事活动上传" class="title" fixed :border="false" placeholder safe-area-inset-top
             @click-left="onClickLeft">
-            <template #left >
+            <template #left>
                 <van-icon name="arrow-left" size="20" color="#FFFFFF" />
             </template>
         </van-nav-bar>
@@ -67,7 +67,8 @@
                 <div class="lable" v-for="item in  goods.goodsinfo.dataList" :key="item.id">
                     <span>名称:{{ item.goodsName }}</span>
                     <span>数量:{{ item.num }}{{ item.unit }}</span>
-                    <span style="color: red;" v-if="store.userInfo.roles[0] != 'customer'"><van-icon name="delete-o" @click="handleDelgood(item.id)" /></span>
+                    <span style="color: red;" v-if="store.userInfo.roles[0] != 'customer'"><van-icon name="delete-o"
+                            @click="handleDelgood(item.id)" /></span>
                 </div>
             </template>
         </van-cell>
@@ -177,7 +178,7 @@ const goods = reactive<goodsInfoItem>({
 
 // 获取农场主体，农事地块，农事类型
 const init = async () => {
-
+    
     fileList.file1 = [];
     fileList.file2 = [];
     fileList.file3 = [];
@@ -370,6 +371,8 @@ const handleDelgood = (id: string) => {
         title: '删除',
         message:
             '确定删除投入品吗?',
+        cancelButtonColor: 'red',
+        teleport: document.getElementById('addfarm')
     })
         .then(() => {
             // console.log('cancel');
@@ -408,7 +411,7 @@ onMounted(() => {
 </script>
   
 <style scoped lang="less">
-.addfarm {
+#addfarm {
     .title {
         :deep(.van-nav-bar--fixed) {
             background: #1f2228;
@@ -474,6 +477,26 @@ onMounted(() => {
 
 :deep(.van-field__control) {
     color: inherit;
+}
+
+:deep(.van-cell__title) {
+    color: #fff;
+}
+:deep(.van-dialog__header) {
+  color: #fff;
+}
+:deep(.van-dialog) {
+  background: #1F2228;
+  color: #fff;
+}
+
+:deep(.van-cell) {
+  background: #1F2228;
+  color: #fff;
+}
+
+:deep(.van-button--default) {
+  background: #1F2228;
 }
 </style>
   
