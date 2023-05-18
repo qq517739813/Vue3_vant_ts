@@ -9,40 +9,21 @@
     <main class="main">
       <van-form @submit="onSubmit" class="form" label-align="top" :show-error-message="false">
         <van-cell-group :border="false" class="form-cell">
-          <van-field
-            v-model="loginForm.name"
-            name="name"
-            placeholder="请输入账号"
-            class="form-input"
-            autocomplete="off"
-            :rules="[{ required: true, message: '请输入账号' }]"
-          >
+          <van-field v-model="loginForm.name" name="name" placeholder="请输入账号" class="form-input" autocomplete="off"
+            :rules="[{ required: true, message: '请输入账号' }]">
             <template #label>
               <span class="lable-text">账号</span>
             </template>
           </van-field>
-          <van-field
-            v-model="loginForm.password"
-            type="password"
-            name="password"
-            placeholder="请输入密码"
-            class="form-input"
-            autocomplete="off"
-            :rules="[{ required: true, message: '请输入密码' }]"
-          >
+          <van-field v-model="loginForm.password" type="password" name="password" placeholder="请输入密码" class="form-input"
+            autocomplete="off" :rules="[{ required: true, message: '请输入密码' }]">
             <template #label>
               <span class="lable-text">密码</span>
             </template>
           </van-field>
         </van-cell-group>
         <div class="login-submit">
-          <van-button
-            block
-            type="primary"
-            native-type="submit"
-            :loading="loginLoding"
-            loading-type="spinner"
-          >
+          <van-button block type="primary" native-type="submit" :loading="loginLoding" loading-type="spinner">
             登录
           </van-button>
         </div>
@@ -72,19 +53,29 @@ const loginForm = reactive<LoginItem>({
   password: 'rt123456',
 });
 const onSubmit = async (values: any) => {
-  loginLoding.value = true;
-  const { data: loginRes } = await login(values);
-  store.upDateUserInfo(loginRes);
-  router.push('/');
-  loginLoding.value = false;
-  const { data: userRes } = await getUserInfo({ id: loginRes.user.uid });
-  store.upDateUserCompleteInfo(userRes);
-  showToast({
-    message: '登录成功',
-    position: 'bottom',
-  });
+  try {
+    loginLoding.value = true;
+    const { data: loginRes } = await login(values);
+    store.upDateUserInfo(loginRes);
+    router.push('/');
+    const { data: userRes } = await getUserInfo({ id: loginRes.user.uid });
+    store.upDateUserCompleteInfo(userRes);
+    showToast({
+      message: '登录成功',
+      position: 'bottom',
+    });
+  } catch (error) {
+    showToast({
+      message: '登录失败，请重试',
+      position: 'bottom',
+      type: 'fail',
+    });
+  } finally {
+    loginLoding.value = false;
+  }
 };
-onMounted(() => {});
+
+onMounted(() => { });
 </script>
 
 <style scoped lang="less">

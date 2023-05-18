@@ -6,8 +6,7 @@
                 <van-icon name="arrow-left" size="20" color="#FFFFFF" />
             </template>
         </van-nav-bar>
-
-        <van-cell title="农事主体">
+        <van-cell title=" 农事主体">
             <template #label>
                 <div class="lable" @click="handleClick('选择主体')">
                     <span class="custom-title">{{ btns.btn.main }}</span>
@@ -103,6 +102,8 @@
             <van-button round type="success" @click="handleSave">保存</van-button>
         </div>
 
+
+
         <van-dialog v-model:show="show" :show-confirm-button="false" closeOnClickOverlay>
             <van-cell>
                 <template #title>
@@ -125,14 +126,13 @@ import { MainInfoItem, fieldInfoItem, acttypeInfoItem, actInfoItem, goodsInfoIte
 import { useRouter, useRoute } from 'vue-router';
 import { userStore } from '@/store/user';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
-import { showConfirmDialog, showToast } from "vant";
+import { closeToast, showConfirmDialog, showLoadingToast, showToast } from "vant";
 
 const router = useRouter();
 const store = userStore()
 const route: RouteLocationNormalizedLoaded = useRoute();
 // 拿到路由参数传过来的id
 const routeid = reactive({ id: route.query.id })
-
 // 农事主体
 const mainList = reactive<MainInfoItem>({ mainInfo: {} })
 // 农事地块
@@ -178,7 +178,12 @@ const goods = reactive<goodsInfoItem>({
 
 // 获取农场主体，农事地块，农事类型
 const init = async () => {
-    
+    showLoadingToast({
+        message: 'loading...',
+        forbidClick: true,
+        loadingType: 'spinner',
+        duration: 0,
+    });
     fileList.file1 = [];
     fileList.file2 = [];
     fileList.file3 = [];
@@ -192,11 +197,11 @@ const init = async () => {
     btns.btn.main = mainList.mainInfo.dataList[0].mainName
     mainId.value = mainList.mainInfo.dataList[0].id
     fieldList.fieldInfo = fieldlist;
-    btns.btn.field = fieldList.fieldInfo.dataList[0].fieldName
-    fieldId.value = fieldList.fieldInfo.dataList[0].id
+    btns.btn.field = fieldList.fieldInfo.dataList[0]?.fieldName
+    fieldId.value = fieldList.fieldInfo.dataList[0]?.id
     actTypeList.acttypeInfo = acttypelist;
-    btns.btn.actType = actTypeList.acttypeInfo.dataList[0].actionName
-    typeId.value = actTypeList.acttypeInfo.dataList[0].id
+    btns.btn.actType = actTypeList.acttypeInfo.dataList[0]?.actionName
+    typeId.value = actTypeList.acttypeInfo.dataList[0]?.id
     if (routeid.id) {
         // 获取投入品信息
         const payload1 = {
@@ -248,6 +253,7 @@ const init = async () => {
         }
 
     }
+    closeToast();
 
 
 
@@ -482,21 +488,23 @@ onMounted(() => {
 :deep(.van-cell__title) {
     color: #fff;
 }
+
 :deep(.van-dialog__header) {
-  color: #fff;
+    color: #fff;
 }
+
 :deep(.van-dialog) {
-  background: #1F2228;
-  color: #fff;
+    background: #1F2228;
+    color: #fff;
 }
 
 :deep(.van-cell) {
-  background: #1F2228;
-  color: #fff;
+    background: #1F2228;
+    color: #fff;
 }
 
 :deep(.van-button--default) {
-  background: #1F2228;
+    background: #1F2228;
 }
 </style>
   
