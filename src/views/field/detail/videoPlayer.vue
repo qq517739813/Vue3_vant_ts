@@ -5,6 +5,7 @@
       id="videoMain"
       ref="videoRef"
       class="video-main video-js vjs-default-skin vjs-big-play-centered"
+      data-setup='{}'
     >
       <source :src="props.src" type="application/x-mpegURL" />
     </video>
@@ -12,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, onUnmounted, CSSProperties, computed, onMounted, ref, toRef, nextTick } from 'vue';
+import { watch, onUnmounted, CSSProperties, computed, onMounted, ref, nextTick } from 'vue';
 import type { Ref } from 'vue';
 import videojs from 'video.js';
 // import 'videojs-contrib-hls'
@@ -33,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
 const videoRef: Ref = ref<HTMLElement | null>(null);
 // scr地址
 const srcPath: Ref = ref<string>('');
-const player: Ref = ref();
+const myPlayer: Ref = ref();
 
 const videoWrapStyles = computed<CSSProperties>(() => {
   return {
@@ -41,43 +42,51 @@ const videoWrapStyles = computed<CSSProperties>(() => {
     height: props.height || '195px',
   };
 });
-const myPropRef = toRef(props, 'src');
-watch(myPropRef, (newVal, oldVal) => {
-  console.log('newVal', newVal);
-  console.log('oldVal', oldVal);
-  if (srcPath.value !== newVal) {
-    srcPath.value = newVal;
-    initVideo();
-  }
-});
+watch(
+  () => props.src,
+  (newVal) => {
+    if (srcPath.value !== newVal) {
+      srcPath.value = newVal;
+      initVideo(srcPath.value);
+    }
+  },
+);
 // 初始化videojs
-const initVideo = () => {
-  nextTick(() => {
-  const options = {
-    // language: 'zh-CN', // 设置语言
-    autoplay: true, // 设置自动播放
-    controls: false, // 是否显示底部控制栏
-    techOrder: ['html5',],
-    preload: 'auto', // 预加载
-    fluid: false, // 自适应宽高
-    muted: true, // 设置了它为true，才可实现自动播放,同时视频也被静音
-    // src// 要嵌入的视频源的源 URL
-  };
-  if (videoRef.value) {
-    // 创建 video 实例
-    player.value = videojs(videoRef.value, options);
+const initVideo = (url: string) => {
+  if (myPlayer.value) {
+    myPlayer.value.dispose();
   }
+  nextTick(() => {
+    const options = {
+      // language: 'zh-CN', // 设置语言
+      autoplay: true, // 设置自动播放
+      controls: false, // 是否显示底部控制栏
+      techOrder: ['html5'],
+      preload: 'auto', // 预加载
+      fluid: false, // 自适应宽高
+      muted: true, // 设置了它为true，才可实现自动播放,同时视频也被静音
+      // src// 要嵌入的视频源的源 URL
+    //   sources: [
+    //     {
+    //       src: url,
+    //       type: 'application/x-mpegURL',
+    //     },
+    //   ],
+    };
+    if (videoRef.value) {
+      // 创建 video 实例
+      myPlayer.value = videojs(videoRef.value, options);
+      myPlayer.value.src = url;
+    }
   });
 };
 
 onMounted(() => {
-//   setTimeout(() => {
-    initVideo();
-//   }, 500);
+  initVideo(props.src);
 });
 onUnmounted(() => {
-  if (player.value) {
-    player.value.dispose();
+  if (myPlayer.value) {
+    myPlayer.value.dispose();
   }
 });
 </script>

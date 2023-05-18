@@ -49,7 +49,7 @@
     <!-- <video id="videoMain" class="video-main video-js vjs-default-skin vjs-big-play-centered">
       <source :src="" type="application/x-mpegURL">
     </video> -->
-    <video-player :src="videoInfo.videoBaseInfo?.AppletAddr" />
+    <video-player :src="videoInfo.videoBaseInfo?.AppletAddr" v-if="!videoLoading" />
     <van-tabs
       swipeable
       v-model:active="tabtId"
@@ -163,6 +163,7 @@ const countField: ComputedRef = computed(() => {
 const loading: Ref<boolean> = ref(false);
 // 控制虫情测报显示状态
 const pestLoading: Ref<boolean> = ref(false);
+const videoLoading: Ref<boolean> = ref(false);
 // 切换设备id
 const equipmentId: Ref<string> = ref('');
 // 切换设备popup弹窗状态
@@ -218,6 +219,7 @@ const onClickVideoTitleRight = () => {
 };
 // 切换设备点击事件
 const handClickDev = (item: VideoBaseItem) => {
+  videoLoading.value = true;
   const rangeCalendar = {
     calendar: {
       // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
@@ -228,6 +230,7 @@ const handClickDev = (item: VideoBaseItem) => {
   equipmentId.value = item.DevId;
   getVideoData(item.DevId);
   getVideoHistortList(item.DevId, rangeCalendar);
+  videoLoading.value = false;
   showPopup.value = false;
 };
 // tab标签点击事件
