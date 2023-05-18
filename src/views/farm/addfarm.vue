@@ -1,13 +1,12 @@
 <template>
-    <div class="addfarm">
+    <div id="addfarm">
         <van-nav-bar title="农事活动上传" class="title" fixed :border="false" placeholder safe-area-inset-top
             @click-left="onClickLeft">
-            <template #left >
+            <template #left>
                 <van-icon name="arrow-left" size="20" color="#FFFFFF" />
             </template>
         </van-nav-bar>
-
-        <van-cell title="农事主体">
+        <van-cell title=" 农事主体">
             <template #label>
                 <div class="lable" @click="handleClick('选择主体')">
                     <span class="custom-title">{{ btns.btn.main }}</span>
@@ -39,7 +38,7 @@
             <template #label>
                 <div class="lable">
                     <input v-model="farmName" type="text" style="border: none; background-color: transparent;"
-                        placeholder="请输入名称">
+                        placeholder="输入农事名称">
                 </div>
             </template>
 
@@ -52,7 +51,7 @@
             </template>
             <template #label>
                 <div class="lable">
-                    <van-field v-model="actIntro" rows="2" type="textarea" autosize placeholder="请输入您的文章内容" />
+                    <van-field v-model="actIntro" rows="2" type="textarea" autosize placeholder="输入农事内容" />
                 </div>
             </template>
         </van-cell>
@@ -67,7 +66,8 @@
                 <div class="lable" v-for="item in  goods.goodsinfo.dataList" :key="item.id">
                     <span>名称:{{ item.goodsName }}</span>
                     <span>数量:{{ item.num }}{{ item.unit }}</span>
-                    <span style="color: red;" v-if="store.userInfo.roles[0] != 'customer'"><van-icon name="delete-o" @click="handleDelgood(item.id)" /></span>
+                    <span style="color: red;" v-if="store.userInfo.roles[0] != 'customer'"><van-icon name="delete-o"
+                            @click="handleDelgood(item.id)" /></span>
                 </div>
             </template>
         </van-cell>
@@ -102,6 +102,8 @@
             <van-button round type="success" @click="handleSave">保存</van-button>
         </div>
 
+
+
         <van-dialog v-model:show="show" :show-confirm-button="false" closeOnClickOverlay>
             <van-cell>
                 <template #title>
@@ -124,14 +126,13 @@ import { MainInfoItem, fieldInfoItem, acttypeInfoItem, actInfoItem, goodsInfoIte
 import { useRouter, useRoute } from 'vue-router';
 import { userStore } from '@/store/user';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
-import { showConfirmDialog, showToast } from "vant";
+import { closeToast, showConfirmDialog, showLoadingToast, showToast } from "vant";
 
 const router = useRouter();
 const store = userStore()
 const route: RouteLocationNormalizedLoaded = useRoute();
 // 拿到路由参数传过来的id
 const routeid = reactive({ id: route.query.id })
-
 // 农事主体
 const mainList = reactive<MainInfoItem>({ mainInfo: {} })
 // 农事地块
@@ -177,7 +178,12 @@ const goods = reactive<goodsInfoItem>({
 
 // 获取农场主体，农事地块，农事类型
 const init = async () => {
-
+    showLoadingToast({
+        message: 'loading...',
+        forbidClick: true,
+        loadingType: 'spinner',
+        duration: 0,
+    });
     fileList.file1 = [];
     fileList.file2 = [];
     fileList.file3 = [];
@@ -191,11 +197,11 @@ const init = async () => {
     btns.btn.main = mainList.mainInfo.dataList[0].mainName
     mainId.value = mainList.mainInfo.dataList[0].id
     fieldList.fieldInfo = fieldlist;
-    btns.btn.field = fieldList.fieldInfo.dataList[0].fieldName
-    fieldId.value = fieldList.fieldInfo.dataList[0].id
+    btns.btn.field = fieldList.fieldInfo.dataList[0]?.fieldName
+    fieldId.value = fieldList.fieldInfo.dataList[0]?.id
     actTypeList.acttypeInfo = acttypelist;
-    btns.btn.actType = actTypeList.acttypeInfo.dataList[0].actionName
-    typeId.value = actTypeList.acttypeInfo.dataList[0].id
+    btns.btn.actType = actTypeList.acttypeInfo.dataList[0]?.actionName
+    typeId.value = actTypeList.acttypeInfo.dataList[0]?.id
     if (routeid.id) {
         // 获取投入品信息
         const payload1 = {
@@ -247,6 +253,7 @@ const init = async () => {
         }
 
     }
+    closeToast();
 
 
 
@@ -370,6 +377,8 @@ const handleDelgood = (id: string) => {
         title: '删除',
         message:
             '确定删除投入品吗?',
+        cancelButtonColor: 'red',
+        teleport: document.getElementById('addfarm')
     })
         .then(() => {
             // console.log('cancel');
@@ -408,7 +417,7 @@ onMounted(() => {
 </script>
   
 <style scoped lang="less">
-.addfarm {
+#addfarm {
     .title {
         :deep(.van-nav-bar--fixed) {
             background: #1f2228;
@@ -474,6 +483,28 @@ onMounted(() => {
 
 :deep(.van-field__control) {
     color: inherit;
+}
+
+:deep(.van-cell__title) {
+    color: #fff;
+}
+
+:deep(.van-dialog__header) {
+    color: #fff;
+}
+
+:deep(.van-dialog) {
+    background: #1F2228;
+    color: #fff;
+}
+
+:deep(.van-cell) {
+    background: #1F2228;
+    color: #fff;
+}
+
+:deep(.van-button--default) {
+    background: #1F2228;
 }
 </style>
   

@@ -187,4 +187,5 @@ onMounted(() => {
 .fontcolor {
   color: #ffffff;
 }
+
 </style>

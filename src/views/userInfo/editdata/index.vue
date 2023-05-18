@@ -1,14 +1,7 @@
 <template>
   <div class="editData">
-    <van-nav-bar
-      title="编辑资料"
-      class="title"
-      fixed
-      :border="false"
-      placeholder
-      safe-area-inset-top
-      @click-left="onClickLeft"
-    >
+    <van-nav-bar title="编辑资料" class="title" fixed :border="false" placeholder safe-area-inset-top
+      @click-left="onClickLeft">
       <template #left>
         <van-icon name="arrow-left" size="20" color="#FFFFFF" />
       </template>
@@ -111,6 +104,7 @@ const handleclose = () => {
 
 <style scoped lang="less">
 .editData {
+
   //title
   .title {
     :deep(.van-nav-bar--fixed) {
@@ -144,5 +138,23 @@ const handleclose = () => {
       }
     }
   }
+
+  :deep(.van-dialog) {
+    background: #1b1e23;
+    color: #ccc;
+  }
+
+  :deep(.van-cell) {
+    background: #1b1e23;
+    padding: 20px 17px;
+    color: #cccc;
+
+  }
+
+  :deep(.van-field__control) {
+    color: #ccc;
+    border: 0.5px solid rgba(255, 255, 255, 0.3); ;
+  }
+
 }
 </style>

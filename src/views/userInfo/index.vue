@@ -34,6 +34,11 @@
     </van-cell-group>
     <van-button class="loginOut" @click="logOut" type="success">退出账号</van-button>
     <userdialog type="修改密码" @handle-Save="sava" @handle-Close="handleclose" :isShow="show" />
+    <div class="logput"></div>
+
+    <van-dialog v-model:show="logputshow" title="标题" show-cancel-button message="确定退出登录？" @confirm=clickconfirm
+      cancel-button-color="red" />
+
   </div>
 </template>
 
@@ -43,13 +48,14 @@ import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { redirectLogin } from '@/utils/utils';
 import { ref } from 'vue';
-import { showLoadingToast, closeToast, showToast, showConfirmDialog } from 'vant';
+import { showLoadingToast, closeToast, showToast } from 'vant';
 import { ResetPwd } from "@/api/user"
 import userdialog from "./components/userdialog.vue";
 
 const store = userStore();
 const router: Router = useRouter();
 const show = ref<boolean>(false);
+const logputshow = ref<boolean>(false);
 // const val = ref<string>('')
 // 点击每个单元格
 const handeleCellClick = (item: string) => {
@@ -64,15 +70,22 @@ const handeleCellClick = (item: string) => {
 };
 // 点击退出
 const logOut = () => {
-  showConfirmDialog({
-    title: '提示',
-    message:
-      '确定要退出登录吗？',
-  })
-    .then(() => {
-      redirectLogin()
-    })
+  logputshow.value = !logputshow.value
+  // showConfirmDialog({
+  //   title: '提示',
+  //   // teleport: '.userInfo', 
+  //   cancelButtonColor: 'red',
+  //   closeOnPopstate: false,
+  //   message:
+  //     '确定要退出登录吗？',
+  // })
+  //   .then(() => {
+  //     redirectLogin()
+  //   }).catch((err) => { return err })
 };
+const clickconfirm = () => {
+  redirectLogin()
+}
 // 点击保存
 const sava = (item: String) => {
   // console.log(store.userInfo.user.uid, '123', val.value, 'item', item);
@@ -98,6 +111,7 @@ const sava = (item: String) => {
 const handleclose = () => {
   show.value = false
 }
+
 </script>
 
 <style scoped lang="less">
@@ -203,5 +217,32 @@ const handleclose = () => {
     font-size: 14px;
     color: #ffffff;
   }
+}
+
+:deep(.van-dialog) {
+  background: #1F2228;
+  color: #ccc;
+}
+
+:deep(.van-cell) {
+  background: #1F2228;
+  color: #ccc;
+}
+
+:deep(.van-field__control) {
+  color: #ccc;
+}
+
+:deep(.van-dialog__header) {
+  color: #ccc;
+}
+
+:deep(.van-button--default) {
+  background: #1F2228;
+}
+
+:deep(.van-field__control) {
+  color: #ccc;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
 }
 </style>
