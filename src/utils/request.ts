@@ -32,21 +32,21 @@ service.interceptors.response.use(
       return res;
     } else {
       if (res.isSuccess===false) {
-        if (res.code === 401 || res.code === 400 || res.Code === 401) {
-          (res.msg || res.Msg) &&
+        if (res.code === 401 || res.code === 400 || res.Code === 401 || res.code === 200) {
+          (res.msg || res.Msg || res.message) &&
             showFailToast({
               forbidClick: true,
-              message: res.msg || res.Msg,
+              message: res.msg || res.Msg || res.message,
               onClose: () => {
                 redirectLogin();
               },
             });
           return;
         }
-        res.msg || res.Msg
+        res.msg || res.Msg || res.message
           ? showFailToast({
               forbidClick: true,
-              message: res.msg || res.Msg,
+              message: res.msg || res.Msg || res.message,
             })
           : showToast({
               message: '未知错误',

@@ -46,7 +46,10 @@
         <span>切换</span>
       </template>
     </van-nav-bar>
-    <div class="video-main">视频</div>
+    <!-- <video id="videoMain" class="video-main video-js vjs-default-skin vjs-big-play-centered">
+      <source :src="" type="application/x-mpegURL">
+    </video> -->
+    <video-player :src="videoInfo.videoBaseInfo?.AppletAddr" />
     <van-tabs
       swipeable
       v-model:active="tabtId"
@@ -139,6 +142,7 @@ import {
   ImgListItem,
 } from '../index';
 import { tabsList } from './base';
+import VideoPlayer from './videoPlayer.vue';
 import FarmActive from './farmActive.vue';
 import PestLamp from '../pestLamp/index.vue';
 import WeatherMonitor from './weatherMonitor.vue';
@@ -223,7 +227,7 @@ const handClickDev = (item: VideoBaseItem) => {
   };
   equipmentId.value = item.DevId;
   getVideoData(item.DevId);
-  getVideoHistortList(item.DevId,rangeCalendar);
+  getVideoHistortList(item.DevId, rangeCalendar);
   showPopup.value = false;
 };
 // tab标签点击事件
@@ -232,14 +236,14 @@ const handleClickTab = (name: number) => {
 };
 // 获取地块信息
 const getFieldInfo = async (Id: string) => {
-  loading.value = true;
+  // loading.value = true;
   const payload = {
     Id,
   };
   const { data: fieldRes } = await getField(payload);
   field.fieldInfo = fieldRes;
   await getDevList(fieldRes.devList);
-  loading.value = false;
+  // loading.value = false;
 };
 // 获取设备列表
 const getDevList = async (ids: string[]) => {
@@ -329,6 +333,7 @@ const init = async (Id: string) => {
     loadingType: 'spinner',
     duration: 0,
   });
+  loading.value = true;
   const rangeCalendar = {
     calendar: {
       // Bdate: moment().subtract(3, 'day').format('YYYY-MM-DD'),
@@ -342,6 +347,7 @@ const init = async (Id: string) => {
   await getWeatherList(weatherList.devInfo[0].DevId);
   await getSoilList(soilList.devInfo[0].DevId);
   await getVideoHistortList(equipmentId.value, rangeCalendar);
+  loading.value = false;
   closeToast();
 };
 onMounted(async () => {
@@ -394,7 +400,8 @@ onMounted(async () => {
     }
   }
   .head {
-    margin: 18px 0;
+    // margin: 18px 0;
+    margin-top: 16px;
     min-height: 110px;
     padding: 12px;
     padding-right: 25px;
@@ -416,11 +423,6 @@ onMounted(async () => {
       align-items: center;
       justify-content: space-between;
     }
-  }
-  .video-main {
-    background: #00cc90;
-    height: 195px;
-    border-radius: 8px;
   }
   :deep(.tabs-content) {
     .van-tabs__content {

@@ -78,8 +78,8 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     server: {
-      port: 9000,
-      open: false,
+      port: 9001,
+      open: true,
       proxy: {
         '/adopt-api': {
           target: 'http://111.21.231.41:20107',
