@@ -5,7 +5,7 @@
       id="videoMain"
       ref="videoRef"
       class="video-main video-js vjs-default-skin vjs-big-play-centered"
-      data-setup='{}'
+      data-setup="{}"
     >
       <source :src="props.src" type="application/x-mpegURL" />
     </video>
@@ -47,12 +47,12 @@ watch(
   (newVal) => {
     if (srcPath.value !== newVal) {
       srcPath.value = newVal;
-      initVideo(srcPath.value);
+      initVideo();
     }
   },
 );
 // 初始化videojs
-const initVideo = (url: string) => {
+const initVideo = () => {
   if (myPlayer.value) {
     myPlayer.value.dispose();
   }
@@ -65,24 +65,35 @@ const initVideo = (url: string) => {
       preload: 'auto', // 预加载
       fluid: false, // 自适应宽高
       muted: true, // 设置了它为true，才可实现自动播放,同时视频也被静音
-      // src// 要嵌入的视频源的源 URL
-    //   sources: [
-    //     {
-    //       src: url,
-    //       type: 'application/x-mpegURL',
-    //     },
-    //   ],
+      //   src// 要嵌入的视频源的源 URL
+      // suppressNotSupportedError:true,
+    //   loadingSpinner: false,
+      sources: [
+        {
+          src: props.src,
+          type: 'application/x-mpegURL',
+        },
+        // {
+        //   src: srcPath.value,
+        //   type: 'application/x-mpegURL',
+        // },
+      ],
     };
     if (videoRef.value) {
       // 创建 video 实例
-      myPlayer.value = videojs(videoRef.value, options);
-      myPlayer.value.src = url;
+      myPlayer.value = videojs(videoRef.value, videojs.obj.merge(options));
+      //   myPlayer.value.src = url;
+      myPlayer.value.on('error', (err: any) => {
+        console.log('err', err);
+        myPlayer.value.error({ code: 4, message: '视频文件未找到' }); // 显示自定义错误消息
+        myPlayer.value.hide();
+      });
     }
   });
 };
 
 onMounted(() => {
-  initVideo(props.src);
+  initVideo();
 });
 onUnmounted(() => {
   if (myPlayer.value) {
