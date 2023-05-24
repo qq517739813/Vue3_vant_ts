@@ -1,6 +1,6 @@
 <template>
-  <div :style="videoWrapStyles">
-    <video
+  <div :style="videoWrapStyles" id="videoWrap">
+    <!-- <video
       v-if="props.src"
       id="videoMain"
       ref="videoRef"
@@ -8,7 +8,7 @@
       data-setup="{}"
     >
       <source :src="props.src" type="application/x-mpegURL" />
-    </video>
+    </video> -->
   </div>
 </template>
 
@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   height: '',
 });
 // video标签
-const videoRef: Ref = ref<HTMLElement | null>(null);
+// const videoRef: Ref = ref<HTMLElement | null>(null);
 // scr地址
 const srcPath: Ref = ref<string>('');
 const myPlayer: Ref = ref();
@@ -47,7 +47,9 @@ watch(
   (newVal) => {
     if (srcPath.value !== newVal) {
       srcPath.value = newVal;
-      initVideo();
+      nextTick(() => {
+        initVideo();
+      });
     }
   },
 );
@@ -56,6 +58,24 @@ const initVideo = () => {
   if (myPlayer.value) {
     myPlayer.value.dispose();
   }
+  if (props.src) {
+    // 获取视频的父容器
+    const videoWrap = document.getElementById('videoWrap') as any;
+    // 创建video元素
+    const video = document.createElement('video');
+    video.setAttribute('id', 'videoMain');
+    video.setAttribute('class', 'video-main video-js vjs-default-skin vjs-big-play-centered');
+    video.setAttribute('data-setup', '{}');
+    video.style.width = props.width || '100%';
+    video.style.height = props.height || '195px';
+    videoWrap.appendChild(video);
+    // 创建source元素
+    const source = document.createElement('source');
+    source.setAttribute('src', props.src);
+    source.setAttribute('type', 'application/x-mpegURL');
+    video.appendChild(source);
+  }
+  const videoEle = document.getElementById('videoMain') as any;
   nextTick(() => {
     const options = {
       // language: 'zh-CN', // 设置语言
@@ -67,7 +87,7 @@ const initVideo = () => {
       muted: true, // 设置了它为true，才可实现自动播放,同时视频也被静音
       //   src// 要嵌入的视频源的源 URL
       // suppressNotSupportedError:true,
-    //   loadingSpinner: false,
+      //   loadingSpinner: false,
       sources: [
         {
           src: props.src,
@@ -79,10 +99,9 @@ const initVideo = () => {
         // },
       ],
     };
-    if (videoRef.value) {
+    if (videoEle) {
       // 创建 video 实例
-      myPlayer.value = videojs(videoRef.value, videojs.obj.merge(options));
-      //   myPlayer.value.src = url;
+      myPlayer.value = videojs(videoEle, videojs.obj.merge(options));
       myPlayer.value.on('error', (err: any) => {
         console.log('err', err);
         myPlayer.value.error({ code: 4, message: '视频文件未找到' }); // 显示自定义错误消息
